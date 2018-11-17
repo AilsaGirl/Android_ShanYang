@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/hl_6xc"
+    android:clipChildren="false">
+
+    <FrameLayout
+        android:id="@+id/fmLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp" />
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="#ffffff"-->
+        <!--android:clipChildren="false"-->
+        <!--android:gravity="bottom"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:paddingBottom="3dp">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvHome"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableTop="@mipmap/ic_launcher"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:text="首页"-->
+            <!--android:textColor="@color/hl_6x3"-->
+            <!--android:textSize="12sp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvPaiHang"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableTop="@mipmap/ic_launcher"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center"-->
+            <!--android:visibility="gone"-->
+            <!--android:text="排行榜"-->
+            <!--android:textColor="@color/hl_6x3"-->
+            <!--android:textSize="12sp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvMessage"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableTop="@mipmap/ic_launcher"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="消息"-->
+            <!--android:textColor="@color/hl_6x3"-->
+            <!--android:textSize="12sp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvMy"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:drawableTop="@mipmap/ic_launcher"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="我的"-->
+            <!--android:textColor="@color/hl_6x3"-->
+            <!--android:textSize="12sp" />-->
+    <!--</LinearLayout>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/tvHome"
+                style="@style/em_home_tab"
+                android:src="@mipmap/ic_launcher"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/em_home_tab"
+                android:src="@mipmap/ic_launcher"
+                tools:ignore="ContentDescription" />
+
+
+            <TextView
+                android:id="@+id/tvMy"
+                style="@style/em_home_tab"
+                android:src="@mipmap/ic_launcher"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

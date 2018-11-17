@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="em_home_tab">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+    <style name="baotui_banner">
+        <item name="indicator_margin">6dp</item>
+        <item name="indicator_height">7dp</item>
+        <item name="indicator_width">7dp</item>
+
+        <item name="indicator_drawable_selected">@mipmap/m_icon_b_img</item>
+        <item name="indicator_drawable_unselected">@mipmap/m_icon_d_img</item>
+        <item name="image_scale_type">fit_xy</item>
+        <item name="layout_scrollFlags">scroll|snap</item>
+    </style>
+    <style name="home_tab">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+    <style name="horizontal_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2px</item>
+        <item name="android:background">#BBBBBB</item>
+    </style>
+
+    <style name="horizontal_line_bold">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2px</item>
+        <item name="android:background">#f5f5f5</item>
+    </style>
+</resources>

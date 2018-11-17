@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:id="@+id/relCustomMenu"
+    >
+
+    <ImageView
+        android:id="@+id/ivLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="14dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/ivLeft"
+        android:text="我的任务"
+        android:textColor="#262626"
+        android:textSize="13sp" />
+
+    <ImageView
+        android:id="@+id/ivRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="14dp"
+        android:src="@mipmap/xiayibu" />
+
+    <TextView
+        android:textSize="13sp"
+        android:id="@+id/tvRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/ivRight"
+        android:text="做任务的奖励"
+        android:textColor="#262626"
+         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="简介"
+        android:layout_below="@id/tvLeft"
+        android:layout_alignLeft="@id/tvLeft"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        />
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/ivLeft"
+        style="@style/horizontal_line" />
+    <View
+        android:id="@+id/view_top"
+        android:layout_alignParentTop="true"
+        style="@style/horizontal_line"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomMenuView">
+        <attr name="hlMenuLeftText" format="reference|string" />         <!--左侧文字-->
+        <attr name="hlMenuLeftIcon" format="reference" />                <!--左侧图标-->
+        <attr name="hlMenuRightIcon" format="reference" />               <!--右侧图标			-->
+        <attr name="hlMenuRightText" format="reference|string" />        <!--右侧文字			-->
+        <attr name="hlMenuLeftTextSize" format="dimension" />            <!--左侧文字大小		-->
+        <attr name="hlMenuRightTextSize" format="dimension" />           <!--右侧文字大小		-->
+        <attr name="hlMenuLeftTextColor" format="reference|color" />     <!--左侧文字颜色		-->
+        <attr name="hlMenuRightTextColor" format="reference|color" />    <!--右侧文字颜色		-->
+        <attr name="hlMenuRightTextVisible" format="enum">              <!--是否显示右侧文字	-->
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="hlMenuUnderLineVisible" format="enum">                  <!--是否显示底部分割线-->
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="hlMenuTopLineVisible" format="enum">                  <!--是否显示底部分割线-->
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="hlMenuRightIconVisible" format="enum">                   <!--右侧图标显示		-->
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+        <attr name="hlMenuLeftIconVisible" format="enum">                   <!--左侧图标显示		-->
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="4" />
+            <enum name="gone" value="8" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="androidWheelView">
+        <attr name="awv_textsize" format="integer" />
+        <attr name="awv_lineSpace" format="float" />
+        <attr name="awv_centerTextColor" format="integer" />
+        <attr name="awv_outerTextColor" format="integer" />
+        <attr name="awv_dividerTextColor" format="integer" />
+        <attr name="awv_itemsVisibleCount" format="integer" />
+        <attr name="awv_isLoop" format="boolean" />
+        <attr name="awv_initialPosition" format="integer" />
+        <attr name="awv_scaleX" format="float" />
+    </declare-styleable>
+    <declare-styleable name="PassWordEditText">
+        <!--密码个数-->
+        <attr name="passwordNumber" format="integer"/>
+        <!--密码半径-->
+        <attr name="passwordRadius" format="dimension"/>
+        <!--密码颜色-->
+        <attr name="passwordColor" format="color"/>
+        <!--分割线大小-->
+        <attr name="divisionLinesSize" format="dimension"/>
+        <!--分割线颜色-->
+        <attr name="divisionLineColor" format="color"/>
+        <!--背景边框大小-->
+        <attr name="bgSize" format="dimension"/>
+        <!--背景边框颜色-->
+        <attr name="bgColor" format="color"/>
+        <!--背景边框弧度-->
+        <attr name="bgCorner" format="dimension"/>
+        <!-- 是否隐藏输入的数字-->
+        <attr name="isHide" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="VerificationCodeView">
+        <attr name="isNetCode" format="boolean"/>
+        <attr name="codeNumber" format="integer"/>
+    </declare-styleable>
+</resources>
