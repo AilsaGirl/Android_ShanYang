@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.eyesutils.Eyes;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.ui.home.FaHuoActivity;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
+import com.liaocheng.suteng.myapplication.ui.my.MyActivity;
 import com.liaocheng.suteng.myapplication.view.UPMarqueeView;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
@@ -90,17 +92,22 @@ public class MainActivity extends BaseActivity {
        vf.setViews(views);
 
     }
-
+    Intent intent;
     @OnClick({R.id.vf, R.id.linFaHuo, R.id.linQiangDan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.vf:
                 break;
             case R.id.linFaHuo:
-                Intent intent = new Intent(mContext, LoginActivity.class);
+                 intent = new Intent(mContext, LoginActivity.class);
                     mContext.startActivity(intent);
+
+//                intent = new Intent(mContext, FaHuoActivity.class);
+//                mContext.startActivity(intent);
                 break;
             case R.id.linQiangDan:
+                 intent = new Intent(mContext, MyActivity.class);
+                mContext.startActivity(intent);
                 break;
         }
     }

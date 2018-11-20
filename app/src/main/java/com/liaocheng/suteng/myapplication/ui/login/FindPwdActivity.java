@@ -9,6 +9,7 @@ public class FindPwdActivity extends BaseActivity {
         return R.layout.activity_findpass;
     }
 
+
     @Override
     public void initEventAndData() {
 

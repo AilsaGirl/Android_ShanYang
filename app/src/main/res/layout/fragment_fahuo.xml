@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fans"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <!--<com.circle.common.view.MyToolBar-->
+        <!--android:id="@+id/toolBar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/toolbar_h" />-->
+
+    <ImageView
+        android:id="@+id/ivNull"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="center"
+        android:visibility="gone" />
+<LinearLayout
+    android:background="#BBBBBB"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_height="35dp">
+<TextView
+    android:id="@+id/tvFaDanNum"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_weight="1"
+    android:text="发单总计：200单"
+    />
+    <TextView
+        android:id="@+id/tvZhiFuNum"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="支出总计：200元"
+        />
+</LinearLayout>
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp" />
+
+</LinearLayout>

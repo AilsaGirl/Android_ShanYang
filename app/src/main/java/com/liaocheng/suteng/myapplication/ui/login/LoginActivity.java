@@ -11,13 +11,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.NullBean;
+import com.liaocheng.suteng.myapplication.presenter.LoginPresenter;
+import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContact.View {
     @BindView(R.id.tvDuanXin)
     TextView tvDuanXin;
     @BindView(R.id.tvMiMa)
@@ -80,6 +84,7 @@ public class LoginActivity extends BaseActivity {
             case R.id.tvGetYZM:
                 break;
             case R.id.loginBtn:
+                mPresenter.login("","");
                 break;
             case R.id.tvPPW:
                 intent = new Intent();
@@ -99,5 +104,10 @@ public class LoginActivity extends BaseActivity {
             case R.id.ivQQ:
                 break;
         }
+    }
+
+    @Override
+    public void loginSuccess(NullBean loginBean) {
+        ToastUtil.show("成功了");
     }
 }

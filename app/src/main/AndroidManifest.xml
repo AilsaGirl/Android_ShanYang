@@ -78,6 +78,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="ec8683dcb5b484aecc3afe97dc7b5fc7"/>
+        <service android:name="com.amap.api.location.APSService" />
         <activity android:name=".ui.MainActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
@@ -93,6 +97,11 @@
         <activity android:name=".ui.login.RegisterActivity"/>
         <activity android:name=".ui.login.FindPwdActivity"/>
         <activity android:name=".ui.login.BangDingActivity"/>
+        <activity android:name=".ui.my.MyActivity"/>
+        <activity android:name=".ui.my.ZhangHuSetingActivity"/>
+        <activity android:name=".ui.my.AboutMeActivity"/>
+        <activity android:name=".ui.my.DingDanGuanLiActivity"/>
+        <activity android:name=".ui.home.FaHuoActivity"/>
     </application>
 
 </manifest>

@@ -24,6 +24,16 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("user/User_Data/changeimg")
     Flowable<BaseResponse<NullBean>> UpHeadProcess(@Field("token") String token, @Field("img") String img);
+    /**
+     * 修改地址
+     *
+     * @param id
+     * @param contactName
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("updateUserAddress")
+    Flowable<BaseResponse<NullBean>> updateUserAddress(@Field("id") String id, @Field("contactName") String contactName, @Field("contactPhone") String contactPhone, @Field("accuracy") String accuracy, @Field("latitude") String latitude, @Field("address") String address, @Field("detailAddress") String detailAddress);
 }
 
 
