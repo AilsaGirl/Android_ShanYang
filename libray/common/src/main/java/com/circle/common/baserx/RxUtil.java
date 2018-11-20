@@ -57,8 +57,8 @@ public class RxUtil {
 
                             return Flowable.error(new ApiException(CommonUtil.splitMsg(baseResponse.msg)));
                         }else if (baseResponse.success()) {
-                            if (baseResponse.data != null) {
-                                return createData(baseResponse.data);
+                            if (baseResponse.result != null) {
+                                return createData(baseResponse.result);
                             } else {
                                 ToastUtil.show(CommonUtil.splitMsg(baseResponse.msg));
                                 return null;
