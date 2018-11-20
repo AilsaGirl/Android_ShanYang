@@ -92,16 +92,52 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.CeShiActivity"/>
-        <activity android:name=".ui.login.LoginActivity"/>
-        <activity android:name=".ui.login.RegisterActivity"/>
-        <activity android:name=".ui.login.FindPwdActivity"/>
-        <activity android:name=".ui.login.BangDingActivity"/>
-        <activity android:name=".ui.my.MyActivity"/>
-        <activity android:name=".ui.my.ZhangHuSetingActivity"/>
-        <activity android:name=".ui.my.AboutMeActivity"/>
-        <activity android:name=".ui.my.DingDanGuanLiActivity"/>
-        <activity android:name=".ui.home.FaHuoActivity"/>
+        <activity android:name=".ui.CeShiActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.login.RegisterActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.login.FindPwdActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".ui.login.BangDingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.my.MyActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.my.ZhangHuSetingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.my.AboutMeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.my.DingDanGuanLiActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.FaHuoActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.address.AddAddress"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.address.AddressList"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.address.NewLocationActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.address.NewLocationSeekActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.address.CityListActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

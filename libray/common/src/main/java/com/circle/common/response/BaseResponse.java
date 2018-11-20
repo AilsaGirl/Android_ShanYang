@@ -12,7 +12,7 @@ public class BaseResponse<T> implements Serializable {
     public String msg;
 
     public boolean success() {
-        return code == 200;
+        return code == 1;
     }
     public boolean isTokenExpire() {
         return code == 406;

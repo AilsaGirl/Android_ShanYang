@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.circle.common.app.BaseApplication;
 import com.circle.common.response.BaseResponse;
 import com.circle.common.response.CommonRes;
+import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 
 import io.reactivex.BackpressureStrategy;
@@ -54,12 +55,12 @@ public class RxUtil {
                         if (baseResponse.isTokenExpire()) {
                             BaseApplication.getInstance().tokenExpire();
 
-                            return Flowable.error(new ApiException(baseResponse.msg));
+                            return Flowable.error(new ApiException(CommonUtil.splitMsg(baseResponse.msg)));
                         }else if (baseResponse.success()) {
                             if (baseResponse.data != null) {
                                 return createData(baseResponse.data);
                             } else {
-                                ToastUtil.show(baseResponse.msg);
+                                ToastUtil.show(CommonUtil.splitMsg(baseResponse.msg));
                                 return null;
                             }
                         } else if (baseResponse.code==406){
@@ -69,7 +70,7 @@ public class RxUtil {
                             if (baseResponse == null || TextUtils.isEmpty(baseResponse.msg)) {
                                 return Flowable.error(new ApiException("服务器返回error"));
                             } else {
-                                return Flowable.error(new ApiException(baseResponse.msg));
+                                return Flowable.error(new ApiException(CommonUtil.splitMsg(baseResponse.msg)));
                             }
                         }
                     }

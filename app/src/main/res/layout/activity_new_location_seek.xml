@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2"
+    android:orientation="vertical"
+  >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="28dp"
+        android:background="@mipmap/toolbar"
+        android:paddingBottom="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/Iv_back"
+            android:layout_width="20dp"
+            android:layout_height="23dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/fanhui" />
+
+        <LinearLayout
+            android:id="@+id/ll_new_location_map"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@mipmap/sousuobeijing"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/sousuox" />
+
+            <AutoCompleteTextView
+                android:id="@+id/AutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:background="@null"
+                android:dropDownVerticalOffset="10dp"
+                android:dropDownWidth="match_parent"
+                android:gravity="center_vertical"
+                android:hint="查找小区/大厦/学校等"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tx_sousuo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            android:text="搜索"
+            android:textColor="@color/hl_6x3" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:divider="#EBEBEB"
+        android:visibility="gone"
+        android:dividerHeight="1dp">
+
+    </ListView>
+
+    <ListView
+        android:id="@+id/listview_lishi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:divider="#EBEBEB"
+        android:dividerHeight="1dp"
+        android:visibility="visible">
+
+    </ListView>
+
+</LinearLayout>

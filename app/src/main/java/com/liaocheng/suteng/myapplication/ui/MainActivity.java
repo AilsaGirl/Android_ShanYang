@@ -15,6 +15,8 @@ import com.circle.common.base.BaseActivity;
 import com.circle.common.eyesutils.Eyes;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.ui.home.FaHuoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.address.AddAddress;
+import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
 import com.liaocheng.suteng.myapplication.ui.my.MyActivity;
 import com.liaocheng.suteng.myapplication.view.UPMarqueeView;
@@ -99,11 +101,11 @@ public class MainActivity extends BaseActivity {
             case R.id.vf:
                 break;
             case R.id.linFaHuo:
-                 intent = new Intent(mContext, LoginActivity.class);
-                    mContext.startActivity(intent);
+//                 intent = new Intent(mContext, LoginActivity.class);
+//                    mContext.startActivity(intent);
 
-//                intent = new Intent(mContext, FaHuoActivity.class);
-//                mContext.startActivity(intent);
+                intent = new Intent(mContext, AddAddress.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.linQiangDan:
                  intent = new Intent(mContext, MyActivity.class);

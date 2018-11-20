@@ -166,5 +166,8 @@ public class MyToolBar extends Toolbar {
         tvTitle.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(resourceId), null, null, null);
         return this;
     }
-
+    public MyToolBar setRightText(String title) {
+        tvRight.setText(title);
+        return this;
+    }
 }

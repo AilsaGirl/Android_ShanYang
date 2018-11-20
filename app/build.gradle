@@ -74,4 +74,5 @@ dependencies {
     //搜索功能
     compile 'com.amap.api:search:5.0.0'
     compile 'com.amap.api:navi-3dmap:6.2.0_3dmap6.3.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }
