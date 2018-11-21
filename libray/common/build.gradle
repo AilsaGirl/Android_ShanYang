@@ -56,4 +56,5 @@ dependencies {
     implementation files('libs/umeng-analytics-7.5.1.jar')
     implementation files('libs/umeng-common-1.5.1.jar')
     compile 'com.youth.banner:banner:1.4.10'
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.2'
 }

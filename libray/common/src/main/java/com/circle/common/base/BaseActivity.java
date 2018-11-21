@@ -23,6 +23,7 @@ import com.circle.common.util.NetWorkUtils;
 import com.circle.common.util.StatusBarUtils;
 import com.circle.common.util.TUtil;
 import com.circle.common.util.ToastUtil;
+import com.gyf.barlibrary.ImmersionBar;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 
@@ -46,8 +47,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends FragmentActi
         // 把actvity放到application栈中管理
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        setTransparentStatusBar();
+//        setTransparentStatusBar();
 //        Eyes.setStatusBarColor(this, ContextCompat.getColor(this, R.color.toolbar_backgroud));
+        ImmersionBar.with(this).init();
         mContext = this;
         mPresenter = TUtil.getT(this, 0);
         if (mPresenter != null) {
@@ -176,6 +178,8 @@ public void setTitleColor(int color){
         if (mPresenter != null)
             mPresenter.detachView();
         AppManager.getAppManager().finishActivity(this);
+        // 必须调用该方法，防止内存泄漏
+        ImmersionBar.with(this).destroy();
     }
     @Override
     public void onResume() {

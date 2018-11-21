@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import com.circle.common.R;
 import com.circle.common.app.AppManager;
 import com.circle.common.util.AndroidBug5497Workaround;
-import com.circle.common.util.CommonUtil;
 import com.circle.common.util.DisplayUtil;
 import com.circle.common.util.NetWorkUtils;
 import com.circle.common.util.TUtil;

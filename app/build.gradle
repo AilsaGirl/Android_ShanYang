@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.liaocheng.suteng.myapplication"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -75,4 +75,5 @@ dependencies {
     compile 'com.amap.api:search:5.0.0'
     compile 'com.amap.api:navi-3dmap:6.2.0_3dmap6.3.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
+
 }
