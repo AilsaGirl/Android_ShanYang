@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * 新增任务地址，高德周围poi地址
- * Created by 徐洪泽 on 2018/3/29 0029.
+ *
  */
 
 public class LocationBean implements Serializable {

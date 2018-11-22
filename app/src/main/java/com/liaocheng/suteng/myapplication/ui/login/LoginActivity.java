@@ -16,6 +16,7 @@ import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.presenter.LoginPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
+import com.liaocheng.suteng.myapplication.ui.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +86,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.loginBtn:
                 mPresenter.login("","");
+                intent = new Intent();
+                intent.setClass(this,MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tvPPW:
                 intent = new Intent();

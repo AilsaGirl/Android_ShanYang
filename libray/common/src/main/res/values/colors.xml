@@ -8,6 +8,7 @@
     <color name="hl_6x6">#666666</color>
     <color name="hl_6x9">#999999</color>
     <color name="hl_6xc">#cccccc</color>
+    <color name="hl_6xb">#bbbbbb</color>
     <color name="black">#000000</color>
     <color name="toolbar_selected">#efe3e8</color>
     <color name="toast_stroke_gray">#9faab8</color>

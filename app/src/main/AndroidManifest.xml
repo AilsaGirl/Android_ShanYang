@@ -99,18 +99,19 @@
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.CeShiActivity"
             android:screenOrientation="portrait"
             />
         <activity android:name=".ui.login.LoginActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".ui.login.RegisterActivity"
             android:screenOrientation="portrait"
             />
@@ -149,6 +150,9 @@
             android:screenOrientation="portrait"
             />
         <activity android:name=".ui.home.address.CityListActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ui.home.fahuo.FaHuoActivity"
             android:screenOrientation="portrait"
             />
     </application>

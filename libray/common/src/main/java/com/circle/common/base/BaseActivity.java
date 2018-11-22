@@ -2,6 +2,7 @@ package com.circle.common.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -196,5 +197,11 @@ public void setTitleColor(int color){
         MobclickAgent.onPageEnd(TAG);
         MobclickAgent.onPause(this);
 
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // 如果你的app可以横竖屏切换，并且适配4.4或者emui3手机请务必在onConfigurationChanged方法里添加这句话
+        ImmersionBar.with(this).init();
     }
 }

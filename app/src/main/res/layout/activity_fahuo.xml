@@ -9,33 +9,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </com.circle.common.view.MyToolBar>
-    <com.amap.api.maps.MapView
-        android:id="@+id/mapView"
+    <RelativeLayout
         android:layout_below="@+id/toolBar"
         android:layout_above="@+id/linBom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <com.amap.api.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/ivMy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="30dp"
+            android:src="@mipmap/icon_wode"
+            />
+        <ImageView
+            android:id="@+id/ivCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="65dp"
+            android:src="@mipmap/icon_chengshi"
+            />
+    </RelativeLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:id="@+id/linBom"
         android:layout_width="match_parent"
-        android:layout_height="163dp">
+        android:layout_height="185dp">
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/stlTitle"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_h"
-            app:tl_indicator_color="#E03D81"
-            android:background="@color/hl_white"
+            android:layout_height="40dp"
+            app:tl_indicator_color="#9E649E"
+            android:background="#7eBBBBBB"
             app:tl_indicator_corner_radius="1dp"
-            app:tl_indicator_height="1dp"
+            app:tl_indicator_margin_bottom="8dp"
+            app:tl_indicator_height="2dp"
             app:tl_underline_color="#F0F0F0"
-            app:tl_indicator_width="180dp"
-            app:tl_tab_space_equal="true"
-            app:tl_textSelectColor="#E03D81"
+            app:tl_indicator_width_equal_title="true"
+            app:tl_textSelectColor="#9E649E"
             app:tl_textUnselectColor="#333333"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:visibility="visible"
             app:tl_textsize="15sp" />
         <android.support.v4.view.ViewPager

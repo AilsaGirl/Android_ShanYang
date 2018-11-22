@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.ui.home.address.AddressList;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
 import com.liaocheng.suteng.myapplication.view.CustomMenuView;
 
@@ -80,6 +81,8 @@ public class MyActivity extends BaseActivity {
                 mContext.startActivity(intent);
                 break;
             case R.id.cmvAddress:
+                intent = new Intent(mContext, AddressList.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.cmvQuan:
                 break;

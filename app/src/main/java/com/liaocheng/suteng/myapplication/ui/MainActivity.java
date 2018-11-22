@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.eyesutils.Eyes;
 import com.liaocheng.suteng.myapplication.R;
-import com.liaocheng.suteng.myapplication.ui.home.FaHuoActivity;
+import com.liaocheng.suteng.myapplication.model.event.FaHuoAddressEvent;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddAddress;
 import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
@@ -24,6 +25,9 @@ import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +98,7 @@ public class MainActivity extends BaseActivity {
        vf.setViews(views);
 
     }
+
     Intent intent;
     @OnClick({R.id.vf, R.id.linFaHuo, R.id.linQiangDan})
     public void onViewClicked(View view) {
@@ -104,7 +109,7 @@ public class MainActivity extends BaseActivity {
 //                 intent = new Intent(mContext, LoginActivity.class);
 //                    mContext.startActivity(intent);
 
-                intent = new Intent(mContext, AddAddress.class);
+                intent = new Intent(mContext, FaHuoActivity.class);
                 mContext.startActivity(intent);
                 break;
             case R.id.linQiangDan:
