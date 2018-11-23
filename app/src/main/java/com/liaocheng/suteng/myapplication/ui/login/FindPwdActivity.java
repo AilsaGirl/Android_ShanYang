@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.NullBean;
+import com.liaocheng.suteng.myapplication.presenter.ForgetPersenter;
+import com.liaocheng.suteng.myapplication.presenter.contract.ForgetmimaContact;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FindPwdActivity extends BaseActivity {
+public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements ForgetmimaContact.View {
     private boolean isclicked = true;
     @BindView(R.id.etphonenumber)
     EditText etphonenumber;
@@ -71,8 +74,7 @@ public class FindPwdActivity extends BaseActivity {
                     String Et_phone = etphonenumber.getText().toString();
                     if (!TextUtils.isEmpty(Et_phone) && isMobile(Et_phone) == true) {
                         isclicked=false;
-
-
+                        mPresenter.getforgetcode(Et_phone,"1");
                     } else {
                         ToastUtil.show("请填写正确的手机号");
                     }
@@ -80,6 +82,24 @@ public class FindPwdActivity extends BaseActivity {
 
                 break;
             case R.id.tvPPW:
+                String Et_phone = etphonenumber.getText().toString();
+                String Et_password = etPwd.getText().toString();
+                String Et_yanzhengma = etYZM.getText().toString();
+
+                if(!TextUtils.isEmpty(Et_phone) && isMobile(Et_phone) == true){
+                    if(!TextUtils.isEmpty(Et_password)){
+                        if(!TextUtils.isEmpty(Et_yanzhengma)){
+                            mPresenter.getforgetpassword(Et_phone,Et_password,Et_yanzhengma);
+                        }else {
+                            ToastUtil.show("请输入验证码");
+                        }
+                    }else {
+                     ToastUtil.show("请填写密码");
+                    }
+                }else {
+                    ToastUtil.show("请填写正确的手机号");
+                }
+
                 break;
         }
     }
@@ -92,5 +112,15 @@ public class FindPwdActivity extends BaseActivity {
         m = p.matcher(str);
         b = m.matches();
         return b;
+    }
+
+    @Override
+    public void setforget(NullBean nullBean) {
+        ToastUtil.show("成功了");
+    }
+
+    @Override
+    public void setforcode(NullBean nullBean) {
+        ToastUtil.show("成功了");
     }
 }
