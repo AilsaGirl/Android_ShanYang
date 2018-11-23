@@ -87,12 +87,10 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("user_register")
     Flowable<BaseResponse<NullBean>> userregister(@Field("phone") String phone, @Field("password") String password,@Field("otherInviteCode") String otherInviteCode,@Field("messageCode") String messageCode);
-
     //忘记密码
     @FormUrlEncoded
     @POST("user_register")
     Flowable<BaseResponse<NullBean>> forgetpassword(@Field("phone") String phone, @Field("password") String password,@Field("messageCode") String messageCode);
-
 
 }
 
