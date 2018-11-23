@@ -113,6 +113,7 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     }
     @Override
     public void setforget(NullBean nullBean) {
+
         ToastUtil.show("成功了");
     }
     @Override
