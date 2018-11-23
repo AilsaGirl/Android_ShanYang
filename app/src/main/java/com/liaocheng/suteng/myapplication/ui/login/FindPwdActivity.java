@@ -84,7 +84,6 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
                 String Et_phone = etphonenumber.getText().toString();
                 String Et_password = etPwd.getText().toString();
                 String Et_yanzhengma = etYZM.getText().toString();
-
                 if(!TextUtils.isEmpty(Et_phone) && isMobile(Et_phone) == true){
                     if(!TextUtils.isEmpty(Et_password)){
                         if(!TextUtils.isEmpty(Et_yanzhengma)){
