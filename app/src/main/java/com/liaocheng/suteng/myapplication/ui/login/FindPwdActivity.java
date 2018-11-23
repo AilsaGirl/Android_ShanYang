@@ -79,7 +79,6 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
                         ToastUtil.show("请填写正确的手机号");
                     }
                 }
-
                 break;
             case R.id.tvPPW:
                 String Et_phone = etphonenumber.getText().toString();
@@ -112,12 +111,10 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
         b = m.matches();
         return b;
     }
-
     @Override
     public void setforget(NullBean nullBean) {
         ToastUtil.show("成功了");
     }
-
     @Override
     public void setforcode(NullBean nullBean) {
         ToastUtil.show("成功了");
