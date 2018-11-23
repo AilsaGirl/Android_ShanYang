@@ -45,7 +45,9 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
 
     @Override
     public int getLayoutId() {
+
         return R.layout.activity_findpass;
+
     }
 
 
@@ -113,7 +115,6 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     }
     @Override
     public void setforget(NullBean nullBean) {
-
         ToastUtil.show("成功了");
     }
     @Override
