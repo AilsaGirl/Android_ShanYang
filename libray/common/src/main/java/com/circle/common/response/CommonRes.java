@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 public class CommonRes<T> implements Serializable {
 
-    public int code;// 200
-    public T info;
-    public String message;
+    public int code;// 200,
+    public T result;
+    public String msg;
 
 
     public boolean success() {
-        return code == 200;
+        return code == 1;
     }
 
     public boolean isTokenExpire() {

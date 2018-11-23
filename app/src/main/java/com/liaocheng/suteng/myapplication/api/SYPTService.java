@@ -4,6 +4,7 @@ import com.circle.common.response.BaseResponse;
 
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
+import com.liaocheng.suteng.myapplication.model.Zcxiybean;
 
 import io.reactivex.Flowable;
 import retrofit2.http.Field;
@@ -63,6 +64,34 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("api/Location/myList")
     Flowable<BaseResponse<SiteBean>> addressListContact(@Field("token") String token, @Field("page") String page, @Field("limit") String limit);
+
+    /**
+     * 修改地址
+     *
+     * @param id
+     * @param contactName
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("findOldOrderAddress")
+    Flowable<BaseResponse<NullBean>> findOldOrderAddress(@Field("userId") String id, @Field("startNo") String contactName);
+    //注册获取验证码
+    @FormUrlEncoded
+    @POST("send_sms")
+    Flowable<BaseResponse<NullBean>>  registcode( @Field("phone") String phone, @Field("type") String type);
+    //注册协议
+    @FormUrlEncoded
+    @POST("getSanYangAgreement_info")
+    Flowable<BaseResponse<Zcxiybean>> zcxieyi(@Field("code") String code, @Field("type") String type);
+    //注册是否成功
+    @FormUrlEncoded
+    @POST("user_register")
+    Flowable<BaseResponse<NullBean>> userregister(@Field("phone") String phone, @Field("password") String password,@Field("otherInviteCode") String otherInviteCode,@Field("messageCode") String messageCode);
+
+    //忘记密码
+    @FormUrlEncoded
+    @POST("user_register")
+    Flowable<BaseResponse<NullBean>> forgetpassword(@Field("phone") String phone, @Field("password") String password,@Field("messageCode") String messageCode);
 
 
 }

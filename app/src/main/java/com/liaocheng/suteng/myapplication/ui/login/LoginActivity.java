@@ -1,5 +1,6 @@
 package com.liaocheng.suteng.myapplication.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,16 +14,30 @@ import android.widget.TextView;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.api.MyApplication;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.presenter.LoginPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
 import com.liaocheng.suteng.myapplication.ui.MainActivity;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContact.View {
+
+    private IWXAPI wxApi;
+    private UMShareAPI umShareAPI = null;
+    private SHARE_MEDIA platform = null;
+
     @BindView(R.id.tvDuanXin)
     TextView tvDuanXin;
     @BindView(R.id.tvMiMa)
@@ -57,6 +72,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initEventAndData() {
+        wxApi = WXAPIFactory.createWXAPI(this, MyApplication.wechatAppid, false);
+        wxApi.registerApp(MyApplication.wechatAppid);
 
     }
 
@@ -86,9 +103,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 break;
             case R.id.loginBtn:
                 mPresenter.login("","");
-                intent = new Intent();
-                intent.setClass(this,MainActivity.class);
-                startActivity(intent);
+//                mPresenter.logins("","");
+//                intent = new Intent();
+//                intent.setClass(this,MainActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.tvPPW:
                 intent = new Intent();
@@ -101,11 +119,43 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 startActivity(intent);
                 break;
             case R.id.ivWeiXin:
-                intent = new Intent();
-                intent.setClass(this,BangDingActivity.class);
-                startActivity(intent);
+                if (!isWxInstall(this)) {
+                    ToastUtil.show("您还未安装客户端");
+                    return;
+                }
+                SendAuth.Req req = new SendAuth.Req();
+                req.scope = "snsapi_userinfo";
+                req.state = "wechat_sdk_demo_test";
+                wxApi.sendReq(req);
                 break;
             case R.id.ivQQ:
+                umShareAPI = UMShareAPI.get(this);
+                platform = SHARE_MEDIA.QQ;
+                final UMAuthListener umAuthListener = new UMAuthListener() {
+                    String openid;
+                    String screen_name;
+                    String profile_image_url;
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+
+                    }
+
+                    @Override
+                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                        ToastUtil.show("取消授权");
+
+                    }
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+                        ToastUtil.show("授权失败");
+                    }
+                };
+                umShareAPI.getPlatformInfo(this, platform, umAuthListener);
                 break;
         }
     }
@@ -113,5 +163,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void loginSuccess(NullBean loginBean) {
         ToastUtil.show("成功了");
+    }
+
+    @Override
+    public void loginSuc(NullBean loginBean) {
+        ToastUtil.show("哈哈哈哈哈哈");
+    }
+    public boolean isWxInstall(Context context) {
+        return wxApi.isWXAppInstalled();
     }
 }

@@ -14,10 +14,12 @@ public interface LoginContact {
     interface View extends BaseView {//结果
 
         void loginSuccess(NullBean loginBean);
+        void loginSuc(NullBean loginBean);
     }
 
     interface Presenter extends BasePresenter<View> {//过程
         void  login(String username, String password);
+        void  logins(String username, String password);
     }
 
 }

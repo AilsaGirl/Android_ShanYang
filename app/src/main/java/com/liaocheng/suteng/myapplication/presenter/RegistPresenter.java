@@ -1,33 +1,26 @@
 package com.liaocheng.suteng.myapplication.presenter;
 
 
+
 import com.circle.common.base.RxPresenter;
 import com.circle.common.baserx.CommonSubscriber;
 import com.circle.common.baserx.RxUtil;
 import com.circle.common.response.BaseResponse;
 import com.liaocheng.suteng.myapplication.api.Api;
 import com.liaocheng.suteng.myapplication.model.NullBean;
-import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
+import com.liaocheng.suteng.myapplication.presenter.contract.RegisContact;
 
-/**
- * Created by wei on 2018/1/11 0028.
- * 各种繁杂过程    接口请求等
- */
-
-public class LoginPresenter extends RxPresenter<LoginContact.View> implements LoginContact.Presenter {
-
-
+public class RegistPresenter extends RxPresenter<RegisContact.View> implements RegisContact.Presenter{
     @Override
-    public void login(String username, String password) {
-
-        addSubscribe(Api.createTBService().updateUserAddress("4041","你好啊","17763515228","122","333","聊城","金鼎大厦")
+    public void getcode(String telnumber, String type) {
+        addSubscribe(Api.createTBService().registcode(telnumber, type)
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
                     @Override
                     protected void _onNext(NullBean commonRes) {
                         if (commonRes != null) {
-                            mView.loginSuccess(commonRes);
+                            mView.setcode(commonRes);
                         } else {
                             mView.showError(0, "");
                         }
@@ -42,15 +35,15 @@ public class LoginPresenter extends RxPresenter<LoginContact.View> implements Lo
     }
 
     @Override
-    public void logins(String username, String password) {
-        addSubscribe(Api.createTBService().findOldOrderAddress("10012102","0")
+    public void getuserZhuce(String phone, String password, String otherInviteCode, String messageCode) {
+        addSubscribe(Api.createTBService().userregister(phone, password, otherInviteCode, messageCode)
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
                     @Override
                     protected void _onNext(NullBean commonRes) {
                         if (commonRes != null) {
-                            mView.loginSuc(commonRes);
+                            mView.setuserregister(commonRes);
                         } else {
                             mView.showError(0, "");
                         }
@@ -62,6 +55,4 @@ public class LoginPresenter extends RxPresenter<LoginContact.View> implements Lo
                 })
         );
     }
-
-
 }

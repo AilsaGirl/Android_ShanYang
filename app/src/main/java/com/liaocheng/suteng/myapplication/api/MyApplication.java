@@ -8,6 +8,7 @@ import android.os.Environment;
 import com.circle.common.app.AppManager;
 import com.circle.common.app.BaseApplication;
 import com.circle.common.util.SPCommon;
+import com.umeng.socialize.PlatformConfig;
 
 import java.io.File;
 
@@ -24,10 +25,18 @@ public class MyApplication extends BaseApplication {
     public final static String DEFAULT_SAVE_IMAGE_PATH = Environment.getExternalStorageDirectory() + File.separator + "CircleDemo" + File.separator + "Images"
             + File.separator;
 
+    public static String wechatAppid = "wx51753e63fa8efcbb";
+    public static String AppSecret = "9c8728db9c53f15e9061d10ef1b45b82";
+    //获取微信TOKEN
+    public static String getWXToken = "https://api.weixin.qq.com/sns/oauth2/access_token";
+    public static String grant_type = "authorization_code";
+
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        PlatformConfig.setQQZone("1106274109","H3EbrcokRkP0AL7d");
+        PlatformConfig.setWeixin("wxf4ec8ddc0cd5b407", "f31385bc4260ee43f4f1662296818b75");
 
     }
 

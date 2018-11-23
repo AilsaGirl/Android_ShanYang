@@ -13,7 +13,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
     signingConfigs {
@@ -68,12 +68,21 @@ dependencies {
     //轮播
     //    compile 'com.amap.api:navi-3dmap:6.2.0_3dmap6.3.1'
     //3D地图so及jar
-//    compile 'com.amap.api:3dmap:5.0.0'
+    //    compile 'com.amap.api:3dmap:5.0.0'
     //定位功能
     compile 'com.amap.api:location:3.3.0'
+    //搜索功能
     //搜索功能
     compile 'com.amap.api:search:5.0.0'
     compile 'com.amap.api:navi-3dmap:6.2.0_3dmap6.3.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
-
+    testCompile 'junit:junit:4.12'
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_shareview.jar')
+    compile files('libs/umeng_social_tool.jar')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    implementation files('libs/open_sdk_r5788_lite.jar')
 }

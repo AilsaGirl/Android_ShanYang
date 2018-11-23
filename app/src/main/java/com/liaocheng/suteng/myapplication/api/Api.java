@@ -64,9 +64,8 @@ public class Api {
         }
 
         String host = "";
-        if (type == TYPE_TB) {
-            host =HTTP_BASE_HOST+"/";
-        }
+        host =HTTP_BASE_HOST;
+
         if (host.endsWith("\\?")) {
             host = host.substring(0, host.length() - 1);
         }

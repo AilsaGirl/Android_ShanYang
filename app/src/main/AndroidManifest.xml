@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.liaocheng.suteng.myapplication">
+
     <uses-feature android:name="android.hardware.sensor.accelerometer" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -70,91 +71,123 @@
     <uses-permission android:name="android.permission.Notification.DEFAULT_ALL" />
     <!-- <uses-permission android:name="android.permission.FLASHLIGHT"/> -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:name=".api.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:resizeableActivity="true"
         android:maxAspectRatio="2.4"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="ec8683dcb5b484aecc3afe97dc7b5fc7"/>
+            android:value="ec8683dcb5b484aecc3afe97dc7b5fc7" />
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
+
         <service android:name="com.amap.api.location.APSService" />
-        <!--适配华为（huawei）刘海屏-->
+        <!-- 适配华为（huawei）刘海屏 -->
         <meta-data
             android:name="android.notch_support"
-            android:value="true"/>
-        <!--适配小米（xiaomi）刘海屏-->
+            android:value="true" />
+        <!-- 适配小米（xiaomi）刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
-        <activity android:name=".ui.MainActivity"
+
+        <activity
+            android:name=".ui.MainActivity"
             android:hardwareAccelerated="false"
-            android:screenOrientation="portrait"
-            >
-
-        </activity>
-        <activity android:name=".ui.CeShiActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.CeShiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.login.RegisterActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.login.FindPwdActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.FindPwdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.BangDingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.ZhangHuSetingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.AboutMeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.DingDanGuanLiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.FaHuoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.address.AddAddress"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.address.AddressList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.address.NewLocationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.address.NewLocationSeekActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.address.CityListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.fahuo.FaHuoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-        <activity android:name=".ui.login.BangDingActivity"
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="sdksample" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1106274109" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.my.MyActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.my.ZhangHuSetingActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.my.AboutMeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.my.DingDanGuanLiActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.FaHuoActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.address.AddAddress"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.address.AddressList"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.address.NewLocationActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.address.NewLocationSeekActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.address.CityListActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".ui.home.fahuo.FaHuoActivity"
-            android:screenOrientation="portrait"
-            />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>
