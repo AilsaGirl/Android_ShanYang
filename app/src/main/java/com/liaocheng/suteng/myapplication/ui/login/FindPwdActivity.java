@@ -1,6 +1,8 @@
 package com.liaocheng.suteng.myapplication.ui.login;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -42,32 +44,44 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     TextView tvFindPW;
     @BindView(R.id.linZhuCe)
     LinearLayout linZhuCe;
+    private static final int NTF_SECOND = 0x1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (msg.what == NTF_SECOND) {
+                int i = (int) msg.obj;
+                tvGetYZM.setText(i + "秒后重新发送");
+                tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+                tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                if (i == 0) {
+                    isclicked = true;
+                    tvGetYZM.setText("获取验证码");
+                    tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+                    tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                }
+            }
+        }
+    };
 
     @Override
     public int getLayoutId() {
-
         return R.layout.activity_findpass;
-
     }
-
-
     @Override
     public void initEventAndData() {
-
     }
-
     @Override
     public void showError(int reqCode, String msg) {
-
+        ToastUtil.show(msg+"");
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
-
     @OnClick({R.id.tvGetYZM, R.id.tvPPW})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -77,6 +91,20 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
                     if (!TextUtils.isEmpty(Et_phone) && isMobile(Et_phone) == true) {
                         isclicked=false;
                         mPresenter.getforgetcode(Et_phone,"1");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 60; i >= 0; i--) {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+
+                                    }
+                                    mHandler.sendMessage(mHandler.obtainMessage(NTF_SECOND, i));
+                                }
+                            }
+                        }).start();
                     } else {
                         ToastUtil.show("请填写正确的手机号");
                     }
@@ -110,7 +138,7 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
         boolean b = false;
         p = Pattern.compile("^[1][3,5,6,7,8,9][0-9]{9}$"); // 验证手机号
         m = p.matcher(str);
-        b = m.matches();
+        b = m.matches() ;
         return b;
     }
     @Override

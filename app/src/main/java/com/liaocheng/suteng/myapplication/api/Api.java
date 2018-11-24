@@ -94,10 +94,7 @@ public class Api {
     public static <T> void toSubscriber(Flowable<T> flowable, CommonSubscriber subscriber) {
         addSubscribe(flowable.subscribeWith(subscriber));
     }
-
-
     private static CompositeDisposable mCompositeDisposable;
-
     private  static void addSubscribe(Disposable subscription) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();

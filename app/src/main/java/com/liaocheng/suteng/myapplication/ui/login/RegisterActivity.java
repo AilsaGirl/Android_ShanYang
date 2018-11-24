@@ -105,6 +105,7 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
             @Override
             public void onClick(View view) {
 
+
             }
         });
     }
