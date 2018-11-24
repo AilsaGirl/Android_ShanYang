@@ -7,59 +7,91 @@
     android:layout_marginBottom="10dp"
     android:background="#ffffff"
     android:orientation="horizontal">
-    <ImageView
-        android:id="@+id/ivBox"
-        android:src="@mipmap/weixuanzhongx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="12dp"
-        android:gravity="center"
-        android:visibility="gone"/>
     <RelativeLayout
-        android:id="@+id/rootView"
+        android:id="@+id/relDizhi"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
+        android:layout_height="80dp">
         <ImageView
-            android:id="@+id/ivEdit"
+            android:id="@+id/ivAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:scaleType="centerCrop"
-          />
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="15dp"
-            android:textColor="#333333"
-            android:textSize="16dp"
-           android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_toLeftOf="@+id/ivEdit"
-            android:text="山东省聊城市花园路133号"/>
-        <TextView
-            android:id="@+id/tvHome"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/icon_dizhi"
+            />
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/ivEdit"
-            android:layout_below="@+id/tvAddress"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:textColor="#333333"
-            android:textSize="14dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="e民通服务站"/>
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ivAddress"
+            android:layout_toLeftOf="@+id/tvDiZhiMoren"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1"
+                >
 
+                <TextView
+                    android:id="@+id/tvDiZhi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="请填写地址"
+                    android:textColor="@color/hl_6x3"
+                    android:textSize="14dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    />
+                <TextView
+                    android:id="@+id/tvDiZhiXiangQing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14dp"
+                    android:textColor="@color/hl_6x8"
+                    android:text="请填写手机号"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    />
+                <TextView
+                    android:id="@+id/tvTel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="3dp"
+                    android:text="1333344444"
+                    android:textColorHint="#bbbbbb"
+                    android:textColor="@color/hl_6x8"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="14dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvDiZhiMoren"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/xiangyou"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            />
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/hl_46xb"
+        />
 </LinearLayout>

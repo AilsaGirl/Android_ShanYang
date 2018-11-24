@@ -9,12 +9,13 @@ import com.circle.common.base.BaseView;
 
 public interface ModificationContact {
     interface View extends BaseView {//结果
-
+        void updateSuccess();
         void AddSuccess();
     }
 
     interface Presenter extends BasePresenter<View> {//过程
+        void updateAddress( String id,String contactName,String contactPhone,String accuracy,String latitude,String address,String detailAddress);
 
-        void addAddress(String locationX, String locationY, String area, String address);
+        void addAddress(String name, String tel,String locationX, String locationY, String area, String address,String addressType);
     }
 }

@@ -17,8 +17,32 @@ import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact
 
 public class ModificationPresenter extends RxPresenter<ModificationContact.View> implements ModificationContact.Presenter {
     @Override
-    public void addAddress( String locationX, String locationY, String area, String address) {
-        addSubscribe(Api.createTBService().createaddress(SPCommon.getString("token",""), locationX, locationY, area, address)
+    public void updateAddress(String id, String contactName, String contactPhone, String accuracy, String latitude, String address, String detailAddress) {
+        addSubscribe(Api.createTBService().updateUserAddress( SPCommon.getString("token",""),id,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+                        if (commonRes != null) {
+                            mView.updateSuccess();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+
+
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void addAddress( String name, String tel,String locationX, String locationY, String area, String address,String addressType) {
+        addSubscribe(Api.createTBService().addNewAddress(SPCommon.getString("token",""),name,tel, locationX, locationY, area, address,addressType)
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber(mContext, true) {

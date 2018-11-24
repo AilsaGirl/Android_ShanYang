@@ -5,6 +5,7 @@ import com.circle.common.base.RxPresenter;
 import com.circle.common.baserx.CommonSubscriber;
 import com.circle.common.baserx.RxUtil;
 import com.circle.common.response.BaseResponse;
+import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.api.Api;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
@@ -20,7 +21,7 @@ public class LoginPresenter extends RxPresenter<LoginContact.View> implements Lo
     @Override
     public void login(String username, String password) {
 
-        addSubscribe(Api.createTBService().updateUserAddress("4041","你好啊","17763515228","122","333","聊城","金鼎大厦")
+        addSubscribe(Api.createTBService().updateUserAddress(SPCommon.getString("token",""),"4041","你好啊","17763515228","122","333","聊城","金鼎大厦")
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {

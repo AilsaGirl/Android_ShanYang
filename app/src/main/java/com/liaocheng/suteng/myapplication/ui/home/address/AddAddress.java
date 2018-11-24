@@ -1,12 +1,14 @@
 package com.liaocheng.suteng.myapplication.ui.home.address;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseActivity;
@@ -18,10 +20,11 @@ import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.ModificationPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact;
 
-
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -32,36 +35,32 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
 
     String newsheng, newshi, newqu;
     String oldsheng, oldshi, oldqu;
-    String id;
+
     String lon;
     String lat;
     @BindView(R.id.toolBar)
     MyToolBar toolBar;
-    @BindView(R.id.locantion)
-    TextView locantion;
-    @BindView(R.id.linSel)
-    LinearLayout linSel;
-    @BindView(R.id.useraddresss)
-    EditText useraddresss;
+    @BindView(R.id.tvBuChong)
+    TextView tvBuChong;
+    @BindView(R.id.ivAddress)
+    ImageView ivAddress;
+    @BindView(R.id.tvDiZhi)
+    TextView tvDiZhi;
+    @BindView(R.id.tvDiZhiXiangQing)
+    TextView tvDiZhiXiangQing;
+    @BindView(R.id.ivTel)
+    ImageView ivTel;
+    @BindView(R.id.etTel)
+    EditText etTel;
+    @BindView(R.id.ivRen)
+    ImageView ivRen;
+    @BindView(R.id.etRen)
+    EditText etRen;
+    @BindView(R.id.btnOk)
+    Button btnOk;
+    @BindView(R.id.etXiangQing)
+    EditText etXiangQing;
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data==null)return;
-        if (resultCode == 110) {
-            if (requestCode == 110) {
-                newsheng = data.getStringExtra("sheng");
-                newshi = data.getStringExtra("shi");
-                newqu = data.getStringExtra("qu");
-                useraddresss.setText(data.getStringExtra("title"));
-                useraddresss.setSelection(data.getStringExtra("title").length());
-                locantion.setText(newsheng + newshi + newqu);
-                lon = data.getStringExtra("lon");
-                lat = data.getStringExtra("lat");
-            }
-        }
-    }
 
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -79,6 +78,7 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
 
         }
     };
+
     @Override
     public void showError(int reqCode, String msg) {
         if (msg != null && !msg.equals("")) {
@@ -87,45 +87,101 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
     }
 
     @Override
-    public void AddSuccess() {
-       ToastUtil.show("添加地址成功！");
+    public void updateSuccess() {
+        ToastUtil.show("补充地址成功！");
         EventBus.getDefault().post(new RecruitEvent(true));
-       finish();
+        finish();
+    }
+
+    @Override
+    public void AddSuccess() {
+        ToastUtil.show("补充地址成功！");
+        EventBus.getDefault().post(new RecruitEvent(true));
+        finish();
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.add_address;
     }
+
     long mLasttime;
+    int mType;
+    String mTitle;
+    String mCity;
+    String mAddress;
+    int isnew;
+    String id;
+
     @Override
     public void initEventAndData() {
-//        Intent intent = getIntent();
-//        intent.getStringExtra("id");
-        toolBar.setTitleText("新增地址").setBackFinish().setRight("保存", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(locantion.getText().toString().trim())){
-                    ToastUtil.show("请先选择地区");
-                    return;
-                }
-                if (TextUtils.isEmpty(useraddresss.getText().toString().trim())){
-                    ToastUtil.show("请填写具体地址");
-                    return;
-                }
-                mPresenter.addAddress(lon,lat,locantion.getText().toString(),useraddresss.getText().toString());
-            }
-        }).setRightTextColor(0xffffffff);
-        linSel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+        Intent intent = getIntent();
+        mType = intent.getIntExtra("type", 0);
+        lon = intent.getStringExtra("lon");
+        lat = intent.getStringExtra("lat");
+        mTitle = intent.getStringExtra("location");
+        mCity = intent.getStringExtra("city");
+        mAddress = intent.getStringExtra("address");
+        isnew = intent.getIntExtra("isnew", 1);
+        if (isnew==0){
+            id = intent.getStringExtra("id");
+        }
+        toolBar.setTitleText("补充地址").setBackFinish();
+        tvDiZhi.setText(mTitle + "");
+        tvDiZhiXiangQing.setText(mAddress + "");
+//        tvBuChong.setText("");
+
+    }
+
+    Intent intent;
+
+    @OnClick({R.id.relDiZhi, R.id.btnOk})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.relDiZhi:
+                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
-                Intent intent = new Intent();
-                intent.setClass(AddAddress.this, NewLocationActivity.class);
-                startActivityForResult(intent, 110);
-            }
-        });
+                intent = new Intent(this, NewLocationSeekActivity.class);
+                intent.putExtra("lon", lon);
+                intent.putExtra("lat", lat);
+                intent.putExtra("type", mType);
+                intent.putExtra("city", mCity + "");
+                intent.putExtra("isnew",isnew);
+                if (isnew==0){
+                    intent.putExtra("id",id);
+                }
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.btnOk:
+                if (mType == 0) {
+
+                } else {
+                    String address = tvDiZhi.getText().toString();
+                    String city = tvDiZhiXiangQing.getText().toString();
+                    String xiangqing = etXiangQing.getText().toString();
+                    String tel = etTel.getText().toString();
+                    String name = etRen.getText().toString();
+                    if (TextUtils.isEmpty(address)||TextUtils.isEmpty(city)){
+                        ToastUtil.show("请选择具体地址");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tel)){
+                        ToastUtil.show("请填写联系方式");
+                        return;
+                    }
+                    if (isnew==1){
+                        mPresenter.addAddress(name+"",tel+"",lon,lat,city+address+"",xiangqing+"",mType+"");
+
+                    }else {
+                        mPresenter.updateAddress(id,name+"",tel+"",lon,lat,city+address+"",xiangqing+"");
+
+                    }
+                      }
+
+                break;
+        }
     }
+
 }

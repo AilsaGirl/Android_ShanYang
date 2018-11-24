@@ -55,12 +55,12 @@ public class RxUtil {
                         if (baseResponse.isTokenExpire()) {
                             BaseApplication.getInstance().tokenExpire();
 
-                            return Flowable.error(new ApiException(CommonUtil.splitMsg(baseResponse.msg)));
+                            return Flowable.error(new ApiException(baseResponse.msg));
                         }else if (baseResponse.success()) {
                             if (baseResponse.result != null) {
                                 return createData(baseResponse.result);
                             } else {
-                                ToastUtil.show(CommonUtil.splitMsg(baseResponse.msg));
+                                ToastUtil.show(baseResponse.msg);
                                 return null;
                             }
                         } else if (baseResponse.code==406){
@@ -70,7 +70,7 @@ public class RxUtil {
                             if (baseResponse == null || TextUtils.isEmpty(baseResponse.msg)) {
                                 return Flowable.error(new ApiException("服务器返回error"));
                             } else {
-                                return Flowable.error(new ApiException(CommonUtil.splitMsg(baseResponse.msg)));
+                                return Flowable.error(new ApiException(baseResponse.msg));
                             }
                         }
                     }

@@ -3,6 +3,7 @@ package com.liaocheng.suteng.myapplication.ui.login;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.api.MyApplication;
@@ -79,7 +81,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showError(int reqCode, String msg) {
-
+        if (!TextUtils.isEmpty(msg)){
+            ToastUtil.show( CommonUtil.splitMsg(msg));
+        }
     }
     Intent intent;
     @OnClick({R.id.tvDuanXin, R.id.tvMiMa, R.id.tvGetYZM, R.id.loginBtn, R.id.tvPPW, R.id.tvFindPW, R.id.ivWeiXin, R.id.ivQQ})
@@ -102,11 +106,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             case R.id.tvGetYZM:
                 break;
             case R.id.loginBtn:
-                mPresenter.login("","");
+//                mPresenter.login("","");
 //                mPresenter.logins("","");
-//                intent = new Intent();
-//                intent.setClass(this,MainActivity.class);
-//                startActivity(intent);
+                intent = new Intent();
+                intent.setClass(this,MainActivity.class);
+                startActivity(intent);
                 break;
             case R.id.tvPPW:
                 intent = new Intent();

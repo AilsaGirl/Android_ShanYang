@@ -50,10 +50,11 @@ public class Api {
                 Request request = chain.request().newBuilder()
                         .header("User-Agent", DeviceUtil.getPhoneBrand() + "-" + DeviceUtil.getPhoneModel() + "-" + DeviceUtil.getBuildVersion() + " -appversionName:" + DeviceUtil.getVersionName(MyApplication.getContext()))
                         .build();
+
                 return chain.proceed(request);
             }
         };
-
+//.addHeader("Content-Type", "text/html; charset=ISO-8859-1")
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(READ_TIME_OUT, TimeUnit.MILLISECONDS)

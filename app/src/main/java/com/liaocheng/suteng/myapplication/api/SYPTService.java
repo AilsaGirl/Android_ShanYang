@@ -2,6 +2,7 @@ package com.liaocheng.suteng.myapplication.api;
 
 import com.circle.common.response.BaseResponse;
 
+import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
 import com.liaocheng.suteng.myapplication.model.Zcxiybean;
@@ -35,36 +36,36 @@ public interface SYPTService {
      */
     @FormUrlEncoded
     @POST("updateUserAddress")
-    Flowable<BaseResponse<NullBean>> updateUserAddress(@Field("id") String id, @Field("contactName") String contactName, @Field("contactPhone") String contactPhone, @Field("accuracy") String accuracy, @Field("latitude") String latitude, @Field("address") String address, @Field("detailAddress") String detailAddress);
+    Flowable<BaseResponse<NullBean>> updateUserAddress(@Field("token") String token,@Field("id") String id, @Field("contactName") String contactName, @Field("contactPhone") String contactPhone, @Field("accuracy") String accuracy, @Field("latitude") String latitude, @Field("address") String address, @Field("detailAddress") String detailAddress);
     /**
      * 个人中心--->创建地址管理
+     * 创建地址管理
      *
      * @param token
+     * @param contactName
      * @return
      */
     @FormUrlEncoded
-    @POST("api/Location/create")
-    Flowable<BaseResponse<NullBean>> createaddress(@Field("token") String token, @Field("x") String x, @Field("y") String y, @Field("area") String area, @Field("address") String address);
-
+    @POST("addNewAddress")
+    Flowable<BaseResponse<NullBean>> addNewAddress(@Field("token") String token, @Field("contactName") String contactName, @Field("contactPhone") String contactPhone, @Field("accuracy") String accuracy, @Field("latitude") String latitude, @Field("address") String address, @Field("detailAddress") String detailAddress, @Field("addressType") String addressType);
     /**
-     * 个人中心--->删除地址管理
+     * 我的地址  家  公司 默认
      *
      * @param token
      * @return
      */
     @FormUrlEncoded
-    @POST("api/Location/del")
-    Flowable<BaseResponse<NullBean>> delddress(@Field("token") String token, @Field("location_id") String location_id);
-    /**
-     * 个人中心--->地址管理
+    @POST("myAddressInfo")
+    Flowable<BaseResponse<MyAddressInfoBean>> myAddressInfo(@Field("token") String token);
+       /**
+     * 个人中心--->地址管理  常用地址
      *
      * @param token
      * @return
      */
     @FormUrlEncoded
-    @POST("api/Location/myList")
-    Flowable<BaseResponse<SiteBean>> addressListContact(@Field("token") String token, @Field("page") String page, @Field("limit") String limit);
-
+    @POST("findOldOrderAddress")
+    Flowable<BaseResponse<MyAddressInfoBean>> addressListContact(@Field("token") String token, @Field("startNo") String startNo);
     /**
      * 修改地址
      *
@@ -94,6 +95,7 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("send_sms")
     Flowable<BaseResponse<NullBean>>  forgetcode( @Field("phone") String phone, @Field("type") String type);
+
 
 
 }

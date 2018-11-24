@@ -1,26 +1,40 @@
 package com.liaocheng.suteng.myapplication.ui.home.address;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.util.CommonUtil;
 import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
-
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.MyLiveList;
-import com.liaocheng.suteng.myapplication.model.SiteBean;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.SitePresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.SiteContact;
@@ -33,23 +47,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
  * Created by Administrator on 2018/3/31.
  */
 
-public class AddressList extends BaseActivity<SitePresenter> implements SiteContact.View, View.OnClickListener, AddressListAdapter.OnItemClickListener {
+public class AddressList extends BaseActivity<SitePresenter> implements SiteContact.View, AddressListAdapter.OnItemClickListener {
     private static final int MYLIVE_MODE_CHECK = 0;
     private static final int MYLIVE_MODE_EDIT = 1;
 
-    XRecyclerView mRecyclerview;
-    LinearLayout mLlBottomDialog;
-    TextView mBtnEditor, mBtnDelete, btnAdd;
     @BindView(R.id.toolBar)
     MyToolBar toolBar;
     @BindView(R.id.ivNull)
     ImageView ivNull;
+    @BindView(R.id.ivMoRenAddress)
+    ImageView ivMoRenAddress;
+    @BindView(R.id.tvMoRenDiZhi)
+    TextView tvMoRenDiZhi;
+    @BindView(R.id.tvMoRenDiZhiXiangQing)
+    TextView tvMoRenDiZhiXiangQing;
+    @BindView(R.id.tvDiZhiMoren)
+    ImageView tvDiZhiMoren;
+    @BindView(R.id.relMoRen)
+    RelativeLayout relMoRen;
+    @BindView(R.id.ivGongSiAddress)
+    ImageView ivGongSiAddress;
+    @BindView(R.id.tvGongSiDiZhi)
+    TextView tvGongSiDiZhi;
+    @BindView(R.id.tvGongSiDiZhiXiangQing)
+    TextView tvGongSiDiZhiXiangQing;
+    @BindView(R.id.tvGongSiGongSi)
+    ImageView tvGongSiGongSi;
+    @BindView(R.id.relGongSi)
+    RelativeLayout relGongSi;
+    @BindView(R.id.ivJiaAddress)
+    ImageView ivJiaAddress;
+    @BindView(R.id.tvJiaDiZhi)
+    TextView tvJiaDiZhi;
+    @BindView(R.id.tvJiaDiZhiXiangQing)
+    TextView tvJiaDiZhiXiangQing;
+    @BindView(R.id.tvDiZhiJia)
+    ImageView tvDiZhiJia;
+    @BindView(R.id.relJia)
+    RelativeLayout relJia;
+    @BindView(R.id.linMyDiZhi)
+    LinearLayout linMyDiZhi;
+    @BindView(R.id.tvChangYong)
+    TextView tvChangYong;
+    @BindView(R.id.recyclerview)
+    XRecyclerView mRecyclerview;
+    @BindView(R.id.tvCity)
+    TextView tvCity;
     private AddressListAdapter mAddressListAdapter = null;
     private LinearLayoutManager mLinearLayoutManager;
     private List<MyLiveList> mydata = new ArrayList<>();
@@ -58,217 +109,61 @@ public class AddressList extends BaseActivity<SitePresenter> implements SiteCont
     private int index = 0;
     public TextView tvTitle;
 
-    /**
-     * 根据选择的数量是否为0来判断按钮的是否可点击.
-     *
-     * @param size
-     */
-    private void setBtnBackground(int size) {
-        if (size != 0) {
-            mBtnDelete.setEnabled(true);
-        } else {
-            mBtnDelete.setEnabled(false);
-        }
-    }
-
+    /*定位相关*/
+    public AMapLocationClient mLocationClient = null;
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption = null;
     private void initListener() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
         mAddressListAdapter.setOnItemClickListener(this);
-        mBtnDelete.setOnClickListener(this);
-        btnAdd.setOnClickListener(this);
+
     }
+double lon;
+    double lat;
 
-    /**
-     * 删除逻辑
-     */
-    private void deleteVideo() {
-        final ArrayList<String> stringArrayList = new ArrayList<String>();
-        if (index == 0) {
-            mBtnDelete.setEnabled(false);
-            return;
-        }
-        final AlertDialog builder = new AlertDialog.Builder(this)
-                .create();
-        builder.show();
-        if (builder.getWindow() == null) return;
-        builder.getWindow().setContentView(R.layout.pop_msg);//设置弹出框加载的布局
-        TextView msg = (TextView) builder.findViewById(R.id.tv_msg);
-        Button cancle = (Button) builder.findViewById(R.id.btn_cancle);
-        Button sure = (Button) builder.findViewById(R.id.btn_sure);
-        if (msg == null || cancle == null || sure == null) return;
-
-        if (index == 1) {
-            msg.setText("删除后不可恢复，是否删除该条目？");
-        } else {
-            msg.setText("删除后不可恢复，是否删除这" + index + "个条目？");
-        }
-        cancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder.dismiss();
-            }
-        });
-        sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = mAddressListAdapter.getMyLiveList().size(), j = 0, h = 0; i > j; i--, h++) {
-                    MyLiveList myLive = mAddressListAdapter.getMyLiveList().get(i - 1);
-                    if (myLive.isSelect()) {
-                        mAddressListAdapter.getMyLiveList().remove(myLive);
-                        Log.d("onClick: ", myLive.id);
-                        stringArrayList.add(myLive.id);
-                        index--;
-                    }
-
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation aMapLocation) {
+            if (aMapLocation != null) {
+                if (aMapLocation.getErrorCode() == 0) {
+                    //可在其中解析amapLocation获取相应内容。
+                    tvCity.setText(aMapLocation.getCity() + "");
+                    lon=aMapLocation.getLongitude();
+                    lat = aMapLocation.getLatitude();
+                } else {
+                    tvCity.setText("定位失败");
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("yue.huang", "location Error, ErrCode:"
+                            + aMapLocation.getErrorCode() + ", errInfo:"
+                            + aMapLocation.getErrorInfo());
                 }
-                String[] stringArray = stringArrayList.toArray(new String[stringArrayList.size()]);
-                String lll = "";
-                for (int i = 0; i < stringArray.length; i++) {
-                    lll = lll + stringArray[i] + ",";
-                }
-                lll = lll.substring(0, lll.length() - 1);
-                Log.d("onClick: ", lll);
-                index = 0;
-                setBtnBackground(index);
-                if (mAddressListAdapter.getMyLiveList().size() == 0) {
-                    mLlBottomDialog.setVisibility(View.GONE);
-                }
-                mAddressListAdapter.notifyDataSetChanged();
-                mPresenter.delAddress(lll);
-                builder.dismiss();
-            }
-        });
-    }
-
-    private void updataEditMode() {
-        mEditMode = mEditMode == MYLIVE_MODE_CHECK ? MYLIVE_MODE_EDIT : MYLIVE_MODE_CHECK;
-        if (mEditMode == MYLIVE_MODE_EDIT) {
-            toolBar.setRightText("取消");
-            mLlBottomDialog.setVisibility(View.VISIBLE);
-            btnAdd.setVisibility(View.GONE);
-            editorStatus = true;
-        } else {
-            toolBar.setRightText("编辑");
-            mLlBottomDialog.setVisibility(View.GONE);
-            btnAdd.setVisibility(View.VISIBLE);
-            editorStatus = false;
-            clearAll();
-        }
-        mAddressListAdapter.setEditMode(mEditMode);
-    }
-
-    private void clearAll() {
-        setBtnBackground(0);
-    }
-    long mLasttime;
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_delete:
-                deleteVideo();
-                break;
-            case R.id.btnAdd:
-                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
-                    return;
-                mLasttime = System.currentTimeMillis();
-                Intent intent = new Intent();
-                intent.setClass(AddressList.this, AddAddress.class);
-                startActivity(intent);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void onItemClickListener(int pos, List<MyLiveList> myLiveList) {
-        if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
-            return;
-        mLasttime = System.currentTimeMillis();
-        MyLiveList myLive = myLiveList.get(pos);
-        if (editorStatus) {
-            boolean isSelect = myLive.isSelect();
-            if (!isSelect) {
-                index++;
-                myLive.setSelect(true);
-
-            } else {
-                myLive.setSelect(false);
-                index--;
-
-            }
-            setBtnBackground(index);
-            mAddressListAdapter.notifyDataSetChanged();
-        } else {
-            if (!TextUtils.isEmpty(mId)&&mId.equals("1")) {
-
-                String name = myLive.username;//("name");//得到新Activity 关闭后返回的数据
-                String address =  myLive.address + myLive.area;//("address");//得到新Activity 关闭后返回的数据
-                String id = myLive.id;//("id");//得到新Activity 关闭后返回的数据
-
-                //数据是使用Intent返回
-                Intent intent = new Intent();
-                //把返回数据存入Intent
-                intent.putExtra("area", myLive.area + "");
-                intent.putExtra("address", myLive.address + "");
-                intent.putExtra("x", myLive.x + "");
-                intent.putExtra("y", myLive.y + "");
-                //设置返回数据
-                this.setResult(1, intent);
-                //关闭Activity
-                this.finish();
             }
         }
-    }
-
+    };
     @Override
     public void showError(int reqCode, String msg) {
         mRecyclerview.refreshComplete();
         mRecyclerview.loadMoreComplete();
 
-            if (msg != null && !msg.equals("")) {
-                ToastUtil.show(CommonUtil.splitMsg(msg));
-            }
-
-    }
-
-    @Override
-    public void AddressListContactSuccess(SiteBean siteBean) {
-        mRecyclerview.refreshComplete();
-        mRecyclerview.loadMoreComplete();
-        if (siteBean.list!=null&&siteBean.list.size()>0){
-            ivNull.setVisibility(View.GONE);
-            List<SiteBean.addressBean> mlist = siteBean.list;
-            if (page==1){
-                mydata.clear();
-            }
-            for (int i = 0; i < mlist.size(); i++) {
-
-                MyLiveList myLiveList = new MyLiveList();
-                myLiveList.id = mlist.get(i).id;
-                myLiveList.user_id = mlist.get(i).user_id;
-                myLiveList.area = mlist.get(i).area;
-                myLiveList.address = mlist.get(i).address;
-                myLiveList.x = mlist.get(i).x;
-                myLiveList.y = mlist.get(i).y;
-                mydata.add(myLiveList);
-            }
-
-            mAddressListAdapter.setData(mydata);
-            initListener();
-        }else {
-            if (page==1){
-                ivNull.setVisibility(View.VISIBLE);
-            }else {
-                ToastUtil.show("最后一页");
-            }
+        if (msg != null && !msg.equals("")) {
+            ToastUtil.show(CommonUtil.splitMsg(msg));
         }
 
-    }
-
-    @Override
-    public void selSuccess() {
-        ToastUtil.show("删除成功！");
-        mRecyclerview.refresh();
     }
 
     @Override
@@ -277,47 +172,37 @@ public class AddressList extends BaseActivity<SitePresenter> implements SiteCont
     }
 
     String mId = "";
-int page =1;
+    int page = 1;
+
     @Override
     public void initEventAndData() {
 //        AutoSizeConfig.getInstance();
-        toolBar.setBackFinish().setTitleText("地址选择").setRight("编辑", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
-                    return;
-                mLasttime = System.currentTimeMillis();
-                updataEditMode();
-            }
-        }).setRightTextColor(0xffffffff);
+        SPCommon.setString("token", "cd53468f0db916abe6ff1da0709b7b95$10002080");
+        toolBar.setBackFinish().setTitleText("地址管理");
         Intent intent = getIntent();
         mId = intent.getStringExtra("id");
-        if (!TextUtils.isEmpty(mId)){
+        if (!TextUtils.isEmpty(mId)) {
             toolBar.setBackFinish().setTitleText("选择地址");
         }
-        mRecyclerview = (XRecyclerView) findViewById(R.id.recyclerview);
-        mLlBottomDialog = (LinearLayout) findViewById(R.id.ll_bottom);
 
-        mBtnDelete = (TextView) findViewById(R.id.btn_delete);
-        btnAdd = (TextView) findViewById(R.id.btnAdd);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                page=1;
-                mPresenter.addressListContact(SPCommon.getString("token", ""),page+"");
+                page = 0;
+                mPresenter.addressListContact(SPCommon.getString("token", ""), page + "");
             }
 
             @Override
             public void onLoadMore() {
-                page++;
-                mPresenter.addressListContact(SPCommon.getString("token", ""),page+"");
+                page = page + 5;
+                mPresenter.addressListContact(SPCommon.getString("token", ""), page + "");
             }
         });
-
+        mPresenter.getMyAddressList(SPCommon.getString("token", ""));
         mydata = new ArrayList<>();
         EventBus.getDefault().register(this);
-        mAddressListAdapter = new AddressListAdapter(this);
+        mAddressListAdapter = new AddressListAdapter();
         mRecyclerview.setAdapter(mAddressListAdapter);
         initListener();
         mRecyclerview.refresh();
@@ -327,8 +212,8 @@ int page =1;
     public void onMessageEvent(RecruitEvent event) {
         if (event == null)
             return;
-        if (event.getShow()){
-            mRecyclerview.refresh();
+        if (event.getShow()) {
+          mPresenter.getMyAddressList(SPCommon.getString("token",""));
         }
 
     }
@@ -345,4 +230,215 @@ int page =1;
         super.onStart();
     }
 
+
+    @Override
+    public void AddressListContactSuccess(MyAddressInfoBean siteBean) {
+        mRecyclerview.refreshComplete();
+        mRecyclerview.loadMoreComplete();
+        if (siteBean.data != null && siteBean.data.size() > 0) {
+            ivNull.setVisibility(View.GONE);
+            mAddressListAdapter.setData(siteBean.data);
+            initListener();
+        } else {
+            if (page == 1) {
+                ivNull.setVisibility(View.VISIBLE);
+            } else {
+                ToastUtil.show("最后一页");
+            }
+        }
+    }
+int jia = 0;
+    int moren= 0;
+    int gongsi= 0;
+    List<MyAddressInfoBean.MyAddressModel> listMyAddress = new ArrayList();
+    @Override
+    public void setMyAddressList(MyAddressInfoBean siteBean) {
+        if (siteBean.data != null && siteBean.data.size() > 0) {
+            listMyAddress = siteBean.data;
+            for (int i = 0; i < siteBean.data.size(); i++) {
+                if (siteBean.data.get(i).addressType.endsWith("1")) {
+                    moren = i;
+                    tvMoRenDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvMoRenDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
+                }
+                if (siteBean.data.get(i).addressType.endsWith("2")) {
+                    gongsi = i;
+                    tvGongSiDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvGongSiDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
+                }
+                if (siteBean.data.get(i).addressType.endsWith("3")) {
+                    jia = i;
+                    tvJiaDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvJiaDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
+                }
+            }
+            mAddressListAdapter.setData(siteBean.data);
+        }
+    }
+
+    @Override
+    public void updateSuccess() {
+
+    }
+
+    @Override
+    public void addNewAddresselSuccess() {
+
+    }
+
+    @Override
+    public void onItemClickListener(int pos) {
+
+    }
+
+    long mLasttime;
+    Intent intent;
+
+    @OnClick({R.id.relMoRen, R.id.relGongSi, R.id.relJia, R.id.tvDiZhiMoren, R.id.tvGongSiGongSi, R.id.tvDiZhiJia,R.id.tvCity, R.id.et_search})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.relMoRen:
+                break;
+            case R.id.relGongSi:
+                break;
+            case R.id.relJia:
+                break;
+            case R.id.tvDiZhiMoren:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(this, NewLocationSeekActivity.class);
+                intent.putExtra("lon",lon);
+                intent.putExtra("lat",lat);
+                intent.putExtra("type",1);
+
+                if (TextUtils.isEmpty(tvMoRenDiZhi.getText().toString())){
+                    intent.putExtra("isnew",1);
+                }else {
+                    if (listMyAddress.size()>moren){
+                        intent.putExtra("id",listMyAddress.get(moren).id);
+                    }
+                    intent.putExtra("isnew",0);
+                }
+                intent.putExtra("city",tvCity.getText().toString()+"");
+                startActivity(intent);
+                break;
+            case R.id.tvGongSiGongSi:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(this, NewLocationSeekActivity.class);
+                intent.putExtra("lon",lon);
+                intent.putExtra("lat",lat);
+                intent.putExtra("type",2);
+                if (TextUtils.isEmpty(tvGongSiDiZhi.getText().toString())){
+                    intent.putExtra("isnew",1);
+                }else {
+                    if (listMyAddress.size()>moren){
+                        intent.putExtra("id",listMyAddress.get(gongsi).id);
+                    }
+                    intent.putExtra("isnew",0);
+                }
+                intent.putExtra("city",tvCity.getText().toString()+"");
+                startActivity(intent);
+                break;
+            case R.id.tvDiZhiJia:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(this, NewLocationSeekActivity.class);
+                intent.putExtra("lon",lon);
+                intent.putExtra("lat",lat);
+                intent.putExtra("type",3);
+                if (TextUtils.isEmpty(tvJiaDiZhi.getText().toString())){
+                    intent.putExtra("isnew",1);
+                }else {
+                    if (listMyAddress.size()>moren){
+                        intent.putExtra("id",listMyAddress.get(jia).id);
+                    }
+                    intent.putExtra("isnew",0);
+                }
+                intent.putExtra("city",tvCity.getText().toString()+"");
+                startActivity(intent);
+
+                break;
+            case R.id.tvCity:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(this, CityListActivity.class);
+                intent.putExtra("name","选择城市");
+                startActivityForResult(intent, 200);
+                break;
+            case R.id.et_search:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(this, NewLocationSeekActivity.class);
+                intent.putExtra("lon",lon);
+                intent.putExtra("lat",lat);
+                intent.putExtra("type",0);
+                intent.putExtra("city",tvCity.getText().toString()+"");
+                startActivity(intent);
+                break;
+        }
+    }
+    /**
+     * 回传的参数
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data==null)return;
+
+        if (resultCode == 201) {
+
+            if (requestCode ==200){
+                String   city = data.getStringExtra("key");
+                tvCity.setText(city+"");
+                getLatlon (city);
+
+            }
+        }
+    }
+
+    private void getLatlon(String cityName){
+
+        GeocodeSearch geocodeSearch=new GeocodeSearch(this);
+        geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+
+            }
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+                if (i==1000){
+                    if (geocodeResult!=null && geocodeResult.getGeocodeAddressList()!=null &&
+                            geocodeResult.getGeocodeAddressList().size()>0){
+                        GeocodeAddress geocodeAddress = geocodeResult.getGeocodeAddressList().get(0);
+                        lat = geocodeAddress.getLatLonPoint().getLatitude();//纬度
+                        lon = geocodeAddress.getLatLonPoint().getLongitude();//经度
+
+
+                        Log.e("地理编码", geocodeAddress.getAdcode()+"");
+                        Log.e("纬度latitude",lat+"");
+                        Log.e("经度longititude",lon+"");
+
+                    }else {
+                        ToastUtil.show("地址名出错");
+                    }
+                }
+            }
+        });
+
+        GeocodeQuery geocodeQuery=new GeocodeQuery(cityName.trim(),"29");
+        geocodeSearch.getFromLocationNameAsyn(geocodeQuery);
+
+
+    }
 }

@@ -20,6 +20,7 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.circle.common.base.BaseActivity;
 import com.circle.common.util.StatusBarUtils;
+import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.LocationBean;
 
@@ -36,6 +37,8 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
     ImageView Iv_back;//标题的back
     AutoCompleteTextView AutoCompleteTextView;//输入框
     TextView tx_sousuo;//搜索
+    TextView tvCity;//搜索
+    MyToolBar toolBarl;
     ListView listView;
     Intent intent;
     ListView listview_lishi;
@@ -51,6 +54,10 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
     double lat;//NewLocationSeekActivity回传经纬度
     double lonf;//NewLocationSeekActivity回传的经纬度
     double latf;//NewLocationSeekActivity回传经纬度
+    int mType =0;
+    String mCity;
+    int isnew = 0;
+    String id = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +65,26 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
         Intent intent = getIntent();
         latf =  intent.getDoubleExtra("lat",0);
         lonf = intent.getDoubleExtra("lon",0);
+        mType = intent.getIntExtra("type",0);
+        isnew = intent.getIntExtra("isnew",1);
+        mCity = intent.getStringExtra("city");
+        if (isnew==0){
+            id = intent.getStringExtra("id");
+        }
         initview();
-
-
+        if (mType==0){
+            AutoCompleteTextView.setHint("物品送到哪里去");
+        }
+        if (mType==1){
+            AutoCompleteTextView.setHint("请输入地址");
+        }
+        if (mType==2){
+            AutoCompleteTextView.setHint("请输入公司地址");
+        }
+        if (mType==3){
+            AutoCompleteTextView.setHint("请输入家庭地址");
+        }
+        tvCity.setText(mCity+"");
     }
 
     @Override
@@ -81,6 +105,8 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
         Iv_back = findViewById(R.id.Iv_back);
         AutoCompleteTextView = findViewById(R.id.AutoCompleteTextView);
         tx_sousuo = findViewById(R.id.tx_sousuo);
+        tvCity = findViewById(R.id.tvCity);
+        toolBarl = findViewById(R.id.toolBar);
         Iv_back.setOnClickListener(this);
         tx_sousuo.setOnClickListener(this);
         AutoCompleteTextView.addTextChangedListener(this);
@@ -90,6 +116,7 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
         date();
         NewLocationSeekAdapter adapter = new NewLocationSeekAdapter(this, data);
         listview_lishi.setAdapter(adapter);
+        toolBarl.setBackFinish().setTitleText("选择地址");
     }
 
     private void date() {
@@ -247,9 +274,37 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
                                 intent.putExtra("lon", String.valueOf(data.get(i).getLat()));
                                 intent.putExtra("lat", String.valueOf(data.get(i).getLon()));
                                 intent.putExtra("location", String.valueOf(data.get(i).getTitle()));
-                                intent.putExtra("city", data.get(i).getTexta());
-                                intent.putExtra("true", "true");
-                                setResult(20, intent);
+                                intent.putExtra("address", data.get(i).getTexta());
+                                intent.putExtra("city", mCity);
+                                intent.putExtra("isnew", isnew);
+                                if (isnew==0){
+                                    intent.putExtra("id", id);
+                                }
+                                if (mType==0){
+//                                    AutoCompleteTextView.setHint("物品送到哪里去");
+                                    intent.putExtra("type",0);
+                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
+                                    startActivity(intent);
+                                }
+                                if (mType==1){
+//                                    AutoCompleteTextView.setHint("请输入地址");
+                                    intent.putExtra("type",1);
+                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
+                                    startActivity(intent);
+                                }
+                                if (mType==2){
+//                                    AutoCompleteTextView.setHint("请输入公司地址");
+                                    intent.putExtra("type",2);
+                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
+                                    startActivity(intent);
+                                }
+                                if (mType==3){
+//                                    AutoCompleteTextView.setHint("请输入家庭地址");
+                                    intent.putExtra("type",3);
+                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
+                                    startActivity(intent);
+                                }
+
                                 NewLocationSeekActivity.this.finish();
                             }
                         });
