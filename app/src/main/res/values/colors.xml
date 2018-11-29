@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background">#FFffff</color>
-
+    <color name="tab_color">#FF4081</color>
+    <color name="help_send">#FF4081</color>
 </resources>

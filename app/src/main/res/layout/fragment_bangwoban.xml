@@ -11,7 +11,7 @@
     android:layout_margin="2dp"
     android:background="@drawable/bangwomai_bg"
     android:gravity="center_vertical"
-    android:hint="请输入要买什么，商品描述及备注"
+    android:hint="请输入你要办的事情，要求、时间和地址"
     android:drawableRight="@mipmap/xiangyou"
     android:textSize="14dp"
     />
@@ -27,6 +27,7 @@
             android:src="@mipmap/icon_weizhihongshou"
             />
         <LinearLayout
+            android:id="@+id/linAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

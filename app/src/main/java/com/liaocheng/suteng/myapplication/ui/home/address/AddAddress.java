@@ -16,9 +16,11 @@ import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.ModificationPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -112,19 +114,24 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
     String mAddress;
     int isnew;
     String id;
-
+    int is_result = 0;
+    int tag = 0;
+    FaHuoAddressModel addressModel = new FaHuoAddressModel();
     @Override
     public void initEventAndData() {
         Intent intent = getIntent();
-        mType = intent.getIntExtra("type", 0);
-        lon = intent.getStringExtra("lon");
-        lat = intent.getStringExtra("lat");
-        mTitle = intent.getStringExtra("location");
-        mCity = intent.getStringExtra("city");
-        mAddress = intent.getStringExtra("address");
-        isnew = intent.getIntExtra("isnew", 1);
+        addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
+        lon = addressModel.lat;
+        lat = addressModel.lon;
+        mType = addressModel.type;
+        isnew = addressModel.is_new;
+        mCity = addressModel.city;
+        mTitle = addressModel.address;
+        mAddress = addressModel.ConcreteAdd;
+        is_result = addressModel.is_result;
+        tag = addressModel.tag;
         if (isnew==0){
-            id = intent.getStringExtra("id");
+            id = addressModel.id;
         }
         toolBar.setTitleText("补充地址").setBackFinish();
         tvDiZhi.setText(mTitle + "");
@@ -132,7 +139,31 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
 //        tvBuChong.setText("");
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data==null)return;
+        if (resultCode == 100) {
+            if (requestCode == 100) {
+                addressModel = (FaHuoAddressModel) data.getSerializableExtra("address_data");
+                lon = addressModel.lat;
+                lat = addressModel.lon;
+                mType = addressModel.type;
+                tag = addressModel.tag;
+                isnew = addressModel.is_new;
+                mCity = addressModel.city;
+                mTitle = addressModel.address;
+                mAddress = addressModel.ConcreteAdd;
 
+                if (isnew==0){
+                    id = addressModel.id;
+                }
+
+                tvDiZhi.setText(mTitle+"");
+                tvDiZhiXiangQing.setText(mAddress+"");
+            }
+        }
+    }
     Intent intent;
 
     @OnClick({R.id.relDiZhi, R.id.btnOk})
@@ -142,21 +173,62 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                 if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
-                intent = new Intent(this, NewLocationSeekActivity.class);
-                intent.putExtra("lon", lon);
-                intent.putExtra("lat", lat);
-                intent.putExtra("type", mType);
-                intent.putExtra("city", mCity + "");
-                intent.putExtra("isnew",isnew);
-                if (isnew==0){
-                    intent.putExtra("id",id);
+                intent = new Intent(this, NewLocationSeekBuActivity.class);
+                if (addressModel==null){
+                    addressModel = new FaHuoAddressModel();
                 }
-                startActivity(intent);
-                finish();
+                addressModel.lat = lon+"";
+                addressModel.lon = lat+"";
+                addressModel.type = mType;
+                addressModel.is_new = isnew;
+                addressModel.tag = tag;
+                addressModel.city = mCity;
+                addressModel.is_result = 1;
+                if (isnew==0){
+                    addressModel.id = id;
+                }
+                intent.putExtra("address_data", addressModel);
+//                startActivity(intent);
+                startActivityForResult(intent, 100);
                 break;
             case R.id.btnOk:
-                if (mType == 0) {
+                if (tag == 0) {
+                    if (mType==1){
+                        intent = new Intent(this, BangWoMaiActivity.class);
+                    }
+                    String address = tvDiZhi.getText().toString();
+                    String city = tvDiZhiXiangQing.getText().toString();
+                    String xiangqing = etXiangQing.getText().toString();
+                    String tel = etTel.getText().toString();
+                    String name = etRen.getText().toString();
+                    if (TextUtils.isEmpty(address)||TextUtils.isEmpty(city)){
+                        ToastUtil.show("请选择具体地址");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tel)){
+                        ToastUtil.show("请填写联系方式");
+                        return;
+                    }
+                    if (addressModel==null){
+                        addressModel = new FaHuoAddressModel();
+                    }
+                    addressModel.address = address;
+                    addressModel.detailAddress = xiangqing;
+                    addressModel.contactName = name;
+                    addressModel.contactPhone = tel;
+                    addressModel.ConcreteAdd = city;
+                    addressModel.lat = lat;
+                    addressModel.lon =lon;
+                    addressModel.is_result = 0;
+                    intent.putExtra("address_data", addressModel);
+                    if (is_result==1){
+                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                        finish();
+                    }else {
+                        startActivity(intent);
+                    }
 
+                    finish();
                 } else {
                     String address = tvDiZhi.getText().toString();
                     String city = tvDiZhiXiangQing.getText().toString();
@@ -172,10 +244,10 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                         return;
                     }
                     if (isnew==1){
-                        mPresenter.addAddress(name+"",tel+"",lon,lat,city+address+"",xiangqing+"",mType+"");
+                        mPresenter.addAddress(name+"",tel+"",lon,lat,address+"",xiangqing+"",tag+"",city+"");
 
                     }else {
-                        mPresenter.updateAddress(id,name+"",tel+"",lon,lat,city+address+"",xiangqing+"");
+                        mPresenter.updateAddress(id,name+"",tel+"",lon,lat,address+"",xiangqing+"",city+"");
 
                     }
                       }

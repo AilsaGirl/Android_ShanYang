@@ -66,9 +66,8 @@
                     android:scaleType="centerInside"
                     android:src="@mipmap/sousuox"/>
                 <EditText
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_weight="1"
                     android:hint="物品送到哪里去"
                     android:textSize="14sp"
                     android:focusable="false"

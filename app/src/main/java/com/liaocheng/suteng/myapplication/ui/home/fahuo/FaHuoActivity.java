@@ -334,7 +334,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         if (event.isDingWei()){
             if (data != null && data.size() > 0) {
 //                        final PoiSearchAdapter adapter = new PoiSearchAdapter(this, data);
-                EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(), data.get(0).getContent()));
+                EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(), data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+""));
             }
         }
     }
@@ -378,7 +378,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
 
                     if (data != null && data.size() > 0) {
 //                        final PoiSearchAdapter adapter = new PoiSearchAdapter(this, data);
-                        EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(),data.get(0).getContent()));
+                        EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(),data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+""));
 //                        mapList.setAdapter(adapter);
 //                        //poi列表的item的点击事件
 //                        mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

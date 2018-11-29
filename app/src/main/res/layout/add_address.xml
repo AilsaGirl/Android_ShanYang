@@ -149,7 +149,7 @@
         android:hint="请输入联系人电话"
         android:textSize="@dimen/textSize_14"
         android:maxLength="11"
-        android:inputType="number"
+        android:inputType="phone"
         android:textColor="@color/hl_6x3"
         android:background="#fff"
         />

@@ -22,6 +22,7 @@ import com.circle.common.base.BaseActivity;
 import com.circle.common.util.StatusBarUtils;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.LocationBean;
 
 
@@ -58,18 +59,20 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
     String mCity;
     int isnew = 0;
     String id = "";
+    FaHuoAddressModel addressModel = new FaHuoAddressModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_location_seek);
         Intent intent = getIntent();
-        latf =  intent.getDoubleExtra("lat",0);
-        lonf = intent.getDoubleExtra("lon",0);
-        mType = intent.getIntExtra("type",0);
-        isnew = intent.getIntExtra("isnew",1);
-        mCity = intent.getStringExtra("city");
+        addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
+        latf = Double.valueOf(addressModel.lat);
+        lonf = Double.valueOf(addressModel.lon);
+        mType = addressModel.tag;
+        isnew = addressModel.is_new;
+        mCity = addressModel.city;
         if (isnew==0){
-            id = intent.getStringExtra("id");
+            id = addressModel.id;
         }
         initview();
         if (mType==0){
@@ -271,40 +274,41 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
                                 Log.d("jieshou", String.valueOf(data.get(i).getLon()));
                                 Log.d("jieshou", String.valueOf(data.get(i).getLat()));
                                 intent = new Intent();
-                                intent.putExtra("lon", String.valueOf(data.get(i).getLat()));
-                                intent.putExtra("lat", String.valueOf(data.get(i).getLon()));
-                                intent.putExtra("location", String.valueOf(data.get(i).getTitle()));
-                                intent.putExtra("address", data.get(i).getTexta());
-                                intent.putExtra("city", mCity);
-                                intent.putExtra("isnew", isnew);
+                                if (addressModel==null){
+                                    addressModel = new FaHuoAddressModel();
+                                }
+                                addressModel.address = String.valueOf(data.get(i).getTitle());
+                                addressModel.ConcreteAdd =  data.get(i).getTexta();
+                                addressModel.lat =String.valueOf(data.get(i).getLon());
+                                addressModel.lon = String.valueOf(data.get(i).getLat());
+                                addressModel.city = mCity;
+                                addressModel.is_new = isnew;
+                                addressModel.is_result =0;
                                 if (isnew==0){
-                                    intent.putExtra("id", id);
+                                    addressModel.id = id;
                                 }
                                 if (mType==0){
 //                                    AutoCompleteTextView.setHint("物品送到哪里去");
-                                    intent.putExtra("type",0);
-                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
-                                    startActivity(intent);
+                                    addressModel.tag = 0;
                                 }
                                 if (mType==1){
 //                                    AutoCompleteTextView.setHint("请输入地址");
-                                    intent.putExtra("type",1);
-                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
-                                    startActivity(intent);
+                                    addressModel.tag = 1;
+
                                 }
                                 if (mType==2){
 //                                    AutoCompleteTextView.setHint("请输入公司地址");
-                                    intent.putExtra("type",2);
-                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
-                                    startActivity(intent);
+                                    addressModel.tag = 2;
+
                                 }
                                 if (mType==3){
 //                                    AutoCompleteTextView.setHint("请输入家庭地址");
-                                    intent.putExtra("type",3);
-                                    intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
-                                    startActivity(intent);
-                                }
+                                    addressModel.tag = 3;
 
+                                }
+                                intent.putExtra("address_data", addressModel);
+                                intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
+                                startActivity(intent);
                                 NewLocationSeekActivity.this.finish();
                             }
                         });

@@ -3,6 +3,7 @@ package com.liaocheng.suteng.myapplication.presenter.contract;
 
 import com.circle.common.base.BasePresenter;
 import com.circle.common.base.BaseView;
+import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
 
@@ -13,7 +14,7 @@ import com.liaocheng.suteng.myapplication.model.SiteBean;
 public interface SiteContact {
     public interface View extends BaseView {//结果
 
-        void AddressListContactSuccess(MyAddressInfoBean siteBean);
+        void AddressListContactSuccess(ChangYongAddressBean siteBean);
         void setMyAddressList(MyAddressInfoBean siteBean);
         void updateSuccess();
         void addNewAddresselSuccess();

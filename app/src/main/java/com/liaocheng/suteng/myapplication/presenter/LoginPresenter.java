@@ -21,7 +21,7 @@ public class LoginPresenter extends RxPresenter<LoginContact.View> implements Lo
     @Override
     public void login(String username, String password) {
 
-        addSubscribe(Api.createTBService().updateUserAddress(SPCommon.getString("token",""),"4041","你好啊","17763515228","122","333","聊城","金鼎大厦")
+        addSubscribe(Api.createTBService().updateUserAddress(SPCommon.getString("token",""),"4041","你好啊","17763515228","122","333","聊城","金鼎大厦","")
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {

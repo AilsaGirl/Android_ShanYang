@@ -158,6 +158,25 @@
             android:name=".ui.home.fahuo.FaHuoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.home.address.NewLocationSeekBuActivity"
+            android:screenOrientation="portrait" />
+        <!--帮我买 -->
+        <activity
+            android:name=".ui.home.fahuo.BangWoMaiActivity"
+            android:screenOrientation="portrait" />
+        <!--帮我买 -->
+        <activity
+            android:name=".ui.home.fahuo.BangWoMaiXiaDanActivity"
+            android:screenOrientation="portrait" />
+        <!--帮我办 -->
+        <activity
+            android:name=".ui.home.fahuo.BangWoBanActivity"
+            android:screenOrientation="portrait" />
+        <!--帮我办 -->
+        <activity
+            android:name=".ui.home.fahuo.BangWoBanXiaDanActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:label="@string/app_name"

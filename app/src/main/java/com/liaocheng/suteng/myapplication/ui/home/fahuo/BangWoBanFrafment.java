@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.circle.common.base.BaseFragment;
 import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.event.FaHuoAddressEvent;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddressList;
 
@@ -44,7 +45,7 @@ public class BangWoBanFrafment extends BaseFragment {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_bangwomai;
+        return R.layout.fragment_bangwoban;
     }
 
     int mId;
@@ -61,10 +62,18 @@ public class BangWoBanFrafment extends BaseFragment {
         EventBus.getDefault().post(new FaHuoAddressEvent(true));
     }
 
+    String mDiZhi;
+    String mXiangQing;
+    String lon;
+    String lat;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(FaHuoAddressEvent event) {
         if (event == null)
             return;
+        mDiZhi = event.getDizhi()+"";
+        mXiangQing = event.getXiangqing()+"";
+        lat = event.getLat();
+        lon = event.getLon();
         tvDiZhi.setText(event.getDizhi()+"");
         tvDiZhiXiangQing.setText(event.getXiangqing()+"");
     }
@@ -94,13 +103,41 @@ public class BangWoBanFrafment extends BaseFragment {
         unbinder.unbind();
     }
     Intent intent;
-    @OnClick({R.id.etMai, R.id.tvDiZhiChangYong})
+    long mLasttime;
+    FaHuoAddressModel addressModel;
+    @OnClick({R.id.etMai, R.id.tvDiZhiChangYong,R.id.linAddress})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.linAddress:
             case R.id.etMai:
+                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+
+                intent = new Intent(mContext, BangWoBanActivity.class);
+                addressModel = new FaHuoAddressModel();
+                addressModel.address = mDiZhi;
+                addressModel.ConcreteAdd = mXiangQing;
+                addressModel.contactName = "";
+                addressModel.contactPhone = "";
+                addressModel.lon =lon;
+                addressModel.lat = lat;
+                addressModel.type = 2;
+                addressModel.is_result = 0;
+                intent.putExtra("address_data", addressModel);
+                mContext.startActivity(intent);
                 break;
             case R.id.tvDiZhiChangYong:
+                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
                 intent = new Intent(mContext, AddressList.class);
+                addressModel = new FaHuoAddressModel();
+                addressModel.type = 2;
+                addressModel.is_result = 0;
+                addressModel.lon =lon;
+                addressModel.lat = lat;
+                intent.putExtra("address_data", addressModel);
                 mContext.startActivity(intent);
                 break;
         }

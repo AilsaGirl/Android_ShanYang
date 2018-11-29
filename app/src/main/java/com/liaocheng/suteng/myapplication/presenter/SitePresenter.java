@@ -7,6 +7,7 @@ import com.circle.common.baserx.RxUtil;
 import com.circle.common.response.BaseResponse;
 import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.api.Api;
+import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
@@ -21,11 +22,11 @@ public class SitePresenter extends RxPresenter<SiteContact.View> implements Site
     @Override
     public void addressListContact(String token,String page) {
         addSubscribe(Api.createTBService().addressListContact(token,page)
-                .compose(RxUtil.<BaseResponse<MyAddressInfoBean>>rxSchedulerHelper())
-                .compose(RxUtil.<MyAddressInfoBean>handleResult())
-                .subscribeWith(new CommonSubscriber<MyAddressInfoBean>(mContext, true) {
+                .compose(RxUtil.<BaseResponse<ChangYongAddressBean>>rxSchedulerHelper())
+                .compose(RxUtil.<ChangYongAddressBean>handleResult())
+                .subscribeWith(new CommonSubscriber<ChangYongAddressBean>(mContext, true) {
                     @Override
-                    protected void _onNext(MyAddressInfoBean commonRes) {
+                    protected void _onNext(ChangYongAddressBean commonRes) {
                         if (commonRes != null) {
                             mView.AddressListContactSuccess(commonRes);
                         } else {
@@ -68,7 +69,7 @@ public class SitePresenter extends RxPresenter<SiteContact.View> implements Site
 
     @Override
     public void updateAddress(String id, String contactName, String contactPhone, String accuracy, String latitude, String address, String detailAddress) {
-        addSubscribe(Api.createTBService().updateUserAddress("", id,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress)
+        addSubscribe(Api.createTBService().updateUserAddress("", id,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress,"")
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
@@ -92,7 +93,7 @@ public class SitePresenter extends RxPresenter<SiteContact.View> implements Site
 
     @Override
     public void addNewAddress(String token, String contactName, String contactPhone, String accuracy, String latitude, String address, String detailAddress) {
-        addSubscribe(Api.createTBService().addNewAddress( token,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress,"")
+        addSubscribe(Api.createTBService().addNewAddress( token,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress,"","")
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {

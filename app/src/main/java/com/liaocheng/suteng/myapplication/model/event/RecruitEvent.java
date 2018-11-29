@@ -1,5 +1,7 @@
 package com.liaocheng.suteng.myapplication.model.event;
 
+import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
+
 /**
  *
  */
@@ -7,6 +9,11 @@ package com.liaocheng.suteng.myapplication.model.event;
 public class RecruitEvent {
     public String title;
   boolean isShow;
+
+    public FaHuoAddressModel addressModel;
+    public RecruitEvent(FaHuoAddressModel addressModel) {
+        this.addressModel = addressModel;
+    }
     public RecruitEvent(boolean isShow) {
         this.isShow = isShow;
     }
@@ -25,5 +32,12 @@ public class RecruitEvent {
     }
     public void setTitle(String mIndex) {
         this.title = title;
+    }
+    public FaHuoAddressModel getAddressModel() {
+        return addressModel;
+    }
+
+    public void setAddressModel(FaHuoAddressModel addressModel) {
+        this.addressModel = addressModel;
     }
 }

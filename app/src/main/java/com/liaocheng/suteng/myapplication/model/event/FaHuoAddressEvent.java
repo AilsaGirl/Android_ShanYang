@@ -4,8 +4,10 @@ public class FaHuoAddressEvent {
     public String dizhi;
     public String xiangqing;
 
+    String lon;String lat;
+
     public boolean isDingWei;
-    public FaHuoAddressEvent(String dizhi,String xiangqing){
+    public FaHuoAddressEvent(String dizhi,String xiangqing,String lon,String lat){
         this.dizhi = dizhi;
         this.xiangqing = xiangqing;
     }
@@ -35,5 +37,21 @@ public class FaHuoAddressEvent {
         isDingWei = dingWei;
     }
 
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
 
 }

@@ -33,11 +33,15 @@ import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
+import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.MyLiveList;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.SitePresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.SiteContact;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,6 +57,10 @@ import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2018/3/31.
+ * 地址列表
+ * 110我的地址
+ * 120常用地址
+ * 100新建/修改地址
  */
 
 public class AddressList extends BaseActivity<SitePresenter> implements SiteContact.View, AddressListAdapter.OnItemClickListener {
@@ -173,14 +181,19 @@ double lon;
 
     String mId = "";
     int page = 1;
+    int is_result=0;
 
     @Override
     public void initEventAndData() {
 //        AutoSizeConfig.getInstance();
-        SPCommon.setString("token", "cd53468f0db916abe6ff1da0709b7b95$10002080");
+        SPCommon.setString("token", "c8333c77fa0db7f4cceef84a88b196d4$10002052");
         toolBar.setBackFinish().setTitleText("地址管理");
         Intent intent = getIntent();
-        mId = intent.getStringExtra("id");
+        addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
+        if (addressModel!=null){
+            mId =addressModel.type+"";
+            is_result = addressModel.is_result;
+        }
         if (!TextUtils.isEmpty(mId)) {
             toolBar.setBackFinish().setTitleText("选择地址");
         }
@@ -189,13 +202,13 @@ double lon;
         mRecyclerview.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                page = 0;
+                page = 1;
                 mPresenter.addressListContact(SPCommon.getString("token", ""), page + "");
             }
 
             @Override
             public void onLoadMore() {
-                page = page + 5;
+                page = page ++;
                 mPresenter.addressListContact(SPCommon.getString("token", ""), page + "");
             }
         });
@@ -230,15 +243,16 @@ double lon;
         super.onStart();
     }
 
-
+  List<ChangYongAddressBean.ChangYongAddressModel>   mChangAddressList = new ArrayList<>();
     @Override
-    public void AddressListContactSuccess(MyAddressInfoBean siteBean) {
+    public void AddressListContactSuccess(ChangYongAddressBean siteBean) {
         mRecyclerview.refreshComplete();
         mRecyclerview.loadMoreComplete();
         if (siteBean.data != null && siteBean.data.size() > 0) {
             ivNull.setVisibility(View.GONE);
             mAddressListAdapter.setData(siteBean.data);
             initListener();
+            mChangAddressList = siteBean.data;
         } else {
             if (page == 1) {
                 ivNull.setVisibility(View.VISIBLE);
@@ -258,21 +272,21 @@ int jia = 0;
             for (int i = 0; i < siteBean.data.size(); i++) {
                 if (siteBean.data.get(i).addressType.endsWith("1")) {
                     moren = i;
-                    tvMoRenDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvMoRenDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).concreteAddress + "");
                     tvMoRenDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
                 }
                 if (siteBean.data.get(i).addressType.endsWith("2")) {
                     gongsi = i;
-                    tvGongSiDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvGongSiDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).concreteAddress + "");
                     tvGongSiDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
                 }
                 if (siteBean.data.get(i).addressType.endsWith("3")) {
                     jia = i;
-                    tvJiaDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).detailAddress + "");
+                    tvJiaDiZhi.setText(siteBean.data.get(i).address + siteBean.data.get(i).concreteAddress + "");
                     tvJiaDiZhiXiangQing.setText(siteBean.data.get(i).contactPhone + "");
                 }
             }
-            mAddressListAdapter.setData(siteBean.data);
+//            mAddressListAdapter.setData(siteBean.data);
         }
     }
 
@@ -285,9 +299,36 @@ int jia = 0;
     public void addNewAddresselSuccess() {
 
     }
-
+    FaHuoAddressModel addressModel;
     @Override
     public void onItemClickListener(int pos) {
+        if (mId.equals("1")) {
+            Intent intent = new Intent(this, BangWoMaiActivity.class);
+            addressModel.type =1;
+        }
+        if (mId.equals("2")) {
+            Intent intent = new Intent(this, BangWoBanActivity.class);
+            addressModel.type =2;
+        }
+            if (addressModel==null){
+                addressModel = new FaHuoAddressModel();
+            }
+            addressModel.address = mChangAddressList.get(pos).sendAddress;
+            addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+            addressModel.contactName = mChangAddressList.get(pos).sendName;
+            addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+            addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+            addressModel.lat = mChangAddressList.get(pos).sendLat;
+            addressModel.lon = mChangAddressList.get(pos).sendLong;
+            intent.putExtra("address_data", addressModel);
+            if (is_result==1){
+                setResult(120, intent);
+            }else {
+                addressModel.is_result =0;
+                startActivity(intent);
+            }
+            finish();
+
 
     }
 
@@ -298,29 +339,170 @@ int jia = 0;
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.relMoRen:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                if (TextUtils.isEmpty(mId)) {
+                    ToastUtil.show("仅支持发货选择，如若添加/修改地址，请点击编辑");
+                   return;
+                }
+
+                if (TextUtils.isEmpty(tvMoRenDiZhi.getText().toString())){
+                    ToastUtil.show("请先编辑地址");
+                }else {
+
+                    if (listMyAddress.size()>moren){
+                        if (mId.equals("1")){
+                            intent = new Intent(this, BangWoMaiActivity.class);
+                            addressModel.type =1;
+                        }
+                        if (mId.equals("2")) {
+                             intent = new Intent(this, BangWoBanActivity.class);
+                            addressModel.type =2;
+                        }
+                        if (addressModel==null){
+                            addressModel = new FaHuoAddressModel();
+                        }
+                        addressModel.address = listMyAddress.get(moren).address;
+                        addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                        addressModel.contactName = listMyAddress.get(moren).contactName;
+                        addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                        addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                        addressModel.lat = listMyAddress.get(moren).latitude;
+                        addressModel.lon = listMyAddress.get(moren).accuracy;
+                        intent.putExtra("address_data", addressModel);
+                        addressModel.is_result =0;
+                        if (is_result==1){
+                            setResult(110, intent);
+                        }else {
+                            startActivity(intent);
+                        }
+
+                        finish();
+                    }else {
+                        ToastUtil.show("该地址返回错误，请输入地址");
+                    }
+
+                }
                 break;
             case R.id.relGongSi:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                if (TextUtils.isEmpty(mId)) {
+                    ToastUtil.show("仅支持发货选择，如若添加/修改地址，请点击编辑");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(tvGongSiDiZhi.getText().toString())){
+                    ToastUtil.show("请先编辑地址");
+                }else {
+
+                    if (listMyAddress.size()>gongsi){
+                        if (mId.equals("1")){
+                            intent = new Intent(this, BangWoMaiActivity.class);
+                            addressModel.type =1;
+                        }
+                        if (mId.equals("2")) {
+                            intent = new Intent(this, BangWoBanActivity.class);
+                            addressModel.type =2;
+                        }
+//                        intent.putExtra("id",listMyAddress.get(moren).id);
+                        if (addressModel==null){
+                            addressModel = new FaHuoAddressModel();
+                        }
+                        addressModel.address = listMyAddress.get(gongsi).address;
+                        addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                        addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                        addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                        addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                        addressModel.lat = listMyAddress.get(gongsi).latitude;
+                        addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                        intent.putExtra("address_data", addressModel);
+                        addressModel.is_result =0;
+                        if (is_result==1){
+                            setResult(110, intent);
+                        }else {
+
+                            startActivity(intent);
+                        }
+
+                        finish();
+                    }else {
+                        ToastUtil.show("该地址返回错误，请输入地址");
+                    }
+
+                }
+
                 break;
             case R.id.relJia:
+                if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                if (TextUtils.isEmpty(mId)) {
+                    ToastUtil.show("仅支持发货选择，如若添加/修改地址，请点击编辑");
+                    return;
+                }
+                if (TextUtils.isEmpty(tvJiaDiZhi.getText().toString())){
+                    ToastUtil.show("请先编辑地址");
+                }else {
+                    if (listMyAddress.size()>jia){
+                        if (mId.equals("1")){
+                            intent = new Intent(this, BangWoMaiActivity.class);
+                            addressModel.type =1;
+                        }
+                        if (mId.equals("2")) {
+                            intent = new Intent(this, BangWoBanActivity.class);
+                            addressModel.type =2;
+                        }
+                        if (addressModel==null){
+                            addressModel = new FaHuoAddressModel();
+                        }
+                        addressModel.address = listMyAddress.get(jia).address;
+                        addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                        addressModel.contactName = listMyAddress.get(jia).contactName;
+                        addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                        addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                        addressModel.lat = listMyAddress.get(jia).latitude;
+                        addressModel.lon = listMyAddress.get(jia).accuracy;
+                        intent.putExtra("address_data", addressModel);
+                        addressModel.is_result =0;
+                        if (is_result==1){
+                            setResult(110, intent);
+                        }else {
+
+                            startActivity(intent);
+                        }
+
+                        finish();
+                    }else {
+                        ToastUtil.show("该地址返回错误，请输入地址");
+                    }
+                }
                 break;
             case R.id.tvDiZhiMoren:
                 if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
                 intent = new Intent(this, NewLocationSeekActivity.class);
-                intent.putExtra("lon",lon);
-                intent.putExtra("lat",lat);
-                intent.putExtra("type",1);
-
+                if (addressModel==null){
+                    addressModel = new FaHuoAddressModel();
+                }
+                addressModel.lat = lon+"";
+                addressModel.lon = lat+"";
+                addressModel.tag = 1;
+                addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvMoRenDiZhi.getText().toString())){
-                    intent.putExtra("isnew",1);
+                    addressModel.is_new = 1;
+//                    intent.putExtra("isnew",1);
                 }else {
                     if (listMyAddress.size()>moren){
-                        intent.putExtra("id",listMyAddress.get(moren).id);
+                        addressModel.id = listMyAddress.get(moren).id;
                     }
-                    intent.putExtra("isnew",0);
+                    addressModel.is_new = 0;
                 }
-                intent.putExtra("city",tvCity.getText().toString()+"");
+                addressModel.city = tvCity.getText().toString()+"";
+                intent.putExtra("address_data", addressModel);
                 startActivity(intent);
                 break;
             case R.id.tvGongSiGongSi:
@@ -328,18 +510,24 @@ int jia = 0;
                     return;
                 mLasttime = System.currentTimeMillis();
                 intent = new Intent(this, NewLocationSeekActivity.class);
-                intent.putExtra("lon",lon);
-                intent.putExtra("lat",lat);
-                intent.putExtra("type",2);
+                if (addressModel==null){
+                    addressModel = new FaHuoAddressModel();
+                }
+                addressModel.lat = lon+"";
+                addressModel.lon = lat+"";
+                addressModel.tag = 2;
+                addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvGongSiDiZhi.getText().toString())){
+                    addressModel.is_new = 1;
                     intent.putExtra("isnew",1);
                 }else {
-                    if (listMyAddress.size()>moren){
-                        intent.putExtra("id",listMyAddress.get(gongsi).id);
+                    if (listMyAddress.size()>gongsi){
+                        addressModel.id = listMyAddress.get(gongsi).id;
                     }
-                    intent.putExtra("isnew",0);
+                    addressModel.is_new = 0;
                 }
-                intent.putExtra("city",tvCity.getText().toString()+"");
+                addressModel.city = tvCity.getText().toString()+"";
+                intent.putExtra("address_data", addressModel);
                 startActivity(intent);
                 break;
             case R.id.tvDiZhiJia:
@@ -347,20 +535,26 @@ int jia = 0;
                     return;
                 mLasttime = System.currentTimeMillis();
                 intent = new Intent(this, NewLocationSeekActivity.class);
-                intent.putExtra("lon",lon);
-                intent.putExtra("lat",lat);
-                intent.putExtra("type",3);
+
+                if (addressModel==null){
+                    addressModel = new FaHuoAddressModel();
+                }
+                addressModel.lat = lon+"";
+                addressModel.lon = lat+"";
+                addressModel.tag = 3;
+                addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvJiaDiZhi.getText().toString())){
+                    addressModel.is_new = 1;
                     intent.putExtra("isnew",1);
                 }else {
-                    if (listMyAddress.size()>moren){
-                        intent.putExtra("id",listMyAddress.get(jia).id);
+                    if (listMyAddress.size()>jia){
+                        addressModel.id = listMyAddress.get(jia).id;
                     }
-                    intent.putExtra("isnew",0);
+                    addressModel.is_new = 0;
                 }
-                intent.putExtra("city",tvCity.getText().toString()+"");
+                addressModel.city = tvCity.getText().toString()+"";
+                intent.putExtra("address_data", addressModel);
                 startActivity(intent);
-
                 break;
             case R.id.tvCity:
                 if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
@@ -374,12 +568,22 @@ int jia = 0;
                 if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
+                if (TextUtils.isEmpty(mId)) {
+                    ToastUtil.show("仅支持发货搜索，如若添加/修改地址，请点击编辑");
+                    return;
+                }
                 intent = new Intent(this, NewLocationSeekActivity.class);
-                intent.putExtra("lon",lon);
-                intent.putExtra("lat",lat);
-                intent.putExtra("type",0);
-                intent.putExtra("city",tvCity.getText().toString()+"");
+                if (addressModel==null){
+                    addressModel = new FaHuoAddressModel();
+                }
+                addressModel.lat = lon+"";
+                addressModel.lon = lat+"";
+                addressModel.tag = 0;
+                addressModel.is_result =0;
+                addressModel.city = tvCity.getText().toString()+"";
+                intent.putExtra("address_data", addressModel);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

@@ -17,8 +17,8 @@ import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact
 
 public class ModificationPresenter extends RxPresenter<ModificationContact.View> implements ModificationContact.Presenter {
     @Override
-    public void updateAddress(String id, String contactName, String contactPhone, String accuracy, String latitude, String address, String detailAddress) {
-        addSubscribe(Api.createTBService().updateUserAddress( SPCommon.getString("token",""),id,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress)
+    public void updateAddress(String id, String contactName, String contactPhone, String accuracy, String latitude, String address, String detailAddress,String concreteAddress) {
+        addSubscribe(Api.createTBService().updateUserAddress( SPCommon.getString("token",""),id,  contactName,  contactPhone,  accuracy,  latitude,  address,  detailAddress,concreteAddress)
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
@@ -41,8 +41,8 @@ public class ModificationPresenter extends RxPresenter<ModificationContact.View>
     }
 
     @Override
-    public void addAddress( String name, String tel,String locationX, String locationY, String area, String address,String addressType) {
-        addSubscribe(Api.createTBService().addNewAddress(SPCommon.getString("token",""),name,tel, locationX, locationY, area, address,addressType)
+    public void addAddress( String name, String tel,String locationX, String locationY, String area, String address,String addressType,String concreteAddress) {
+        addSubscribe(Api.createTBService().addNewAddress(SPCommon.getString("token",""),name,tel, locationX, locationY, area, address,addressType,concreteAddress)
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber(mContext, true) {

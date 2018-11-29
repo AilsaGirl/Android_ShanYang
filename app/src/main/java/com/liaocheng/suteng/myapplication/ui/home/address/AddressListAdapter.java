@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.MyLiveList;
 
@@ -26,15 +27,15 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
 
 
-    private List<MyAddressInfoBean.MyAddressModel> mMyLiveList = new ArrayList<>();
+    private List<ChangYongAddressBean.ChangYongAddressModel> mMyLiveList = new ArrayList<>();
     private OnItemClickListener mOnItemClickListener;
 
 
-    public void setData(List<MyAddressInfoBean.MyAddressModel> mMyLiveList){
+    public void setData(List<ChangYongAddressBean.ChangYongAddressModel> mMyLiveList){
         this.mMyLiveList = mMyLiveList;
         notifyDataSetChanged();
     }
-    public List<MyAddressInfoBean.MyAddressModel> getMyLiveList() {
+    public List<ChangYongAddressBean.ChangYongAddressModel> getMyLiveList() {
         if (mMyLiveList == null) {
             mMyLiveList = new ArrayList<>();
         }
@@ -60,9 +61,9 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.tvDiZhi.setText(mMyLiveList.get(position).address +"");
-        holder.tvDiZhiXiangQing.setText(mMyLiveList.get(position).detailAddress +"");
-        holder.tvTel.setText(mMyLiveList.get(position).contactPhone +"");
+        holder.tvDiZhi.setText(mMyLiveList.get(position).sendAddress +"");
+        holder.tvDiZhiXiangQing.setText(mMyLiveList.get(position).sendConcreteAdd +"");
+        holder.tvTel.setText(mMyLiveList.get(position).sendPhone +"");
 
         holder.itemView.setTag(position);
 

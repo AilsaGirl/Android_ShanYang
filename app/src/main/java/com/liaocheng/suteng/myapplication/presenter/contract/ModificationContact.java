@@ -14,8 +14,8 @@ public interface ModificationContact {
     }
 
     interface Presenter extends BasePresenter<View> {//过程
-        void updateAddress( String id,String contactName,String contactPhone,String accuracy,String latitude,String address,String detailAddress);
+        void updateAddress( String id,String contactName,String contactPhone,String accuracy,String latitude,String address,String detailAddress,String concreteAddress);
 
-        void addAddress(String name, String tel,String locationX, String locationY, String area, String address,String addressType);
+        void addAddress(String name, String tel,String locationX, String locationY, String area, String address,String addressType,String concreteAddress);
     }
 }

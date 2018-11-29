@@ -5,7 +5,7 @@ import java.util.List;
 public class MyAddressInfoBean {
     public List<MyAddressModel> data;
 
-    public class MyAddressModel{
+    public  class MyAddressModel{
 //        id	String	地址ID
 //        contactPhone	String	联系人手机号
 //        contactName	String	联系人姓名
@@ -22,6 +22,7 @@ public class MyAddressInfoBean {
         public String accuracy;//": "110",
         public String latitude;//": "33",
         public String addressType;//": "0"
+        public String  concreteAddress;
     }
 
 }
