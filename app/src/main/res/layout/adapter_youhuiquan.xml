@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/hl_white"
+    android:layout_marginTop="1dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:padding="5dp"
+    android:orientation="horizontal"
+    >
+    <TextView
+        android:id="@+id/tvBianHao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/hl_6x3"
+        android:textSize="@dimen/textSize_14"
+        android:text="优惠券编号："
+        />
+    <TextView
+        android:id="@+id/tvJinE"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/hl_6x3"
+        android:textSize="@dimen/textSize_14"
+        android:layout_marginLeft="25dp"
+        android:text="2元/张"
+        />
+</LinearLayout>
+    <TextView
+        android:id="@+id/tvStartTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="@color/hl_6x3"
+        android:textSize="@dimen/textSize_14"
+        android:text="优惠券获取时间："
+        />
+    <TextView
+        android:id="@+id/tvEndTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="@color/hl_6x3"
+        android:textSize="@dimen/textSize_14"
+        android:text="优惠券到期时间："
+        />
+</LinearLayout>

@@ -8,6 +8,7 @@ import android.os.Environment;
 import com.circle.common.app.AppManager;
 import com.circle.common.app.BaseApplication;
 import com.circle.common.util.SPCommon;
+import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
 import com.umeng.socialize.PlatformConfig;
 
 import java.io.File;
@@ -42,20 +43,14 @@ public class MyApplication extends BaseApplication {
 
     @Override
     public void tokenExpire() {
-        SPCommon.setString("token","");
-        SPCommon.setString("img","");
-        SPCommon.setString("username", "");
-        SPCommon.setString("name", "");
+        SPCommon.setString("token", "");
         SPCommon.setString("phone", "");
-        SPCommon.setString("uid", "");
-        SPCommon.setString("sex", "");
+        SPCommon.setString("userId","");
 
         if(SPCommon.getBoolean("tokenExpire", true)){
-            SPCommon.setBoolean("tokenExpire", false);
-//            Intent intent = new Intent(context, LonginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//            AppManager.getAppManager().finishAllActivity();
+            AppManager.getAppManager().finishAllActivity();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
         super.tokenExpire();
 

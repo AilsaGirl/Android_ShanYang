@@ -5,11 +5,11 @@
     android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.circle.common.view.MyToolBar
-        android:id="@+id/toolBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.circle.common.view.MyToolBar>
+   <View
+       android:layout_width="match_parent"
+       android:layout_height="26dp"
+       android:background="@mipmap/tool"
+       />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -125,10 +125,21 @@
                     android:layout_marginRight="15dp"
 
                     >
+                    <TextView
+                        android:id="@+id/tvTiXian"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/zhuce_bg"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:textColor="#fff"
+                        android:text="提现"
+                        />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:gravity="center_vertical"
                         >
@@ -149,17 +160,7 @@
                             android:text="111"
                             />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/tvTiXian"
-                        android:layout_width="60dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/zhuce_bg"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:gravity="center"
-                        android:textColor="#fff"
-                        android:text="充值"
-                        />
+
                 </RelativeLayout>
             </LinearLayout>
             <View
@@ -174,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_zhanghu"
                 app:hlMenuLeftText="账户设置"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -184,7 +185,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_dingdanguanli"
                 app:hlMenuLeftText="订单管理"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -194,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_dizhiguanli"
                 app:hlMenuLeftText="地址管理"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -204,7 +205,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_wodeyouhuiquan"
                 app:hlMenuLeftText="我的优惠券"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -214,7 +215,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_shenqingjiedanyuan"
                 app:hlMenuLeftText="申请接单员"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -224,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_lianxikefu"
                 app:hlMenuLeftText="联系客服"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"
@@ -234,7 +235,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/hl_white"
-                app:hlMenuLeftIcon="@mipmap/zhanghu"
+                app:hlMenuLeftIcon="@mipmap/icon_gengduo"
                 app:hlMenuLeftText="更多服务/奖励"
                 app:hlMenuRightTextVisible="gone"
                 app:hlMenuUnderLineVisible="visible"

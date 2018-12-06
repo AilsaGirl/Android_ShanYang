@@ -2,6 +2,7 @@ package com.liaocheng.suteng.myapplication.ui.home.fahuo;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddressList;
+import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,7 +64,30 @@ public class BangWoBanActivity extends BaseActivity {
     FaHuoAddressModel addressModel = new FaHuoAddressModel();
     @Override
     public void initEventAndData() {
-        toolBar.setTitleText("补充信息").setBackFinish();
+        toolBar.setTitleText("补充信息").setLeftClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(BangWoBanActivity.this);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
+                dialog.setBackgroundResource(true);
+                dialog.setVisibilityBtn(true);
+                dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                    @Override
+                    public void onYesClick() {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                    @Override
+                    public void onOnClick() {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
         EventBus.getDefault().register(this);
         Intent intent = getIntent();
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
@@ -108,6 +133,31 @@ public class BangWoBanActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setBackgroundResource(true);
+            dialog.setVisibilityBtn(true);
+            dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                @Override
+                public void onOnClick() {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+        return false;
     }
     @Override
     public void showError(int reqCode, String msg) {
@@ -182,6 +232,7 @@ public class BangWoBanActivity extends BaseActivity {
                 addressModel.is_result = 1;
                 addressModel.lon =lon;
                 addressModel.lat = lat;
+                addressModel.is_new_address =0;
                 intent.putExtra("address_data", addressModel);
                 startActivityForResult(intent, 110);
 //                mContext.startActivity(intent);
@@ -215,6 +266,7 @@ public class BangWoBanActivity extends BaseActivity {
                 addressModel.is_result = 0;
                 addressModel.lat =lat;
                 addressModel.lon =lon;
+                addressModel.is_new_address =0;
                 intent = new Intent(mContext, BangWoBanXiaDanActivity.class);
                 intent.putExtra("address_data", addressModel);
                 if (addressModel.is_result==1){
@@ -222,6 +274,7 @@ public class BangWoBanActivity extends BaseActivity {
                     finish();
                 }else {
                     startActivity(intent);
+                    finish();
                 }
 
                 break;

@@ -40,6 +40,7 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -51,6 +52,7 @@ import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.ui.home.address.CityListActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.PoiSearchAdapter;
+import com.liaocheng.suteng.myapplication.ui.my.MyActivity;
 import com.liaocheng.suteng.myapplication.ui.my.fragment.FaHuoDingDanFragment;
 import com.liaocheng.suteng.myapplication.ui.my.fragment.JieDanDingDanFragment;
 
@@ -155,7 +157,9 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
 
     @Override
     public void showError(int reqCode, String msg) {
-
+        if (msg != null && !msg.equals("")) {
+            ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
+        }
     }
 
     @Override
@@ -509,7 +513,8 @@ Intent intent;
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivMy:
-
+                intent = new Intent(mContext, MyActivity.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.ivCity:
                 if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作

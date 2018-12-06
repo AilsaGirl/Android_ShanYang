@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.ModificationPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
+import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -133,7 +135,30 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         if (isnew==0){
             id = addressModel.id;
         }
-        toolBar.setTitleText("补充地址").setBackFinish();
+        toolBar.setTitleText("补充地址").setLeftClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(AddAddress.this);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
+                dialog.setBackgroundResource(true);
+                dialog.setVisibilityBtn(true);
+                dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                    @Override
+                    public void onYesClick() {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                    @Override
+                    public void onOnClick() {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
         tvDiZhi.setText(mTitle + "");
         tvDiZhiXiangQing.setText(mAddress + "");
 //        tvBuChong.setText("");
@@ -163,6 +188,31 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                 tvDiZhiXiangQing.setText(mAddress+"");
             }
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setBackgroundResource(true);
+            dialog.setVisibilityBtn(true);
+            dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                @Override
+                public void onOnClick() {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+        return false;
     }
     Intent intent;
 

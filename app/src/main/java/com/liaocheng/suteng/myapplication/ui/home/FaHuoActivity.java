@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 
 import com.amap.api.maps.MapView;
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.CommonUtil;
+import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.liaocheng.suteng.myapplication.R;
@@ -41,7 +43,9 @@ public class FaHuoActivity extends BaseActivity<FaHuoPresenter> {
 
     @Override
     public void showError(int reqCode, String msg) {
-
+        if (msg != null && !msg.equals("")) {
+            ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
+        }
     }
 
     @Override

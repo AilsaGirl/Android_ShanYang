@@ -104,10 +104,13 @@
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ui.CeShiActivity"
+            android:name=".ui.login.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.login.GuideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.StartActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -124,18 +127,7 @@
         <activity
             android:name=".ui.login.BangDingActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my.MyActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my.ZhangHuSetingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my.AboutMeActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.my.DingDanGuanLiActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.home.FaHuoActivity"
             android:screenOrientation="portrait" />
@@ -176,6 +168,43 @@
         <activity
             android:name=".ui.home.fahuo.BangWoBanXiaDanActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.ZhangHuSetingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.AboutMeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.DingDanGuanLiActivity"
+            android:screenOrientation="portrait" />
+        <!-- 优惠券-->
+        <activity
+            android:name=".ui.my.YouHuiQuanActivity"
+            android:screenOrientation="portrait" />
+        <!-- 优惠券列表-->
+        <activity
+            android:name=".ui.my.YouHuiQuanListActivity"
+            android:screenOrientation="portrait" />
+        <!-- 修改密码相关  开始-->
+        <activity
+            android:name=".ui.my.UpdateNewPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.UpdatePhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.UpdateZhiFuMiMaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.UpdatePhoneZhiFuMiMaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.SetZhiFuMiMaActivity"
+            android:screenOrientation="portrait" />
+        <!-- 修改密码相关  结束-->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"

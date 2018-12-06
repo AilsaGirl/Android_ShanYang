@@ -17,4 +17,5 @@ public class FaHuoAddressModel implements Serializable {
     public int  is_new = 0;//是否新地址
     public String id;//地址
     public  int tag;//地址类型
+    public int is_new_address = 0;
 }

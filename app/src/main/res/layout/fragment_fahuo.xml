@@ -31,7 +31,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:layout_weight="1"
-    android:text="发单总计：200单"
+    android:text="发单总计：0单"
     />
     <TextView
         android:id="@+id/tvZhiFuNum"
@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:layout_weight="1"
-        android:text="支出总计：200元"
+        android:text="支出总计：0元"
         />
 </LinearLayout>
     <com.jcodecraeer.xrecyclerview.XRecyclerView

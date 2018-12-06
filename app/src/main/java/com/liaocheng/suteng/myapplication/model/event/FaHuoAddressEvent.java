@@ -10,6 +10,8 @@ public class FaHuoAddressEvent {
     public FaHuoAddressEvent(String dizhi,String xiangqing,String lon,String lat){
         this.dizhi = dizhi;
         this.xiangqing = xiangqing;
+        this.lon = lon;
+        this.lat =lat;
     }
     public FaHuoAddressEvent(boolean isDingWei){
         this.isDingWei = isDingWei;

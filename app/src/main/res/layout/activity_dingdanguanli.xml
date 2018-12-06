@@ -12,7 +12,7 @@
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/stlTitle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_h"
+        android:layout_height="38dp"
         app:tl_indicator_color="#E03D81"
         android:background="@color/hl_white"
         app:tl_indicator_corner_radius="1dp"

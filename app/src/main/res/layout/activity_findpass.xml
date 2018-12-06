@@ -94,7 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:singleLine="true"
-            android:inputType="textPassword"
             android:maxLength="20"
             android:hint="请输入验证码"
             android:textColor="@color/hl_6x3"
@@ -136,31 +135,31 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:textColor="@color/hl_6x3"
+            android:textColor="@color/hl_white"
             android:id="@+id/tvPPW"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/zhuce_bg"
-            android:text="完成修改"
+            android:text="修改"
             android:textSize="18dp" />
         <TextView
 
             android:layout_width="40dp"
             android:layout_height="wrap_content" />
         <TextView
-            android:textColor="@color/hl_6x3"
+            android:textColor="@color/hl_white"
             android:id="@+id/tvFindPW"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/zhuce_bg"
             android:textSize="18dp"
-            android:text="返回登录"
+            android:text="登录"
             />
     </LinearLayout>
 

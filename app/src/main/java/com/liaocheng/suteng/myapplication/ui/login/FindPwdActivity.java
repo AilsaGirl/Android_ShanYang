@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.NullBean;
@@ -53,13 +54,13 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
             if (msg.what == NTF_SECOND) {
                 int i = (int) msg.obj;
                 tvGetYZM.setText(i + "秒后重新发送");
-                tvGetYZM.setTextColor(getResources().getColor(R.color.white));
-                tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+//                tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+//                tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 if (i == 0) {
                     isclicked = true;
                     tvGetYZM.setText("获取验证码");
-                    tvGetYZM.setTextColor(getResources().getColor(R.color.white));
-                    tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+//                    tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+//                    tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 }
             }
         }
@@ -74,7 +75,9 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     }
     @Override
     public void showError(int reqCode, String msg) {
-        ToastUtil.show(msg+"");
+        if (msg != null && !msg.equals("")) {
+            ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

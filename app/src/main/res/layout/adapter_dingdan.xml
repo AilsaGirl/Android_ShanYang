@@ -76,6 +76,7 @@
         android:text="山东省聊城市东城府区东昌路123号"
         />
     <TextView
+        android:id="@+id/tvFaHUoXQ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/ivFaHuo"
@@ -115,6 +116,7 @@
             android:text="山东省聊城市东城府区东昌路123号"
             />
         <TextView
+            android:id="@+id/tvShouHuoXQ"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ivShouHuo"
@@ -136,6 +138,7 @@
         android:orientation="horizontal"
         >
         <TextView
+            android:id="@+id/tvJinELeiXing"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="14dp"
@@ -166,6 +169,7 @@
             android:text="全程:8.3km"
             />
         <TextView
+            android:id="@+id/tvZhiFu"
             android:layout_width="83dp"
             android:layout_height="34dp"
             android:background="@drawable/zhifu_bg"

@@ -124,6 +124,7 @@ public class BangWoBanFrafment extends BaseFragment {
                 addressModel.lat = lat;
                 addressModel.type = 2;
                 addressModel.is_result = 0;
+                addressModel.is_new_address =0;
                 intent.putExtra("address_data", addressModel);
                 mContext.startActivity(intent);
                 break;
@@ -137,6 +138,7 @@ public class BangWoBanFrafment extends BaseFragment {
                 addressModel.is_result = 0;
                 addressModel.lon =lon;
                 addressModel.lat = lat;
+                addressModel.is_new_address =0;
                 intent.putExtra("address_data", addressModel);
                 mContext.startActivity(intent);
                 break;

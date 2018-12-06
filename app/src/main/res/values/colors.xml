@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background">#FFffff</color>
-    <color name="tab_color">#FF4081</color>
-    <color name="help_send">#FF4081</color>
+    <color name="tab_color">#E03D81</color>
+    <color name="help_send">#E03D81</color>
+    <color name="transparent">#00000000</color>
 </resources>

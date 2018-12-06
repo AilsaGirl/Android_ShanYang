@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.NullBean;
@@ -62,13 +63,13 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
             if (msg.what == NTF_SECOND) {
                 int i = (int) msg.obj;
                 tvGetYZM.setText(i + "秒后重新发送");
-                tvGetYZM.setTextColor(getResources().getColor(R.color.white));
-                tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+//                tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+//                tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 if (i == 0) {
                     isclicked = true;
                     tvGetYZM.setText("获取验证码");
-                    tvGetYZM.setTextColor(getResources().getColor(R.color.white));
-                    tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+//                    tvGetYZM.setTextColor(getResources().getColor(R.color.white));
+//                    tvGetYZM.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 }
             }
         }
@@ -82,35 +83,18 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
 
     @Override
     public void initEventAndData() {
-
+        cbXy.setChecked(true);
     }
 
     @Override
     public void showError(int reqCode, String msg) {
-        ToastUtil.show(msg+"");
+        if (msg != null && !msg.equals("")) {
+            ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
+        }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-        cbXy.setChecked(true);
-        initview();
-    }
 
-    private void initview() {
-        tv_registxy = (TextView) findViewById(R.id.tv_registxy);
-        tv_registxy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-            }
-        });
-    }
-
-    @OnClick({R.id.tvGetYZM, R.id.cb_xy, R.id.tvFindPW,R.id.tvPPW})
+    @OnClick({R.id.tvGetYZM, R.id.cb_xy, R.id.tvFindPW,R.id.tvPPW,R.id.tv_registxy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvGetYZM:
@@ -144,8 +128,14 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
 
                 break;
             case R.id.tvFindPW:
+//                Intent intent = new Intent();
+//                intent.setClass(this,LoginActivity.class);
+//                startActivity(intent);
+                finish();
                 break;
+            case R.id.tv_registxy://协议
 
+                break;
             case R.id.tvPPW:
                 String Etname = etName.getText().toString();
                 String Et_password = etPwd.getText().toString();
@@ -184,12 +174,12 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
 
     @Override
     public void setcode(NullBean RegistCodeBean) {
-        ToastUtil.show("成功了");
+        ToastUtil.show("获取验证码成功");
     }
 
     @Override
     public void setuserregister(NullBean nullBean) {
-        ToastUtil.show("成功了");
+        ToastUtil.show("注册成功");
     }
 
 }

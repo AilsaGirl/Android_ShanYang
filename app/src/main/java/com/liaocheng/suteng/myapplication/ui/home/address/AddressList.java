@@ -41,7 +41,9 @@ import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.SitePresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.SiteContact;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanXiaDanActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiXiaDanActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -151,6 +153,7 @@ double lon;
                 if (aMapLocation.getErrorCode() == 0) {
                     //可在其中解析amapLocation获取相应内容。
                     tvCity.setText(aMapLocation.getCity() + "");
+//                    tvCity.setText(aMapLocation.getAoiName() + "");
                     lon=aMapLocation.getLongitude();
                     lat = aMapLocation.getLatitude();
                 } else {
@@ -186,7 +189,7 @@ double lon;
     @Override
     public void initEventAndData() {
 //        AutoSizeConfig.getInstance();
-        SPCommon.setString("token", "c8333c77fa0db7f4cceef84a88b196d4$10002052");
+//        SPCommon.setString("token", "c8333c77fa0db7f4cceef84a88b196d4$10002052");
         toolBar.setBackFinish().setTitleText("地址管理");
         Intent intent = getIntent();
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
@@ -302,17 +305,30 @@ int jia = 0;
     FaHuoAddressModel addressModel;
     @Override
     public void onItemClickListener(int pos) {
+        if (TextUtils.isEmpty(mId)) {
+            ToastUtil.show("仅支持发货选择，如若添加/修改地址，请点击编辑");
+            return;
+        }
+        if (addressModel==null){
+            addressModel = new FaHuoAddressModel();
+        }
         if (mId.equals("1")) {
-            Intent intent = new Intent(this, BangWoMaiActivity.class);
+            if (addressModel.is_new_address==1){
+                Intent intent = new Intent(this, BangWoMaiXiaDanActivity.class);
+            }else {
+                Intent intent = new Intent(this, BangWoMaiActivity.class);
+            }
             addressModel.type =1;
         }
         if (mId.equals("2")) {
-            Intent intent = new Intent(this, BangWoBanActivity.class);
+            if (addressModel.is_new_address==1){
+                Intent intent = new Intent(this, BangWoBanXiaDanActivity.class);
+            }else {
+                Intent intent = new Intent(this, BangWoBanActivity.class);
+            }
             addressModel.type =2;
         }
-            if (addressModel==null){
-                addressModel = new FaHuoAddressModel();
-            }
+
             addressModel.address = mChangAddressList.get(pos).sendAddress;
             addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
             addressModel.contactName = mChangAddressList.get(pos).sendName;
@@ -488,8 +504,8 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lon+"";
-                addressModel.lon = lat+"";
+                addressModel.lat = lat+"";
+                addressModel.lon = lon+"";
                 addressModel.tag = 1;
                 addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvMoRenDiZhi.getText().toString())){
@@ -513,8 +529,8 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lon+"";
-                addressModel.lon = lat+"";
+                addressModel.lat = lat+"";
+                addressModel.lon = lon+"";
                 addressModel.tag = 2;
                 addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvGongSiDiZhi.getText().toString())){
@@ -539,8 +555,8 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lon+"";
-                addressModel.lon = lat+"";
+                addressModel.lat = lat+"";
+                addressModel.lon = lon+"";
                 addressModel.tag = 3;
                 addressModel.is_result =0;
                 if (TextUtils.isEmpty(tvJiaDiZhi.getText().toString())){
@@ -576,8 +592,8 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lon+"";
-                addressModel.lon = lat+"";
+                addressModel.lat = lat+"";
+                addressModel.lon = lon+"";
                 addressModel.tag = 0;
                 addressModel.is_result =0;
                 addressModel.city = tvCity.getText().toString()+"";

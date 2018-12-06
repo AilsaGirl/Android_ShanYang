@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -29,6 +30,7 @@ import com.liaocheng.suteng.myapplication.presenter.FaHuoXiaDanPersenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.FaHuoContact;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddressList;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.adapter.MyTimeAdapter;
+import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -102,7 +104,30 @@ public class BangWoBanXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
 
     @Override
     public void initEventAndData() {
-        toolBar.setTitleText("补充信息").setBackFinish();
+        toolBar.setTitleText("补充信息").setLeftClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(BangWoBanXiaDanActivity.this);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
+                dialog.setBackgroundResource(true);
+                dialog.setVisibilityBtn(true);
+                dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                    @Override
+                    public void onYesClick() {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+                dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                    @Override
+                    public void onOnClick() {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
         Intent intent = getIntent();
         EventBus.getDefault().register(this);
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
@@ -150,7 +175,31 @@ public class BangWoBanXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
             ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
         }
     }
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setBackgroundResource(true);
+            dialog.setVisibilityBtn(true);
+            dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                @Override
+                public void onOnClick() {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+        return false;
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(RecruitEvent event) {
         if (event == null)
@@ -237,6 +286,7 @@ public class BangWoBanXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
                 }
                 addressModel.type = 1;
                 addressModel.is_result = 1;
+                addressModel.is_new_address =1;
                 intent.putExtra("address_data", addressModel);
                 startActivityForResult(intent, 110);
                 break;

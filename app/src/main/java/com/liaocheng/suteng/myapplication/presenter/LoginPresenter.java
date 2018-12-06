@@ -7,6 +7,7 @@ import com.circle.common.baserx.RxUtil;
 import com.circle.common.response.BaseResponse;
 import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.api.Api;
+import com.liaocheng.suteng.myapplication.model.LoginBean;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
 
@@ -17,18 +18,18 @@ import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
 
 public class LoginPresenter extends RxPresenter<LoginContact.View> implements LoginContact.Presenter {
 
-
+    //短信登录
     @Override
     public void login(String username, String password) {
 
-        addSubscribe(Api.createTBService().updateUserAddress(SPCommon.getString("token",""),"4041","你好啊","17763515228","122","333","聊城","金鼎大厦","")
-                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
-                .compose(RxUtil.<NullBean>handleResult())
-                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+        addSubscribe(Api.createTBService().user_login_byIdentifyCode(username,password)
+                .compose(RxUtil.<BaseResponse<LoginBean>>rxSchedulerHelper())
+                .compose(RxUtil.<LoginBean>handleResult())
+                .subscribeWith(new CommonSubscriber<LoginBean>(mContext, true) {
                     @Override
-                    protected void _onNext(NullBean commonRes) {
+                    protected void _onNext(LoginBean commonRes) {
                         if (commonRes != null) {
-                            mView.loginSuccess(commonRes);
+                            mView.loginSuc(commonRes);
                         } else {
                             mView.showError(0, "");
                         }
@@ -41,17 +42,39 @@ public class LoginPresenter extends RxPresenter<LoginContact.View> implements Lo
         );
 
     }
-
+//用户名密码登录
     @Override
     public void logins(String username, String password) {
-        addSubscribe(Api.createTBService().findOldOrderAddress("10012102","0")
+        addSubscribe(Api.createTBService().user_login(username,password)
+                .compose(RxUtil.<BaseResponse<LoginBean>>rxSchedulerHelper())
+                .compose(RxUtil.<LoginBean>handleResult())
+                .subscribeWith(new CommonSubscriber<LoginBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(LoginBean commonRes) {
+                        if (commonRes != null) {
+                            mView.loginSuc(commonRes);
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void getforgetcode(String number, String code) {
+        addSubscribe(Api.createTBService().forgetcode(number,"20")
                 .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
                 .compose(RxUtil.<NullBean>handleResult())
                 .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
                     @Override
                     protected void _onNext(NullBean commonRes) {
                         if (commonRes != null) {
-                            mView.loginSuc(commonRes);
+                            mView.setforcode(commonRes);
                         } else {
                             mView.showError(0, "");
                         }
