@@ -201,7 +201,6 @@ public class BangWoMaiActivity extends BaseActivity {
         }
         if (resultCode == 120) {
             if (requestCode == 110) {
-
                 addressModel = (FaHuoAddressModel) data.getSerializableExtra("address_data");
                 mAddress = addressModel.address;
                 mCity = addressModel.ConcreteAdd;

@@ -49,6 +49,7 @@
         android:layout_below="@+id/relQuan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="90dp"
         android:layout_marginTop="1dp" />
     <TextView
         android:id="@+id/tvZhuanChu"
@@ -58,6 +59,8 @@
         android:background="@drawable/zhuce_bg"
         android:layout_alignParentBottom="true"
         android:gravity="center"
+        android:textColor="@color/hl_white"
+        android:textSize="@dimen/textSize_14"
         android:text="转出"
         />
 </RelativeLayout>

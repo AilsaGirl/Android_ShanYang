@@ -2,6 +2,7 @@ package com.liaocheng.suteng.myapplication.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,12 @@ import com.circle.common.util.CommonUtil;
 import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.MainModel;
+import com.liaocheng.suteng.myapplication.model.NoticeModel;
 import com.liaocheng.suteng.myapplication.model.event.FaHuoAddressEvent;
+import com.liaocheng.suteng.myapplication.presenter.MainPresenter;
+import com.liaocheng.suteng.myapplication.presenter.contract.MainContact;
+import com.liaocheng.suteng.myapplication.ui.home.GongDaoListActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddAddress;
 import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
@@ -44,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContact.View {
 
     @BindView(R.id.ivBackground)
     Banner ivBackground;
@@ -99,7 +105,8 @@ public class MainActivity extends BaseActivity {
                     SPCommon.setString("lat",aMapLocation.getLatitude()+"");
                     SPCommon.setString("qu",aMapLocation.getDistrict()+"");
                     SPCommon.setString("city",aMapLocation.getCity()+"");
-
+                    mPresenter.getBanner(SPCommon.getString("qu","东昌府区"));
+                    mPresenter.getNotice(SPCommon.getString("qu","东昌府区"));
                 } else {
 
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -113,50 +120,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initEventAndData() {
         setTransparentStatusBar();
-        List<String> list = new ArrayList<>();
-        list.add("https://dev.emintong.com/uploads/20180622/jpeg/152963986346676.jpeg");
-        list.add("https://dev.emintong.com/uploads/0518/jpeg/152661582624813.jpeg");
-        list.add("https://dev.emintong.com/uploads/0621/jpeg/152954437072059.jpeg");
-        ivBackground.setImages(list).setImageLoader(new ImageLoader() {
-            @Override
-            public void displayImage(Context context, Object path, ImageView imageView) {
-                if (path instanceof String) {
-                    Picasso.with(context).load((String) path).into(imageView);
-                }
-
-            }
-        }).setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-
-//                        Intent intent = new Intent(mContext, PartyBuilding5Activity.class);
-//                        intent.putExtra("urlh5", model.value);
-//                        mContext.startActivity(intent);
-
-
-            }
-        }).start();
-        for (int i = 0; i < 5; i++) {
-            LayoutInflater inflater3 = LayoutInflater.from(mContext);
-            View view = inflater3.inflate(R.layout.shouye_gg, null);
-//                holder.vf.removeView(view);
-            TextView tvTitle1 = (TextView) view
-                    .findViewById(R.id.tvTitle1);
-
-            tvTitle1.setText("我是第"+i+"条");
-
-          vf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Intent intent = new Intent(mContext, CommunalMinutesH5Activity.class);
-//                    intent.putExtra("kangyang", "康养列表");
-//                    mContext.startActivity(intent);
-                }
-            });
-            views.add(view);
-        }
-       vf.setViews(views);
         initListener();
+
     }
 
     Intent intent;
@@ -184,5 +149,71 @@ public class MainActivity extends BaseActivity {
         if (msg != null && !msg.equals("")) {
             ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
         }
+    }
+
+    @Override
+    public void setNotice(NoticeModel noticeBean) {
+        if (noticeBean.data==null||noticeBean.data.size()==0){
+            return;
+        }
+        for (int i = 0; i < noticeBean.data.size(); i++) {
+            LayoutInflater inflater3 = LayoutInflater.from(mContext);
+            View view = inflater3.inflate(R.layout.shouye_gg, null);
+//                holder.vf.removeView(view);
+            TextView tvTitle1 = (TextView) view
+                    .findViewById(R.id.tvTitle1);
+            tvTitle1.setText(noticeBean.data.get(i).content+"");
+            vf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, GongDaoListActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
+            views.add(view);
+        }
+        vf.setViews(views);
+    }
+long mLasttime;
+    @Override
+    public void setBanner(final MainModel mBean) {
+        if (mBean.data==null||mBean.data.size()==0){
+            return;
+        }
+        List<String> list = new ArrayList<>();
+       for (int i=0;i<mBean.data.size();i++){
+           list.add(mBean.data.get(i).imgUrl);
+       }
+        ivBackground.setImages(list).setImageLoader(new ImageLoader() {
+            @Override
+            public void displayImage(Context context, Object path, ImageView imageView) {
+                if (path instanceof String) {
+                    Picasso.with(context).load((String) path).into(imageView);
+                }
+
+            }
+        }).setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                if (TextUtils.isEmpty(mBean.data.get(position).imgToUrl)){
+                    return;
+                }else {
+                    if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                        return;
+                    mLasttime = System.currentTimeMillis();
+                    //代码实现跳转
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(mBean.data.get(position).imgToUrl+"");//此处填链接
+                    intent.setData(content_url);
+                    startActivity(intent);
+                }
+//                        Intent intent = new Intent(mContext, PartyBuilding5Activity.class);
+//                        intent.putExtra("urlh5", model.value);
+//                        mContext.startActivity(intent);
+
+
+            }
+        }).start();
     }
 }

@@ -25,8 +25,6 @@ import butterknife.ButterKnife;
 
 public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> {
 
-
-
     private Context mContext;
 
     private List<MySendOrdersBean.MySendOrdersModel> mList = new ArrayList<>();
@@ -59,7 +57,7 @@ int type = 0;
 //            5	合作商家
 //            6	县域快送
             if (ordersModel.orderType.equals("1")) {
-                holder.tvDingDanType.setText("帮我送");
+                holder.tvDingDanType.setText("帮我买");
             }
             if (ordersModel.orderType.equals("2")) {
                 holder.tvDingDanType.setText("帮我办");

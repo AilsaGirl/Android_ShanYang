@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:rotation="0"
+        android:src="@mipmap/back" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:layout_toLeftOf="@+id/btn_take_picture"
+        android:layout_toRightOf="@+id/image_back"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/Iv_guohui"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="30dp"
+                android:rotation="270"
+                android:src="@mipmap/guohui"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/Iv_renxiang"
+                android:layout_width="160dp"
+                android:layout_height="180dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="40dp"
+                android:rotation="270"
+                android:src="@mipmap/renxiang"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/view_border"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/view_border_white_shape4" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/btn_take_picture"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/take_picture_circle"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp" />
+</RelativeLayout>

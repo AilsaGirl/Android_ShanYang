@@ -60,7 +60,14 @@ public class MyToolBar extends Toolbar {
         tvRight.setOnClickListener(clickListener);
         return this;
     }
-
+    //重载 设置右边 StringId方法
+    public MyToolBar setRight(int rightC,String right, View.OnClickListener clickListener) {
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setTextColor(rightC);
+        tvRight.setText(right);
+        tvRight.setOnClickListener(clickListener);
+        return this;
+    }
     public MyToolBar setRightGone(int Visible) {
         tvRight.setVisibility(Visible);
         return this;

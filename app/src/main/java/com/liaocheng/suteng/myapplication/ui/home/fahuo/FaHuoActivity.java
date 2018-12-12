@@ -26,6 +26,7 @@ import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
@@ -241,6 +242,8 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         aMap.setLocationSource(this);// 设置定位监听
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        aMap.getUiSettings().setZoomGesturesEnabled(false);
+
     }
 
     /**
@@ -361,6 +364,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                     poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
                     //清空数据
                     data.clear();
+                    aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
                     for (PoiItem item : poiItems) {
                         //获取经纬度对象
                         LatLonPoint llp = item.getLatLonPoint();
@@ -479,7 +483,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latlng, 18);
                         aMap.animateCamera(cu);
                         aMap.addMarker(mk);
-
+                        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
                         Log.e("地理编码", geocodeAddress.getAdcode() + "");
                         Log.e("纬度latitude", lat + "");
                         Log.e("经度longititude", lon + "");

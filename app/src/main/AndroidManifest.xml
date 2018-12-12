@@ -98,7 +98,16 @@
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
-
+        <!-- 腾讯优图key -->
+        <meta-data
+            android:name="OCR_APP_KEY"
+            android:value="10128171" />
+        <meta-data
+            android:name="OCR_SECRET_ID"
+            android:value="AKIDxnPoz4EWrwlLkutzf6IFwRimbCZjHMp5" />
+        <meta-data
+            android:name="OCR_SECRET_KEY"
+            android:value="A6oLejaDdpnX3LPEqENIzShQxSmtnVzF" />
         <activity
             android:name=".ui.MainActivity"
             android:hardwareAccelerated="false"
@@ -130,6 +139,9 @@
 
         <activity
             android:name=".ui.home.FaHuoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.GongDaoListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.home.address.AddAddress"
@@ -188,6 +200,10 @@
         <activity
             android:name=".ui.my.YouHuiQuanListActivity"
             android:screenOrientation="portrait" />
+        <!-- 我的信息-->
+        <activity
+            android:name=".ui.my.UpDataMyInFoActivity"
+            android:screenOrientation="portrait" />
         <!-- 修改密码相关  开始-->
         <activity
             android:name=".ui.my.UpdateNewPhoneActivity"
@@ -203,6 +219,34 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my.SetZhiFuMiMaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyIdentityWinActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyUpdateIdentityActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.FuWuJiangLiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyYaoQingMaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.MyTuiGuangActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.TuiGuangRenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.TuiGuangJiangLiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.my.CoustomCaptureActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.Fullscreen" />
+        <activity
+            android:name=".ui.my.MyIdentityActivity"
             android:screenOrientation="portrait" />
         <!-- 修改密码相关  结束-->
         <activity

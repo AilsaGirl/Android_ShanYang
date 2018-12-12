@@ -3,12 +3,20 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+    lintOptions {
+        abortOnError false
+        //即使报错也不会停止打包
+        checkReleaseBuilds false
+        //打包release版本的时候进行检测
+    }
     defaultConfig {
         applicationId "com.liaocheng.suteng.myapplication"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 129
+        versionName "1.2.9"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -84,4 +92,11 @@ dependencies {
     compile files('libs/umeng_social_tool.jar')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation files('libs/open_sdk_r5788_lite.jar')
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
+//身份证
+    implementation files('libs/fastjson-1.1.39.jar')
+    implementation files('libs/sun.misc.BASE64Decoder.jar')
+    implementation 'com.github.eric0liang:lib_cardocr:1.0.4'
+    //二维码
+    compile 'com.google.zxing:core:3.3.0'
 }

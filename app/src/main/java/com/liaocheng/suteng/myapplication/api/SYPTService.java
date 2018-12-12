@@ -2,15 +2,21 @@ package com.liaocheng.suteng.myapplication.api;
 
 import com.circle.common.response.BaseResponse;
 
+import com.liaocheng.suteng.myapplication.model.AuthBean;
 import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
+import com.liaocheng.suteng.myapplication.model.ExtensionDetailQueryBean;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.LoginBean;
+import com.liaocheng.suteng.myapplication.model.MainModel;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
 import com.liaocheng.suteng.myapplication.model.MyBean;
 import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
 import com.liaocheng.suteng.myapplication.model.MyTeaBean;
+import com.liaocheng.suteng.myapplication.model.MyTuiGuangBean;
+import com.liaocheng.suteng.myapplication.model.NoticeModel;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
+import com.liaocheng.suteng.myapplication.model.PromoteDetailBean;
 import com.liaocheng.suteng.myapplication.model.ServiceCenterBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
 import com.liaocheng.suteng.myapplication.model.UpdatePhoneBean;
@@ -19,9 +25,13 @@ import com.liaocheng.suteng.myapplication.model.YouHuiQuanListBean;
 import com.liaocheng.suteng.myapplication.model.Zcxiybean;
 
 import io.reactivex.Flowable;
+import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * Created by Circle on 2017/3/28 0028.
@@ -186,6 +196,15 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("getServiceCenter")
     Flowable<BaseResponse<ServiceCenterBean>>  getServiceCenter(@Field("token") String token, @Field("area") String area);
+    //首页轮播
+    @FormUrlEncoded
+    @POST("getBanner")
+    Flowable<BaseResponse<MainModel>>  getBanner(@Field("token") String token, @Field("area") String area);
+
+    //首页公告
+    @FormUrlEncoded
+    @POST("getNotice")
+    Flowable<BaseResponse<NoticeModel>>  getNotice(@Field("token") String token, @Field("area") String area);
 
     /**
      * 发货下单
@@ -218,6 +237,52 @@ public interface SYPTService {
                                                             @Field("longitude")  String longitude, @Field("latitude")  String latitude, @Field("tip")  String tip,
                                                             @Field("coupon")  String coupon, @Field("weight")  String weight, @Field("trafficTool")  String trafficTool, @Field("parcel_insurance_id") String parcel_insurance_id
                                                             );
+
+    /**
+     * 上传一张图片
+     * @param nickName
+     * @param photo
+     * @return
+     */
+    @Multipart
+    @POST("user_setUserProfile")
+    Call<BaseResponse<NullBean>> uploadImage(@Part("nickName") String nickName,
+                             @Part("photo\"; filename=\"image.png\"") RequestBody photo);
+
+    //修改用户名
+    @FormUrlEncoded
+    @POST("user_setUserNickName")
+    Flowable<BaseResponse<NullBean>>  user_setUserNickName(@Field("token") String token,@Field("nickName") String nickName);
+    //修改图片名
+    @FormUrlEncoded
+    @POST("user_setUserHeadImg")
+    Flowable<BaseResponse<NullBean>>  user_setUserHeadImg(@Field("token") String token,@Field("headImg") String headImg);
+    //身份认证
+    @FormUrlEncoded
+    @POST("user_addAuth")
+    Flowable<BaseResponse<NullBean>>  user_addAuth(@Field("token") String token,@Field("name") String name,@Field("phone") String phone,@Field("idCode") String idCode,@Field("positive_idPhoto") String positive_idPhoto,@Field("reverse_idPhoto") String reverse_idPhoto,@Field("armed_idPhoto") String armed_idPhoto);
+    //身份认证
+    @FormUrlEncoded
+    @POST("auth_info")
+    Flowable<BaseResponse<AuthBean>>  auth_info(@Field("token") String token);
+    //身份认证
+    @FormUrlEncoded
+    @POST("auth_delete")
+    Flowable<BaseResponse<NullBean>>  auth_delete(@Field("token") String token);
+    //推广概览
+    @FormUrlEncoded
+    @POST("extensionSumMoneyQuery")
+    Flowable<BaseResponse<MyTuiGuangBean>>  extensionSumMoneyQuery(@Field("token") String token,@Field("city") String city,@Field("area") String area);
+    //推广人详情
+    @FormUrlEncoded
+    @POST("promoteDetail")
+    Flowable<BaseResponse<PromoteDetailBean>>  promoteDetail(@Field("token") String token, @Field("pageNo") String pageNo, @Field("generation") String generation);
+    //推广明细
+    @FormUrlEncoded
+    @POST("extensionDetailQuery")
+    Flowable<BaseResponse<ExtensionDetailQueryBean>>  extensionDetailQuery(@Field("token") String token, @Field("pageNo") String pageNo, @Field("generation") String generation, @Field("promotionType") String promotionType, @Field("duration") String duration);
+
+
 }
 
 

@@ -13,8 +13,6 @@ import com.liaocheng.suteng.myapplication.R;
 
 
 /**
- * name:xukang
- * company:山东博界科技
  * DATA: 2018/8/16-10:10
  * Descript:
  */
@@ -105,7 +103,10 @@ public class ApplyAndAlterDialog extends Dialog {
         titleStr = message;
         dialogcontext=context;
     }
-
+//    //图片
+//    public void setImg(boolean bacNum){
+//        isbac=bacNum;
+//    }
     //图片
     public void setBackgroundResource(boolean bacNum){
         isbac=bacNum;
