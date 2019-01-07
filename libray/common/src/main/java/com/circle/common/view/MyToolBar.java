@@ -1,5 +1,6 @@
 package com.circle.common.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -73,14 +74,15 @@ public class MyToolBar extends Toolbar {
         return this;
     }
 
+
     //重载 设置右边 StringId方法
     public MyToolBar setRight(int right, View.OnClickListener clickListener) {
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText(right);
+//        tvRight.setText(right);
+        tvRight.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(right), null);
         tvRight.setOnClickListener(clickListener);
         return this;
     }
-
     public MyToolBar setCommonBackgroundColor(int color) {
         toolBar.setBackgroundColor(color);
         return this;
@@ -128,12 +130,23 @@ public class MyToolBar extends Toolbar {
         tvRight.setOnClickListener(clickListener);
         return this;
     }
-
+    public MyToolBar setTitleClick(View.OnClickListener clickListener) {
+        tvTitle.setOnClickListener(clickListener);
+        return this;
+    }
+    @SuppressLint("NewApi")
     public MyToolBar setTitleText(String title) {
+        tvTitle.setBackground(null);
+        tvTitle.setTextColor(0xff333333);
         tvTitle.setText(title);
         return this;
     }
-
+    @SuppressLint("NewApi")
+    public MyToolBar setTitleTextBg() {
+        tvTitle.setTextColor(0xffffffff);
+        tvTitle.setBackground(getResources().getDrawable(R.drawable.zhuce_bg));
+        return this;
+    }
     public MyToolBar setTitleText(int textId) {
         tvTitle.setText(textId);
         return this;

@@ -32,6 +32,7 @@ import com.liaocheng.suteng.myapplication.ui.home.GongDaoListActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddAddress;
 import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.JieDanActivity;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
 import com.liaocheng.suteng.myapplication.ui.my.MyActivity;
 import com.liaocheng.suteng.myapplication.view.UPMarqueeView;
@@ -138,7 +139,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mContext.startActivity(intent);
                 break;
             case R.id.linQiangDan:
-                 intent = new Intent(mContext, MyActivity.class);
+                 intent = new Intent(mContext, JieDanActivity.class);
                 mContext.startActivity(intent);
                 break;
         }

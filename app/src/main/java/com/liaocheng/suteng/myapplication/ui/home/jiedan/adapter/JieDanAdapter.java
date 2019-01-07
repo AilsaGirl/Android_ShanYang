@@ -1,0 +1,151 @@
+package com.liaocheng.suteng.myapplication.ui.home.jiedan.adapter;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+
+/**
+ * 接单
+ * Created by weihongfang
+ */
+
+public class JieDanAdapter extends RecyclerView.Adapter<JieDanAdapter.ViewHolder> {
+
+
+    private Context mContext;
+
+    private List<JieDanDaTingModel.JieDanDaTingBean> mList = new ArrayList<>();
+
+    private FollowClickListener mListener;
+    int type = 0;
+
+    public JieDanAdapter(Context context, int type, FollowClickListener mListener) {
+        this.mContext = context;
+        this.type = type;
+        this.mListener = mListener;
+    }
+
+    public void setData(List<JieDanDaTingModel.JieDanDaTingBean> mySendOrdersBean) {
+        mList = mySendOrdersBean;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_jiedan, parent, false));
+    }
+
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        if (holder instanceof ViewHolder) {
+            final JieDanDaTingModel.JieDanDaTingBean model = mList.get(position);
+//            orderType	说明   1帮我买2	帮我办3	帮我送4	同校快送5	合作商家6	县域快送
+            holder.linMai.setVisibility(View.GONE);
+            holder.relFa.setVisibility(View.VISIBLE);
+            if (model.orderType.equals("1")){
+                holder.tvType.setText("帮我买");
+                holder.linMai.setVisibility(View.VISIBLE);
+                holder.relFa.setVisibility(View.GONE);
+                holder.tvMsg.setText("商品描述及备注："+model.description+"");
+            }else  if (model.orderType.equals("2")){
+                holder.tvType.setText("帮我办");
+            }else  if (model.orderType.equals("3")){
+                holder.tvType.setText("帮我送");
+            }else  if (model.orderType.equals("4")){
+                holder.tvType.setText("同校快送");
+            }else  if (model.orderType.equals("5")){
+                holder.tvType.setText("合作商家");
+            }else  if (model.orderType.equals("6")){
+                holder.tvType.setText("县域快送");
+            }
+            holder.tvDingDanTime.setText(model.appointTime+"");
+            holder.tvNum.setText("￥"+model.remuneration+"");
+            holder.tvFaJL.setText(model.distance+"");
+//            holder.tvFa.setText("");
+            holder.tvFaHuo.setText(model.sendAddress+"");
+            holder.tvFaHUoXQ.setText(model.sendConcreteAdd+"");
+            holder.tvShouJL.setText(model.distance+"");
+//            holder.tvShou.setText("");
+            holder.tvShouHuo.setText(model.receiveAddress+"");
+            holder.tvShouHUoXQ.setText(model.receiveConcreteAdd+"");
+            holder.tvJuLi.setText("全程："+model.distance);
+            holder.tvZhiFu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onFollowBtnClick("1",model.orderCode,1);
+                }
+            });
+        }
+
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return mList == null ? 0 : mList.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tvType)
+        TextView tvType;
+        @BindView(R.id.tvDingDanTime)
+        TextView tvDingDanTime;
+        @BindView(R.id.tvNum)
+        TextView tvNum;
+        @BindView(R.id.tvMsg)
+        TextView tvMsg;
+        @BindView(R.id.linMai)
+        LinearLayout linMai;
+        @BindView(R.id.tvFaJL)
+        TextView tvFaJL;
+        @BindView(R.id.tvFa)
+        TextView tvFa;
+        @BindView(R.id.linFa)
+        LinearLayout linFa;
+        @BindView(R.id.tvFaHuo)
+        TextView tvFaHuo;
+        @BindView(R.id.tvFaHUoXQ)
+        TextView tvFaHUoXQ;
+        @BindView(R.id.relFa)
+        RelativeLayout relFa;
+        @BindView(R.id.tvShouJL)
+        TextView tvShouJL;
+        @BindView(R.id.tvShou)
+        TextView tvShou;
+        @BindView(R.id.linShou)
+        LinearLayout linShou;
+        @BindView(R.id.tvShouHuo)
+        TextView tvShouHuo;
+        @BindView(R.id.tvShouHUoXQ)
+        TextView tvShouHUoXQ;
+        @BindView(R.id.tvZhiFu)
+        TextView tvZhiFu;
+        @BindView(R.id.tvJuLi)
+        TextView tvJuLi;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public static interface FollowClickListener {
+        void onFollowBtnClick(String type, String uid, int i);
+    }
+}

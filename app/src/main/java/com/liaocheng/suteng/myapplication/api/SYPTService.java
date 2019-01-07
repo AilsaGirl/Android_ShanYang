@@ -6,6 +6,7 @@ import com.liaocheng.suteng.myapplication.model.AuthBean;
 import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
 import com.liaocheng.suteng.myapplication.model.ExtensionDetailQueryBean;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
+import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
 import com.liaocheng.suteng.myapplication.model.LoginBean;
 import com.liaocheng.suteng.myapplication.model.MainModel;
 import com.liaocheng.suteng.myapplication.model.MyAddressInfoBean;
@@ -281,6 +282,18 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("extensionDetailQuery")
     Flowable<BaseResponse<ExtensionDetailQueryBean>>  extensionDetailQuery(@Field("token") String token, @Field("pageNo") String pageNo, @Field("generation") String generation, @Field("promotionType") String promotionType, @Field("duration") String duration);
+    //接单大厅
+    @FormUrlEncoded
+    @POST("order_info")
+    Flowable<BaseResponse<JieDanDaTingModel>>  order_info(@Field("token") String token, @Field("pageNo") String pageNo);
+    //上班
+    @FormUrlEncoded
+    @POST("setWorkState")
+    Flowable<BaseResponse<NullBean>>  setWorkState(@Field("token") String token, @Field("workState") String workState);
+    //接单
+    @FormUrlEncoded
+    @POST("order_grab")
+    Flowable<BaseResponse<NullBean>>  order_grab(@Field("token") String token, @Field("orderCode") String orderCode);
 
 
 }
