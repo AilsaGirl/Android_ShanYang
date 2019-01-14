@@ -47,7 +47,7 @@ public class RitUtil  extends RoutUtil{
      * 添加骑行路线到地图中。
      * @since V3.5.0
      */
-    public void addToMap() {
+    public void addToMap(int startId,int endId ) {
 
         initPolylineOptions();
         try {
@@ -62,7 +62,7 @@ public class RitUtil  extends RoutUtil{
                 addRidePolyLines(rideStep);
             }
             mPolylineOptions.add(endPoint);
-            addStartAndEndMarker();
+            addStartAndEndMarker(startId,endId);
 
             showPolyline();
         } catch (Throwable e) {

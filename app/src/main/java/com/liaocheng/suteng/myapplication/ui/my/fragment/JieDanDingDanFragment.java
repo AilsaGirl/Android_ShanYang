@@ -139,7 +139,7 @@ List<MySendOrdersBean.MySendOrdersModel> mList = new ArrayList<>();
     public void setMySendOrder(MySendOrdersBean myBean) {
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();
-        if (myBean.data != null) {
+        if (myBean.data != null&&myBean.data.size()>0) {
             if (page==1){
                 mList.clear();
             }
@@ -152,7 +152,8 @@ List<MySendOrdersBean.MySendOrdersModel> mList = new ArrayList<>();
             if (page != 1) {
                 ToastUtil.show("最后一页");
             } else {
-                recyclerView.setVisibility(View.GONE);
+                mList.clear();
+                mList.addAll(myBean.data);
                 ivNull.setVisibility(View.VISIBLE);
             }
         }

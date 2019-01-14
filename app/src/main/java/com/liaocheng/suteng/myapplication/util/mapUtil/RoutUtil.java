@@ -26,11 +26,13 @@ public class RoutUtil {
     protected List<Polyline> allPolyLines = new ArrayList<Polyline>();
     protected Marker startMarker;
     protected Marker endMarker;
+    protected Marker midMarker;
     protected LatLng startPoint;
+    protected LatLng midPoint;
     protected LatLng endPoint;
     protected AMap mAMap;
     private Context mContext;
-    private Bitmap startBit, endBit, busBit, walkBit, driveBit;
+    private Bitmap startBit,midBit, endBit, busBit, walkBit, driveBit;
     protected boolean nodeIconVisible = true;
 
     public RoutUtil(Context context) {
@@ -45,6 +47,9 @@ public class RoutUtil {
         if (startMarker != null) {
             startMarker.remove();
 
+        }
+        if (midMarker != null) {
+            midMarker.remove();
         }
         if (endMarker != null) {
             endMarker.remove();
@@ -62,6 +67,10 @@ public class RoutUtil {
         if (startBit != null) {
             startBit.recycle();
             startBit = null;
+        }
+        if (midBit != null) {
+            midBit.recycle();
+            midBit = null;
         }
         if (endBit != null) {
             endBit.recycle();
@@ -96,6 +105,17 @@ public class RoutUtil {
     protected BitmapDescriptor getEndBitmapDescriptor() {
         return BitmapDescriptorFactory.fromResource(R.mipmap.amap_end);
     }
+    /**
+     * 给终点Marker设置图标，并返回更换图标的图片。如不用默认图片，需要重写此方法。
+     * @return 更换的Marker图片。
+     * @since V2.1.0
+     */
+    protected BitmapDescriptor getMidBitmapDescriptor() {
+        return BitmapDescriptorFactory.fromResource(R.mipmap.amap_end);
+    }
+    protected BitmapDescriptor getBitmapDescriptor(int id) {
+        return BitmapDescriptorFactory.fromResource(id);
+    }
 //	/**
 //	 * 给公交Marker设置图标，并返回更换图标的图片。如不用默认图片，需要重写此方法。
 //	 * @return 更换的Marker图片。
@@ -117,14 +137,25 @@ public class RoutUtil {
 //		return BitmapDescriptorFactory.fromResource(R.drawable.amap_car);
 //	}
 
-    protected void addStartAndEndMarker() {
+    protected void addStartAndEndMarker(int startId,int endId) {
         startMarker = mAMap.addMarker((new MarkerOptions())
-                .position(startPoint).icon(getStartBitmapDescriptor())
-                .title("\u8D77\u70B9"));
+                .position(startPoint).icon(getBitmapDescriptor(startId)));
         // startMarker.showInfoWindow();
 
         endMarker = mAMap.addMarker((new MarkerOptions()).position(endPoint)
-                .icon(getEndBitmapDescriptor()).title("\u7EC8\u70B9"));
+                .icon(getBitmapDescriptor(endId)));
+        // mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,
+        // getShowRouteZoom()));
+    }
+    protected void addStartAndEndMarker(String startTitle,String midTitle,String endTitle) {
+        startMarker = mAMap.addMarker((new MarkerOptions())
+                .position(startPoint).icon(getBitmapDescriptor(R.mipmap.amap_start))
+                .title(startTitle+""));
+        // startMarker.showInfoWindow();
+        midMarker = mAMap.addMarker((new MarkerOptions()).position(midPoint)
+                .icon(getBitmapDescriptor(R.mipmap.amap_start)).title(midTitle+""));
+        endMarker = mAMap.addMarker((new MarkerOptions()).position(endPoint)
+                .icon(getBitmapDescriptor(R.mipmap.amap_start)).title(endTitle+""));
         // mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint,
         // getShowRouteZoom()));
     }

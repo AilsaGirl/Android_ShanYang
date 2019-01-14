@@ -4,6 +4,7 @@ import com.circle.common.response.BaseResponse;
 
 import com.liaocheng.suteng.myapplication.model.AuthBean;
 import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
+import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
 import com.liaocheng.suteng.myapplication.model.ExtensionDetailQueryBean;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
@@ -17,7 +18,9 @@ import com.liaocheng.suteng.myapplication.model.MyTuiGuangBean;
 import com.liaocheng.suteng.myapplication.model.NoticeModel;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
+import com.liaocheng.suteng.myapplication.model.PayModel;
 import com.liaocheng.suteng.myapplication.model.PromoteDetailBean;
+import com.liaocheng.suteng.myapplication.model.ReceiveOrderModel;
 import com.liaocheng.suteng.myapplication.model.ServiceCenterBean;
 import com.liaocheng.suteng.myapplication.model.SiteBean;
 import com.liaocheng.suteng.myapplication.model.UpdatePhoneBean;
@@ -294,7 +297,78 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("order_grab")
     Flowable<BaseResponse<NullBean>>  order_grab(@Field("token") String token, @Field("orderCode") String orderCode);
-
+    //接单详情
+    @FormUrlEncoded
+    @POST("querySendOrderDetail")
+    Flowable<BaseResponse<DingDanBuyInfoModel>>  querySendOrderDetail(@Field("token") String token, @Field("orderCode") String orderCode);
+    //用户删除未支付订单
+    @FormUrlEncoded
+    @POST("order_cancell")
+    Flowable<BaseResponse<NullBean>>  order_cancell(@Field("token") String token, @Field("orderCode") String orderCode);
+    //支付订单
+    @FormUrlEncoded
+    @POST("order_pay")
+    Flowable<BaseResponse<PayModel>>  order_pay(@Field("token") String token, @Field("orderCode") String orderCode, @Field("payType") String payType);
+    //用户删除未被抢订单
+    @FormUrlEncoded
+    @POST("user_order_refund")
+    Flowable<BaseResponse<NullBean>>  user_order_refund(@Field("token") String token, @Field("orderCode") String orderCode);
+    //订单加价
+    @FormUrlEncoded
+    @POST("addOrderTip")
+    Flowable<BaseResponse<PayModel>>  addOrderTip(@Field("token") String token, @Field("orderCode") String orderCode, @Field("payType") String payType);
+    //确认订单
+    @FormUrlEncoded
+    @POST("order_submit")
+    Flowable<BaseResponse<NullBean>>  order_submit(@Field("token") String token, @Field("orderCode") String orderCode);
+   //撤销订单接单员
+    @FormUrlEncoded
+    @POST("order_revoke")
+    Flowable<BaseResponse<NullBean>>  order_revoke(@Field("token") String token, @Field("orderCode") String orderCode);
+    //确认订单
+    @FormUrlEncoded
+    @POST("courier_order_submit")
+    Flowable<BaseResponse<NullBean>>  courier_order_submit(@Field("token") String token, @Field("orderCode") String orderCode);
+    //短信确认订单
+    @FormUrlEncoded
+    @POST("checkReceiveCode")
+    Flowable<BaseResponse<NullBean>>  checkReceiveCode(@Field("token") String token, @Field("orderCode") String orderCode,@Field("receiveCode") String receiveCode);
+    //接单员撤销订单到用户余额
+    @FormUrlEncoded
+    @POST("order_refund")
+    Flowable<BaseResponse<NullBean>>  order_refund(@Field("token") String token, @Field("orderCode") String orderCode);
+    //确认到店取货
+    @FormUrlEncoded
+    @POST("getThePickup")
+    Flowable<BaseResponse<NullBean>>  getThePickup(@Field("token") String token, @Field("orderCode") String orderCode);
+    //处理被指定订单
+    @FormUrlEncoded
+    @POST("executeSpecificOrder")
+    Flowable<BaseResponse<NullBean>>  executeSpecificOrder(@Field("token") String token, @Field("orderCode") String orderCode , @Field("executeType") String executeType);
+    //处理被转让订单
+    @FormUrlEncoded
+    @POST("executeTransferOrder")
+    Flowable<BaseResponse<NullBean>>  executeTransferOrder(@Field("token") String token, @Field("orderCode") String orderCode , @Field("executeType") String executeType);
+    //转让订单
+    @FormUrlEncoded
+    @POST("transferOrder")
+    Flowable<BaseResponse<NullBean>>  transferOrder(@Field("token") String token, @Field("orderCode") String orderCode , @Field("phone") String phone);
+    //接单员设置交通工具
+    @FormUrlEncoded
+    @POST("setWorkTraffic")
+    Flowable<BaseResponse<NullBean>>  setWorkTraffic(@Field("token") String token, @Field("trafficTool") String trafficTool);
+    //取货中
+    @FormUrlEncoded
+    @POST("queryReceiveOrder")
+    Flowable<BaseResponse<ReceiveOrderModel>>  queryReceiveOrder(@Field("token") String token, @Field("pageNo") String pageNo);
+    //送货中
+    @FormUrlEncoded
+    @POST("queryOnTheWayOrder")
+    Flowable<BaseResponse<ReceiveOrderModel>>  queryOnTheWayOrder(@Field("token") String token, @Field("pageNo") String pageNo);
+    //送货中图片
+    @FormUrlEncoded
+    @POST("order_upPhotoByIndex")
+    Flowable<BaseResponse<NullBean>>  order_upPhotoByIndex(@Field("token") String token, @Field("orderCode") String orderCode, @Field("goodsImg") String goodsImg, @Field("index") String index);
 
 }
 

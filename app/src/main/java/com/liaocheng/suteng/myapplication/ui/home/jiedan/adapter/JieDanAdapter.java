@@ -1,6 +1,7 @@
 package com.liaocheng.suteng.myapplication.ui.home.jiedan.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanBuyInfoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanInfoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.JieDanActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +70,9 @@ public class JieDanAdapter extends RecyclerView.Adapter<JieDanAdapter.ViewHolder
                 holder.tvMsg.setText("商品描述及备注："+model.description+"");
             }else  if (model.orderType.equals("2")){
                 holder.tvType.setText("帮我办");
+                holder.linMai.setVisibility(View.VISIBLE);
+                holder.relFa.setVisibility(View.GONE);
+                holder.tvMsg.setText("商品描述及备注："+model.description+"");
             }else  if (model.orderType.equals("3")){
                 holder.tvType.setText("帮我送");
             }else  if (model.orderType.equals("4")){
@@ -89,7 +96,27 @@ public class JieDanAdapter extends RecyclerView.Adapter<JieDanAdapter.ViewHolder
             holder.tvZhiFu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onFollowBtnClick("1",model.orderCode,1);
+                    mListener.onFollowBtnClick(model.orderType,model.orderCode,1);
+                }
+            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (model.orderType.equals("1") || model.orderType.equals("2")) {
+//                    mPresenter.order_grab(uid);
+//                    recyclerView.refresh();
+                        Intent intent = new Intent();
+                        intent.putExtra("code", model.orderCode);
+                        intent.putExtra("isJieDanYuan", true);
+                        intent.setClass(mContext, DingDanBuyInfoActivity.class);
+                        mContext.startActivity(intent);
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra("code", model.orderCode);
+                        intent.setClass(mContext, DingDanInfoActivity.class);
+                        mContext.startActivity(intent);
+
+                    }
                 }
             });
         }

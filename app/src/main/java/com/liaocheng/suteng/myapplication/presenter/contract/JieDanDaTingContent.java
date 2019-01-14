@@ -10,11 +10,13 @@ public interface JieDanDaTingContent {
         void setOrder(JieDanDaTingModel myBean);
         void  updateTechnicianWorkStatus();
         void  order_grab();
+        void  setWorkTraffic();
     }
     interface Presenter extends BasePresenter<View> {//过程
         void  getOrder(String pageNo);
         void  updateTechnicianWorkStatus(String type);
         void  order_grab(String code);
+        void  setWorkTraffic(String type);
 
     }
 }

@@ -12,37 +12,15 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tvDingDanType"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:textColor="@color/hl_white"
-        android:background="@drawable/zhuce_bg"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="帮我送"
-        />
-    <TextView
-        android:id="@+id/tvDingDanTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:textSize="16dp"
         android:textColor="@color/hl_6x3"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="2018-11-09  17:09:09"
-        />
-    <TextView
-        android:id="@+id/tvDingDanStutas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#BBBBBB"
         android:gravity="center"
         android:padding="5dp"
         android:text="帮我送"
         />
+
 </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -95,6 +73,7 @@
         android:layout_toRightOf="@+id/ivFaHuo"
         android:layout_marginLeft="10dp"
         android:textColor="@color/hl_6x3"
+        android:layout_marginRight="40dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="18dp"
@@ -108,11 +87,20 @@
         android:layout_below="@+id/tvFaHuo"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
+        android:layout_marginRight="40dp"
         android:textColor="#BBBBBB"
         android:ellipsize="end"
         android:singleLine="true"
         android:textSize="14dp"
         android:text="山东省聊城市东城府区东昌路123号"
+        />
+    <ImageView
+        android:id="@+id/ivDingWeiFa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/daohang"
         />
 </RelativeLayout>
     <RelativeLayout
@@ -134,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ivShouHuo"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="40dp"
             android:textColor="@color/hl_6x3"
             android:ellipsize="end"
             android:singleLine="true"
@@ -148,13 +137,97 @@
             android:layout_below="@+id/tvShouHuo"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="3dp"
+            android:layout_marginRight="40dp"
             android:textColor="#BBBBBB"
             android:ellipsize="end"
             android:singleLine="true"
             android:textSize="14dp"
             android:text="山东省聊城市东城府区东昌路123号"
             />
+        <ImageView
+            android:id="@+id/ivDingWeiShou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/daohang"
+            />
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="#bbb"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/hl_6x3"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="拍照上传"
+        android:gravity="center"
+        />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    >
+    <ImageView
+        android:id="@+id/ivPhoto1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/add"
+        />
+    <ImageView
+        android:id="@+id/ivPhoto2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/add"
+        />
+    <ImageView
+        android:id="@+id/ivPhoto3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="15dp"
+        android:src="@mipmap/add"
+        />
+</LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/tab_color"
+        android:text="请输入收货人验证码"
+        android:textSize="16dp"
+        android:gravity="center"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/dingdan_bg"
+        >
+        <EditText
+            android:id="@+id/etCode"
+            android:layout_width="180dp"
+            android:layout_height="45dp"
+            android:background="#dddddd"
+            android:maxLength="4"
+            />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="66dp"
@@ -163,45 +236,29 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:id="@+id/tvJinELeiXing"
+            android:id="@+id/tvQueRen"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="14dp"
-            android:textColor="#BBBBBB"
-            android:gravity="bottom"
-            android:layout_marginRight="5dp"
-            android:text="支付金额"
-            />
-        <TextView
-            android:id="@+id/tvZhiFuNum"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="14dp"
-            android:textColor="#333333"
-            android:gravity="bottom"
-            android:layout_marginRight="5dp"
-            android:text="￥222"
-            />
-        <TextView
-            android:id="@+id/tvJuLiNum"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="bottom|center"
-            android:textSize="14dp"
-            android:textColor="#BBBBBB"
-            android:layout_marginRight="5dp"
-            android:text="全程:8.3km"
+            android:background="@drawable/zhuce_bg"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:text="确认提交"
             />
         <TextView
-            android:id="@+id/tvZhiFu"
-            android:layout_width="83dp"
-            android:layout_height="34dp"
-            android:background="@drawable/zhifu_bg"
-            android:text="去支付"
+            android:id="@+id/tvCall"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:textSize="14dp"
-            android:textColor="#333333"
+            android:layout_weight="1"
+            android:background="@drawable/zhuce_bg"
+            android:textColor="#fff"
             android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:text="联系用户"
             />
+
     </LinearLayout>
 </LinearLayout>

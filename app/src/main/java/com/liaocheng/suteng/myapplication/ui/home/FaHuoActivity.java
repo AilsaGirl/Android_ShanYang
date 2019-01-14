@@ -37,7 +37,7 @@ public class FaHuoActivity extends BaseActivity<FaHuoPresenter> {
     @Override
     public void initEventAndData() {
         toolBar.setTitleText("我要发货").setBackFinish();
-        mPresenter.initMap(this,mapView, "36.46807421644299", "115.95567726928711", "36.47028295377302", "115.97867989379883");
+//        mPresenter.initMap(mapView, "36.46807421644299", "115.95567726928711", "36.47028295377302", "115.97867989379883");
 
     }
 

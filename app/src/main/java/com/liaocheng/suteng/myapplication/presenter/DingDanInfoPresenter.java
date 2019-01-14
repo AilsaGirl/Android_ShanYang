@@ -1,17 +1,16 @@
 package com.liaocheng.suteng.myapplication.presenter;
 
-import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -40,22 +39,21 @@ import com.circle.common.util.JavaTypeUtil;
 import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.api.Api;
-import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
-import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
-import com.liaocheng.suteng.myapplication.presenter.contract.FaHuoContact;
+import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
+import com.liaocheng.suteng.myapplication.model.NullBean;
+import com.liaocheng.suteng.myapplication.model.PayModel;
+import com.liaocheng.suteng.myapplication.presenter.contract.DingDanBuyInfoContent;
+import com.liaocheng.suteng.myapplication.presenter.contract.DingDanInfoContent;
 import com.liaocheng.suteng.myapplication.util.mapUtil.RitUtil;
 
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by LHB on 2018/7/23 0023.
  */
 
-public class FaHuoPresenter extends RxPresenter{
+public class DingDanInfoPresenter extends RxPresenter<DingDanInfoContent.View> implements DingDanInfoContent.Presenter{
     public String mWeiDu, mJingDu;
     public AMap aMap;
 
@@ -65,12 +63,44 @@ public class FaHuoPresenter extends RxPresenter{
 
     private RideRouteResult mRideRouteResult;
 
-    public void initMap(MapView mapView, final String starWeiDu, final String starJingdu, final String endWeiDu, final String endJingdu) {
+    public void Ride(int s){
+        if (s==1){
+            LatLonPoint mStarLng1 = new LatLonPoint(JavaTypeUtil.StringToDouble(starWeiDu), JavaTypeUtil.StringToDouble(starJingdu));//终点，116.481288,39.995576
+            LatLonPoint mEndPoint1 = new LatLonPoint(JavaTypeUtil.StringToDouble(WeiDu), JavaTypeUtil.StringToDouble(Jingdu));//终点，116.481288,39.995576
+            final RouteSearch.FromAndTo fromAndTo1 = new RouteSearch.FromAndTo(mEndPoint1,mStarLng1);
+            RouteSearch.RideRouteQuery query1 = new RouteSearch.RideRouteQuery(fromAndTo1, 4);
+            mSearch.calculateRideRouteAsyn(query1);
+        }else {
+            LatLonPoint mStarLng = new LatLonPoint(JavaTypeUtil.StringToDouble(starWeiDu), JavaTypeUtil.StringToDouble(starJingdu));//终点，116.481288,39.995576
+            LatLonPoint mEndPoint = new LatLonPoint(JavaTypeUtil.StringToDouble(endWeiDu), JavaTypeUtil.StringToDouble(endJingdu));//终点，116.481288,39.995576
+            final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(mStarLng, mEndPoint);
+            RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, 4);
+            mSearch.calculateRideRouteAsyn(query);
+        }
+
+    }
+    int isThree;
+     String WeiDu;String Jingdu;String starWeiDu;  String starJingdu;  String endWeiDu;  String endJingdu;
+    public void initMap(MapView mapView, final String WeiDu, final String Jingdu, final String starWeiDu, final String starJingdu, final String endWeiDu, final String endJingdu, int isStart) {
+      this.WeiDu= WeiDu;
+        this.Jingdu= Jingdu;
+        this.starWeiDu= starWeiDu;
+        this.starJingdu= starJingdu;
+        this.endWeiDu= endWeiDu;
+        this.endJingdu= endJingdu;
+        this.isThree = isStart;
         if (aMap == null) {
             aMap = mapView.getMap();
 //            aMap.setLocationSource(this);// 设置定位监听
+            MyLocationStyle myLocationStyle = new MyLocationStyle();
+/* myLocationStyle.myLocationIcon(BitmapDescriptorFactory.
+fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 自定义精度范围的圆形边框颜色
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));//圆圈的颜色,设为透明的时候就可以去掉园区区域了
+            aMap.setMyLocationStyle(myLocationStyle);
+
             aMap.getUiSettings().setMyLocationButtonEnabled(false);// 设置默认定位按钮是否显示
-            aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+            aMap.setMyLocationEnabled(false);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
             aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
@@ -177,7 +207,7 @@ public class FaHuoPresenter extends RxPresenter{
 
             @Override
             public void onRideRouteSearched(RideRouteResult result, int errorCode) {
-                aMap.clear();// 清理地图上的所有覆盖物
+//                aMap.clear();// 清理地图上的所有覆盖物
                 if (errorCode == AMapException.CODE_AMAP_SUCCESS) {
                     if (result != null && result.getPaths() != null) {
                         if (result.getPaths().size() > 0) {
@@ -192,18 +222,26 @@ public class FaHuoPresenter extends RxPresenter{
                                     mRideRouteResult.getStartPos(),
                                     mRideRouteResult.getTargetPos());
                             rideRouteOverlay.removeFromMap();
-                            rideRouteOverlay.addToMap(0,0);
-                            rideRouteOverlay.zoomToSpan();
+                            if (isThree==1){
+                                rideRouteOverlay.addToMap(R.mipmap.amap_start,R.mipmap.amap_start);
+                                rideRouteOverlay.zoomToSpan();
+                                Ride(2);
+                                isThree++;
+                            }else {
+                                rideRouteOverlay.addToMap(R.mipmap.amap_start,R.mipmap.amap_end);
+                                rideRouteOverlay.zoomToSpan();
+                            }
+
                         }
                     }
                 }
             }
         });
-        LatLonPoint mStarLng = new LatLonPoint(JavaTypeUtil.StringToDouble(starWeiDu), JavaTypeUtil.StringToDouble(starJingdu));//终点，116.481288,39.995576
-        LatLonPoint mEndPoint = new LatLonPoint(JavaTypeUtil.StringToDouble(endWeiDu), JavaTypeUtil.StringToDouble(endJingdu));//终点，116.481288,39.995576
-        final RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(mStarLng, mEndPoint);
-        RouteSearch.RideRouteQuery query = new RouteSearch.RideRouteQuery(fromAndTo, 4);
-        mSearch.calculateRideRouteAsyn(query);
+      if (isThree==1){
+          Ride(1);
+      }else {
+          Ride(2);
+      }
 //        LatLng latLng = new LatLng(JavaTypeUtil.StringToDouble(mWeiDu), JavaTypeUtil.StringToDouble(mJingDu));
 //        if (locationMarker == null) {
 //            //首次定位
@@ -214,9 +252,81 @@ public class FaHuoPresenter extends RxPresenter{
 //            //首次定位,选择移动到地图中心点并修改级别到15级
 //            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 //        }
+
+
+    }
+
+    @Override
+    public void getDingDa(String code) {
+        addSubscribe(Api.createTBService().querySendOrderDetail(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(DingDanBuyInfoModel commonRes) {
+
+                        if (commonRes != null) {
+                            mView.setDingDa(commonRes);
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
     }
 
 
+    @Override
+    public void order_grab(String code) {
+        addSubscribe(Api.createTBService().order_grab(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.order_grab();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
+
+
+
+    @Override
+    public void transferOrder(String code, String phone) {
+        addSubscribe(Api.createTBService().transferOrder(SPCommon.getString("token",""),code,phone)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.transferOrder();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
 
 
 
