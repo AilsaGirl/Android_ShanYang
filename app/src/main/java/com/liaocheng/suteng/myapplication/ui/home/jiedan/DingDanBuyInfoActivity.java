@@ -162,6 +162,10 @@ public class DingDanBuyInfoActivity extends BaseActivity<DingDanBuyInfoPresenter
                     linJieDan.setVisibility(View.VISIBLE);
                     linQuHuo.setVisibility(View.GONE);
                     tvQiangDan.setVisibility(View.GONE);
+                    tvTel.setText("***********************");
+                    tvRen.setText("***********************");
+                    tvMoreAddress.setText("***********************");
+                    tvAddress.setText("***********************");
                     break;
                 case "5":
                     linFuKuan.setVisibility(View.GONE);
@@ -272,8 +276,8 @@ public class DingDanBuyInfoActivity extends BaseActivity<DingDanBuyInfoPresenter
             }
         }
 
-        tvJieDanRen.setText(DingDanBean.transporterName + "");
-        tvJieDanRenTel.setText(DingDanBean.transporterPhone + "");
+        tvJieDanRen.setText("接单人："+DingDanBean.transporterName + "");
+        tvJieDanRenTel.setText("手机号："+DingDanBean.transporterPhone + "");
 
     }
 

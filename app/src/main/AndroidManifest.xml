@@ -292,6 +292,12 @@
         <activity
             android:name=".ui.home.jiedan.WoDeRenWuActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.jiedan.GengDuoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.home.jiedan.FaDanXiangQingActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

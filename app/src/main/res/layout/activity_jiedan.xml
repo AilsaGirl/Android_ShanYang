@@ -11,6 +11,14 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivNull"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:scaleType="fitXY"
+        android:src="@mipmap/icon_null"
+        android:visibility="visible" />
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/recyclerView"
         android:layout_below="@+id/toolbar"

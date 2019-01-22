@@ -314,7 +314,7 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
                 if (addressModel==null){
                     ToastUtil.show("订单错误");
                 }else {
-                    mPresenter.detail("","1",addressModel.contactName,addressModel.contactPhone,addressModel.address,addressModel.ConcreteAdd,addressModel.detailAddress,lat,lon,"","","","","","","",tvNum.getText().toString()+"","","6","",tvShiJian.getText().toString()+"",addressModel.content+"","","",etTel.getText().toString(),"");
+                    mPresenter.detail("","1",addressModel.contactName,addressModel.contactPhone,addressModel.address,addressModel.ConcreteAdd,addressModel.detailAddress,lat,lon,"","","","","","","",etHuoKuan.getText().toString()+"","","6","",tvShiJian.getText().toString()+"",addressModel.content+"","","",etTel.getText().toString(),"");
                 }
                 break;
             case R.id.tvShiJian:

@@ -137,12 +137,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
                 intent = new Intent(mContext, FaHuoActivity.class);
                 mContext.startActivity(intent);
-                finish();
+//                finish();
                 break;
             case R.id.linQiangDan:
                  intent = new Intent(mContext, JieDanActivity.class);
                 mContext.startActivity(intent);
-                finish();
+//                finish();
                 break;
         }
     }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.circle.common.base.BaseFragment;
@@ -46,7 +47,7 @@ public class JieDanDingDanFragment extends BaseFragment<JieDanPresenter> impleme
     @BindView(R.id.recyclerView)
     XRecyclerView recyclerView;
     @BindView(R.id.fans)
-    LinearLayout fans;
+    RelativeLayout fans;
     @BindView(R.id.ivNull)
     ImageView ivNull;
     @BindView(R.id.tvFaDanNum)
@@ -152,6 +153,7 @@ List<MySendOrdersBean.MySendOrdersModel> mList = new ArrayList<>();
             if (page != 1) {
                 ToastUtil.show("最后一页");
             } else {
+                ToastUtil.show("暂无数据");
                 mList.clear();
                 mList.addAll(myBean.data);
                 ivNull.setVisibility(View.VISIBLE);

@@ -314,17 +314,17 @@ int jia = 0;
         }
         if (mId.equals("1")) {
             if (addressModel.is_new_address==1){
-                Intent intent = new Intent(this, BangWoMaiXiaDanActivity.class);
+                 intent = new Intent(this, BangWoMaiXiaDanActivity.class);
             }else {
-                Intent intent = new Intent(this, BangWoMaiActivity.class);
+                 intent = new Intent(this, BangWoMaiActivity.class);
             }
             addressModel.type =1;
         }
         if (mId.equals("2")) {
             if (addressModel.is_new_address==1){
-                Intent intent = new Intent(this, BangWoBanXiaDanActivity.class);
+                 intent = new Intent(this, BangWoBanXiaDanActivity.class);
             }else {
-                Intent intent = new Intent(this, BangWoBanActivity.class);
+                 intent = new Intent(this, BangWoBanActivity.class);
             }
             addressModel.type =2;
         }

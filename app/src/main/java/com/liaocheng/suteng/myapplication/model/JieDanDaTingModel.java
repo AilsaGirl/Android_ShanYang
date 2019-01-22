@@ -19,6 +19,8 @@ public class JieDanDaTingModel {
       public String   longitude;//	String	收货地经度
       public String   latitude;//	String	收货地纬度
       public String   distance;//	String	配送距离
+
+      public String   finishTime;//	String	订单完成时间
    }
 
 }

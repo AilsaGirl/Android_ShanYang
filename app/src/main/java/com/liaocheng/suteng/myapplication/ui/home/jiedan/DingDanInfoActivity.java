@@ -270,40 +270,7 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         starJingdu = DingDanBean.sendLong;
         endWeiDu = DingDanBean.latitude;
         endJingdu = DingDanBean.longitude;
-        switch (DingDanBean.status) {
-            case "1"://未付款
-                break;
-            case "2"://未被抢
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-            case "3"://取货中
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-            case "4"://已完成
-                mapView.setVisibility(View.GONE);
-                break;
-            case "5"://送货中
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-            case "6"://待提交
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-            case "7"://已退款
-                mapView.setVisibility(View.GONE);
-                break;
-            case "8"://指定接单中
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-            case "9"://转让订单中
-                mapView.setVisibility(View.VISIBLE);
-                initListener();
-                break;
-        }
+
         tvJuLi.setText("距离取货地");
 //        distance = AMapUtils.calculateLineDistance(latlngA, marker.getPosition());//计算距离
         tvFaJL.setText(DingDanBean.distance + "");
@@ -370,7 +337,44 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         tvNum.setText("接单总计：￥" + DingDanBean.total);
         tvBianHao.setText("订单编号：" + DingDanBean.orderCode);
         tvShiJian.setText("创建时间：" + DingDanBean.payTime);
-
+        switch (DingDanBean.status) {
+            case "1"://未付款
+                break;
+            case "2"://未被抢
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+            case "3"://取货中
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+            case "4"://已完成
+                mapView.setVisibility(View.GONE);
+                tvFaHuo.setText("************************");
+                tvFaHUoXQ.setText("************************");
+                tvShouHuo.setText("************************");
+                tvShouHUoXQ.setText("************************");
+                break;
+            case "5"://送货中
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+            case "6"://待提交
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+            case "7"://已退款
+                mapView.setVisibility(View.GONE);
+                break;
+            case "8"://指定接单中
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+            case "9"://转让订单中
+                mapView.setVisibility(View.VISIBLE);
+                initListener();
+                break;
+        }
 
     }
 
@@ -434,6 +438,9 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
 
                 break;
             case R.id.ivFaTel:
+                if (status.equals("4")){
+                    return;
+                }
                 Intent intent = new Intent(Intent.ACTION_DIAL);
 
                 Uri data = Uri.parse("tel:" + mFaHUoTel);
@@ -443,6 +450,9 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
                 startActivity(intent);
                 break;
             case R.id.ivShouTel:
+                if (status.equals("4")){
+                    return;
+                }
                 Intent intents = new Intent(Intent.ACTION_DIAL);
 
                 Uri datas = Uri.parse("tel:" + mShouHuoTel);

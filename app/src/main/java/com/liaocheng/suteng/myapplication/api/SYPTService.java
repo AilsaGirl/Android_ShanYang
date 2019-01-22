@@ -5,6 +5,7 @@ import com.circle.common.response.BaseResponse;
 import com.liaocheng.suteng.myapplication.model.AuthBean;
 import com.liaocheng.suteng.myapplication.model.ChangYongAddressBean;
 import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
+import com.liaocheng.suteng.myapplication.model.DingDanWeiZhiBean;
 import com.liaocheng.suteng.myapplication.model.ExtensionDetailQueryBean;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
@@ -369,6 +370,22 @@ public interface SYPTService {
     @FormUrlEncoded
     @POST("order_upPhotoByIndex")
     Flowable<BaseResponse<NullBean>>  order_upPhotoByIndex(@Field("token") String token, @Field("orderCode") String orderCode, @Field("goodsImg") String goodsImg, @Field("index") String index);
+    //完成订单
+    @FormUrlEncoded
+    @POST("queryCompletedOrder")
+    Flowable<BaseResponse<JieDanDaTingModel>>  queryCompletedOrder(@Field("token") String token, @Field("pageNo") String pageNo);
+    //退款订单
+    @FormUrlEncoded
+    @POST("queryHaveRefundOrder")
+    Flowable<BaseResponse<JieDanDaTingModel>>  queryHaveRefundOrder(@Field("token") String token, @Field("pageNo") String pageNo);
+    //用户拉黑接单员
+    @FormUrlEncoded
+    @POST("addBlacklist")
+    Flowable<BaseResponse<NullBean>>  addBlacklist(@Field("token") String token, @Field("receiveUserId") String receiveUserId);
+    //查询收发接单员经纬度
+    @FormUrlEncoded
+    @POST("getCoordByOrderCode")
+    Flowable<BaseResponse<DingDanWeiZhiBean>>  getCoordByOrderCode(@Field("token") String token, @Field("orderCode") String orderCode);
 
 }
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -53,6 +54,8 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
     JieDanAdapter adapter;
     @BindView(R.id.tvRel)
     RelativeLayout tvRel;
+    @BindView(R.id.ivNull)
+    ImageView ivNull;
 
     @Override
     public int getLayoutId() {
@@ -105,12 +108,14 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
 
             tvJieDan.setText("刷新订单");
             recyclerView.setVisibility(View.VISIBLE);
+            ivNull.setVisibility(View.GONE);
             recyclerView.refresh();
             toolbar.setTitleText("下班").setTitleTextBg();
             isFrist = false;
         } else {
             tvJieDan.setText("开始接单");
             recyclerView.setVisibility(View.GONE);
+            ivNull.setVisibility(View.VISIBLE);
             toolbar.setTitleText("接单大厅");
             isFrist = true;
         }
@@ -129,6 +134,26 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (SPCommon.getBoolean("iswork", false)) {
+
+            tvJieDan.setText("刷新订单");
+            recyclerView.setVisibility(View.VISIBLE);
+            ivNull.setVisibility(View.GONE);
+            recyclerView.refresh();
+            toolbar.setTitleText("下班").setTitleTextBg();
+            isFrist = false;
+        } else {
+            tvJieDan.setText("开始接单");
+            recyclerView.setVisibility(View.GONE);
+            ivNull.setVisibility(View.VISIBLE);
+            toolbar.setTitleText("接单大厅");
+            isFrist = true;
+        }
+    }
+
+    @Override
     public void showError(int reqCode, String msg) {
         recyclerView.loadMoreComplete();
         recyclerView.refreshComplete();
@@ -141,6 +166,7 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
     Intent intent;
     boolean isFrist = true;
     PopupWindow popupWindow;
+
     @OnClick({R.id.tvBaoJing, R.id.tvJieDan, R.id.tvMyTask})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -197,7 +223,7 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
                 //设置popwindow的宽高，这里我直接获取了手机屏幕的宽，高设置了600DP
                 DisplayMetrics dm = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(dm);
-                 popupWindow = new PopupWindow(view, dm.widthPixels, 700);
+                popupWindow = new PopupWindow(view, dm.widthPixels, 700);
 // 使其聚集
                 popupWindow.setFocusable(true);
                 // 设置允许在外点击消失
@@ -232,7 +258,7 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
                 if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
-                intent = new Intent(mContext,WoDeRenWuActivity.class);
+                intent = new Intent(mContext, WoDeRenWuActivity.class);
                 mContext.startActivity(intent);
                 break;
         }
@@ -241,13 +267,14 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (popupWindow!=null&&popupWindow.isShowing()){
+        if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
             popupWindow = null;
         }
     }
 
     List<JieDanDaTingModel.JieDanDaTingBean> list = new ArrayList<JieDanDaTingModel.JieDanDaTingBean>();
+
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
@@ -267,6 +294,9 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
         } else {
             if (page == 1) {
                 ToastUtil.show("暂无数据");
+                list.clear();
+                adapter.setData(list);
+                ivNull.setVisibility(View.VISIBLE);
             } else {
                 ToastUtil.show("最后一页");
             }
@@ -280,6 +310,7 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
             tvJieDan.setText("刷新订单");
             SPCommon.setBoolean("iswork", true);
             recyclerView.setVisibility(View.VISIBLE);
+            ivNull.setVisibility(View.GONE);
             toolbar.setTitleText("下班").setTitleTextBg();
             recyclerView.refresh();
             isFrist = false;
@@ -288,6 +319,7 @@ public class JieDanActivity extends BaseActivity<JieDanDaTingPresenter> implemen
             SPCommon.setBoolean("iswork", false);
             tvJieDan.setText("开始接单");
             recyclerView.setVisibility(View.GONE);
+            ivNull.setVisibility(View.VISIBLE);
             toolbar.setTitleText("接单大厅");
             isFrist = true;
         }

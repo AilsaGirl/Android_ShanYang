@@ -1,21 +1,14 @@
 package com.liaocheng.suteng.myapplication.presenter;
 
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdate;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Poi;
 import com.amap.api.navi.AmapNaviPage;
@@ -39,22 +32,16 @@ import com.circle.common.util.JavaTypeUtil;
 import com.circle.common.util.SPCommon;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.api.Api;
-import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
-import com.liaocheng.suteng.myapplication.model.NullBean;
-import com.liaocheng.suteng.myapplication.model.PayModel;
-import com.liaocheng.suteng.myapplication.presenter.contract.DingDanBuyInfoContent;
-import com.liaocheng.suteng.myapplication.presenter.contract.DingDanInfoContent;
+import com.liaocheng.suteng.myapplication.model.DingDanWeiZhiBean;
+import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
+import com.liaocheng.suteng.myapplication.presenter.contract.DingDanWeiZhiContent;
+import com.liaocheng.suteng.myapplication.presenter.contract.FaDanContent;
 import com.liaocheng.suteng.myapplication.util.mapUtil.RitUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by LHB on 2018/7/23 0023.
- */
-
-public class DingDanInfoPresenter extends RxPresenter<DingDanInfoContent.View> implements DingDanInfoContent.Presenter{
-    public String mWeiDu, mJingDu;
+public class DingDanWeiZhiPresenter extends RxPresenter<DingDanWeiZhiContent.View> implements DingDanWeiZhiContent.Presenter{
     public AMap aMap;
 
     private Marker locationMarker;
@@ -80,9 +67,9 @@ public class DingDanInfoPresenter extends RxPresenter<DingDanInfoContent.View> i
 
     }
     int isThree;
-     String WeiDu;String Jingdu;String starWeiDu;  String starJingdu;  String endWeiDu;  String endJingdu;
-    public void initMap(MapView mapView, final String WeiDu, final String Jingdu, final String starWeiDu, final String starJingdu, final String endWeiDu, final String endJingdu, int isStart) {
-      this.WeiDu= WeiDu;
+    String WeiDu;String Jingdu;String starWeiDu;  String starJingdu;  String endWeiDu;  String endJingdu;
+    public void initMap(MapView mapView, final String WeiDu, final String Jingdu, final String starWeiDu, final String starJingdu, final String endWeiDu, final String endJingdu, final int isStart) {
+        this.WeiDu= WeiDu;
         this.Jingdu= Jingdu;
         this.starWeiDu= starWeiDu;
         this.starJingdu= starJingdu;
@@ -91,14 +78,13 @@ public class DingDanInfoPresenter extends RxPresenter<DingDanInfoContent.View> i
         this.isThree = isStart;
         if (aMap == null) {
             aMap = mapView.getMap();
-//            aMap.setLocationSource(this);// 设置定位监听
+            //            aMap.setLocationSource(this);// 设置定位监听
             MyLocationStyle myLocationStyle = new MyLocationStyle();
 /* myLocationStyle.myLocationIcon(BitmapDescriptorFactory.
 fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
             myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 自定义精度范围的圆形边框颜色
             myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));//圆圈的颜色,设为透明的时候就可以去掉园区区域了
             aMap.setMyLocationStyle(myLocationStyle);
-
             aMap.getUiSettings().setMyLocationButtonEnabled(false);// 设置默认定位按钮是否显示
             aMap.setMyLocationEnabled(false);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
             aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
@@ -231,17 +217,23 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
                                 rideRouteOverlay.addToMap(R.mipmap.amap_start,R.mipmap.amap_end);
                                 rideRouteOverlay.zoomToSpan();
                             }
-
+                            if (isStart==1){
+                                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(JavaTypeUtil.StringToDouble( WeiDu), JavaTypeUtil.StringToDouble(Jingdu)), 15));
+                            }else {
+                                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(JavaTypeUtil.StringToDouble( endWeiDu), JavaTypeUtil.StringToDouble(endJingdu)), 15));
+                            }
                         }
                     }
                 }
             }
         });
-      if (isThree==1){
-          Ride(1);
-      }else {
-          Ride(2);
-      }
+        if (isThree==1){
+            Ride(1);
+        }else {
+            Ride(2);
+        }
+//        aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(JavaTypeUtil.StringToDouble( WeiDu), JavaTypeUtil.StringToDouble(Jingdu)), 18));
+
 //        LatLng latLng = new LatLng(JavaTypeUtil.StringToDouble(mWeiDu), JavaTypeUtil.StringToDouble(mJingDu));
 //        if (locationMarker == null) {
 //            //首次定位
@@ -252,19 +244,20 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
 //            //首次定位,选择移动到地图中心点并修改级别到15级
 //            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 //        }
-    }
 
+
+    }
     @Override
-    public void getDingDa(String code) {
-        addSubscribe(Api.createTBService().querySendOrderDetail(SPCommon.getString("token",""),code)
-                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
-                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
-                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+    public void getCoordByOrderCode(String orderCode) {
+        addSubscribe(Api.createTBService().getCoordByOrderCode(SPCommon.getString("token",""),orderCode)
+                .compose(RxUtil.<BaseResponse<DingDanWeiZhiBean>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanWeiZhiBean>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanWeiZhiBean>(mContext, true) {
                     @Override
-                    protected void _onNext(DingDanBuyInfoModel commonRes) {
+                    protected void _onNext(DingDanWeiZhiBean commonRes) {
 
                         if (commonRes != null) {
-                            mView.setDingDa(commonRes);
+                            mView.getCoordByOrderCode(commonRes);
                         } else {
                             mView.showError(0, "");
                         }
@@ -276,56 +269,4 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
                 })
         );
     }
-
-
-    @Override
-    public void order_grab(String code) {
-        addSubscribe(Api.createTBService().order_grab(SPCommon.getString("token",""),code)
-                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
-                .compose(RxUtil.<NullBean>handleResult())
-                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
-                    @Override
-                    protected void _onNext(NullBean commonRes) {
-
-                        if (commonRes != null) {
-                            mView.order_grab();
-                        } else {
-                            mView.showError(0, "");
-                        }
-                    }
-                    @Override
-                    protected void _onError(String message) {
-                        mView.showError(0, message);
-                    }
-                })
-        );
-    }
-
-
-
-    @Override
-    public void transferOrder(String code, String phone) {
-        addSubscribe(Api.createTBService().transferOrder(SPCommon.getString("token",""),code,phone)
-                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
-                .compose(RxUtil.<NullBean>handleResult())
-                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
-                    @Override
-                    protected void _onNext(NullBean commonRes) {
-
-                        if (commonRes != null) {
-                            mView.transferOrder();
-                        } else {
-                            mView.showError(0, "");
-                        }
-                    }
-                    @Override
-                    protected void _onError(String message) {
-                        mView.showError(0, message);
-                    }
-                })
-        );
-    }
-
-
-
 }

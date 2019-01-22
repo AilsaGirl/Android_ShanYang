@@ -1,44 +1,40 @@
-package com.liaocheng.suteng.myapplication.ui.my.fragment;
+package com.liaocheng.suteng.myapplication.ui.home.jiedan.fragment;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.circle.common.base.BaseFragment;
 import com.circle.common.util.CommonUtil;
-import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.liaocheng.suteng.myapplication.R;
-import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
-import com.liaocheng.suteng.myapplication.model.event.DingDanEvent;
-import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
-import com.liaocheng.suteng.myapplication.presenter.FaDanPresenter;
-import com.liaocheng.suteng.myapplication.presenter.contract.FaDanContent;
-import com.liaocheng.suteng.myapplication.ui.my.adapter.FaDanAdapter;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.liaocheng.suteng.myapplication.model.JieDanDaTingModel;
+import com.liaocheng.suteng.myapplication.model.ReceiveOrderModel;
+import com.liaocheng.suteng.myapplication.presenter.QuHuoPresenter;
+import com.liaocheng.suteng.myapplication.presenter.WanChengPresenter;
+import com.liaocheng.suteng.myapplication.presenter.contract.QuHuoContent;
+import com.liaocheng.suteng.myapplication.presenter.contract.WanChengContent;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.adapter.RenWuAdapter;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.adapter.WanChengAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 /**
  * Created by Administrator on 2018/11/6.
  */
 
 @SuppressLint("ValidFragment")
-public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implements FaDanContent.View {
+public class WanChengFragment extends BaseFragment<WanChengPresenter> implements WanChengContent.View {
     int mId;
 //    @BindView(R.id.toolBar)
 //    MyToolBar toolBar;
@@ -46,14 +42,9 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
     ImageView ivNull;
     @BindView(R.id.recyclerView)
     XRecyclerView recyclerView;
-    @BindView(R.id.fans)
-    RelativeLayout fans;
-    @BindView(R.id.tvFaDanNum)
-    TextView tvFaDanNum;
-    @BindView(R.id.tvZhiFuNum)
-    TextView tvZhiFuNum;
+
     @SuppressLint("ValidFragment")
-    public FaHuoDingDanFragment(int id) {
+    public WanChengFragment(int id) {
         mId = id;
     }
 
@@ -65,24 +56,10 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
             ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
         }
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(DingDanEvent event) {
-        if (event == null)
-            return;
-        if (!TextUtils.isEmpty(duration)){
-            duration=  event.geTitle()+"";
-            page=1;
-            mPresenter.getMySendOrder(duration, page + "");
-            mPresenter.getTotel(duration);
-        }else {
-            ToastUtil.show("查询失败");
-        }
 
-
-    }
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_fahuo;
+        return R.layout.fragment_daiquhuo;
     }
 
     @Override
@@ -94,7 +71,7 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
     @Override
     public void initEventAndDataNoLazy() {
         super.initEventAndDataNoLazy();
-        EventBus.getDefault().register(this);
+
         initRecyclerView();
     }
 
@@ -104,46 +81,54 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        mPresenter.getTotel(duration);
+
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 page = 1;
-                mPresenter.getMySendOrder(duration, page + "");
+                if (mId==1){
+                    mPresenter.queryCompletedOrder(page+"");
+                }else {
+                    mPresenter.queryHaveRefundOrder(page+"");//退款
+                }
+
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                mPresenter.getMySendOrder(duration, page + "");
+                if (mId==1){
+                    mPresenter.queryCompletedOrder(page+"");
+                }else {
+                    mPresenter.queryHaveRefundOrder(page+"");//退款
+                }
             }
         });
 
         recyclerView.setVisibility(View.VISIBLE);
 
-            mAdapter = new FaDanAdapter(mContext, 0);
+            mAdapter = new WanChengAdapter(mContext, 0);
             recyclerView.setAdapter(mAdapter);
         mAdapter.setData(mList);
-
         recyclerView.refresh();
     }
-    FaDanAdapter mAdapter;
+    WanChengAdapter mAdapter;
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventBus.getDefault().unregister(this);
     }
-    List<MySendOrdersBean.MySendOrdersModel> mList = new ArrayList<>();
+List<JieDanDaTingModel.JieDanDaTingBean> mList = new ArrayList<>();
+
 
     @Override
-    public void setMySendOrder(MySendOrdersBean myBean) {
+    public void queryCompletedOrder(JieDanDaTingModel ReceiveOrderBean) {
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();
-        if (myBean.data != null) {
+        if (ReceiveOrderBean.data != null&&ReceiveOrderBean.data.size()>0) {
             if (page==1){
                 mList.clear();
             }
-                mList.addAll(myBean.data);
+            mList.addAll(ReceiveOrderBean.data);
 
             recyclerView.setVisibility(View.VISIBLE);
             ivNull.setVisibility(View.GONE);
@@ -152,17 +137,38 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
             if (page != 1) {
                 ToastUtil.show("最后一页");
             } else {
-                ToastUtil.show("暂无数据");
-                mList.clear();
-                mAdapter.setData(mList);
                 ivNull.setVisibility(View.VISIBLE);
+                if (page==1){
+                    mList.clear();
+                }
+                mList.addAll(ReceiveOrderBean.data);
             }
         }
     }
 
     @Override
-    public void setTotel(MySendOrdersBean myBean) {
-        tvFaDanNum.setText("发单总计："+myBean.orderCount+"单");
-        tvZhiFuNum.setText("支付总计："+myBean.orderPayMoney+"元");
+    public void queryHaveRefundOrder(JieDanDaTingModel ReceiveOrderBean) {
+        recyclerView.refreshComplete();
+        recyclerView.loadMoreComplete();
+        if (ReceiveOrderBean.data != null&&ReceiveOrderBean.data.size()>0) {
+            if (page==1){
+                mList.clear();
+            }
+            mList.addAll(ReceiveOrderBean.data);
+
+            recyclerView.setVisibility(View.VISIBLE);
+            ivNull.setVisibility(View.GONE);
+            mAdapter.setData(mList);
+        } else {
+            if (page != 1) {
+                ToastUtil.show("最后一页");
+            } else {
+                ivNull.setVisibility(View.VISIBLE);
+                if (page==1){
+                    mList.clear();
+                }
+                mList.addAll(ReceiveOrderBean.data);
+            }
+        }
     }
 }

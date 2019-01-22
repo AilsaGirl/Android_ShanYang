@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanBuyInfoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanInfoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.FaDanXiangQingActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,17 +176,35 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
                     if (ordersModel.status.equals("1")) {
 
                     } else {
+
                         if (ordersModel.orderType.equals("1") || ordersModel.orderType.equals("2")) {
                             Intent intent = new Intent();
                             intent.putExtra("code", ordersModel.orderCode);
-                          if (type==1){
-                              intent.putExtra("isJieDanYuan", true);
-                          }else {
-                              intent.putExtra("isJieDanYuan", false);
-                          }
+                            intent.putExtra("isJieDanYuan", false);
+//                          if (type==1){
+//                              intent.putExtra("isJieDanYuan", true);
+//                          }else {
+//                              intent.putExtra("isJieDanYuan", false);
+//                          }
 
                             intent.setClass(mContext, DingDanBuyInfoActivity.class);
                             mContext.startActivity(intent);
+                        }else {
+                            Intent intent = new Intent();
+                            intent.putExtra("code", ordersModel.orderCode);
+                            intent.setClass(mContext, FaDanXiangQingActivity.class);
+                            mContext.startActivity(intent);
+//                            if (type==0){
+//                                Intent intent = new Intent();
+//                                intent.putExtra("code", ordersModel.orderCode);
+//                                intent.setClass(mContext, FaDanXiangQingActivity.class);
+//                                mContext.startActivity(intent);
+//                            }else {
+//                                Intent intent = new Intent();
+//                                intent.putExtra("code", ordersModel.orderCode);
+//                                intent.setClass(mContext, DingDanInfoActivity.class);
+//                                mContext.startActivity(intent);
+//                            }
                         }
                     }
                 }
@@ -197,13 +217,30 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
 //                    recyclerView.refresh();
                         Intent intent = new Intent();
                         intent.putExtra("code", ordersModel.orderCode);
-                        if (type==1){
-                            intent.putExtra("isJieDanYuan", true);
-                        }else {
-                            intent.putExtra("isJieDanYuan", false);
-                        }
+//                        if (type==1){
+//                            intent.putExtra("isJieDanYuan", true);
+//                        }else {
+//                            intent.putExtra("isJieDanYuan", false);
+//                        }
+                        intent.putExtra("isJieDanYuan", false);
                         intent.setClass(mContext, DingDanBuyInfoActivity.class);
                         mContext.startActivity(intent);
+                    }else {
+                        Intent intent = new Intent();
+                        intent.putExtra("code", ordersModel.orderCode);
+                        intent.setClass(mContext, FaDanXiangQingActivity.class);
+                        mContext.startActivity(intent);
+//                        if (type==0){
+//                            Intent intent = new Intent();
+//                            intent.putExtra("code", ordersModel.orderCode);
+//                            intent.setClass(mContext, FaDanXiangQingActivity.class);
+//                            mContext.startActivity(intent);
+//                        }else {
+//                            Intent intent = new Intent();
+//                            intent.putExtra("code", ordersModel.orderCode);
+//                            intent.setClass(mContext, DingDanInfoActivity.class);
+//                            mContext.startActivity(intent);
+//                        }
                     }
                 }
             });
