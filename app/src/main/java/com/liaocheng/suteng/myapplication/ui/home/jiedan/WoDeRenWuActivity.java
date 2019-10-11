@@ -18,6 +18,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.event.DingDanEvent;
+import com.liaocheng.suteng.myapplication.model.event.RenWuEvent;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.fragment.DaiQuHuoFragment;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.fragment.SongHuoZhongFragment;
 import com.liaocheng.suteng.myapplication.ui.my.fragment.FaHuoDingDanFragment;
@@ -53,6 +54,9 @@ public class WoDeRenWuActivity extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void initEventAndData() {
+        EventBus.getDefault().register(this);
+//        Intent intent = new Intent();
+        int tab = getIntent().getIntExtra("tab",0);
         titleList = new String[2];
         for (int i = 1; i < 3; i++) {
 
@@ -77,11 +81,21 @@ public class WoDeRenWuActivity extends BaseActivity {
 
             }
         });
+        stlTitle.setCurrentTab(tab);
+
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void onMessageEvent(RenWuEvent event) {
+        if (event == null)
+            return;
+        stlTitle.setCurrentTab(event.getTab());
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
     }
     public FragmentTransaction mFragmentTransaction;
     public FragmentManager fragmentManager;

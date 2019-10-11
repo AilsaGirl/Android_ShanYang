@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -16,13 +17,9 @@ import com.circle.common.util.ToastUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.ExtensionDetailQueryBean;
-import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
 import com.liaocheng.suteng.myapplication.model.event.DingDanEvent;
-import com.liaocheng.suteng.myapplication.presenter.FaDanPresenter;
 import com.liaocheng.suteng.myapplication.presenter.TuiGuangJiangLiPresenter;
-import com.liaocheng.suteng.myapplication.presenter.contract.FaDanContent;
 import com.liaocheng.suteng.myapplication.presenter.contract.TuiGuangJiangLiContact;
-import com.liaocheng.suteng.myapplication.ui.my.adapter.FaDanAdapter;
 import com.liaocheng.suteng.myapplication.ui.my.adapter.TuiGuangJiangLiAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,7 +40,7 @@ import butterknife.Unbinder;
 @SuppressLint("ValidFragment")
 public class TuiGuangJiangLiFragment extends BaseFragment<TuiGuangJiangLiPresenter> implements TuiGuangJiangLiContact.View {
     int mId;
-    String daiLiId ="1";
+    String daiLiId = "1";
     @BindView(R.id.ivNull)
     ImageView ivNull;
     @BindView(R.id.recyclerView)
@@ -51,9 +48,11 @@ public class TuiGuangJiangLiFragment extends BaseFragment<TuiGuangJiangLiPresent
     @BindView(R.id.fans)
     RelativeLayout fans;
     Unbinder unbinder;
+    @BindView(R.id.btnTotal)
+    Button btnTotal;
 
     @SuppressLint("ValidFragment")
-    public TuiGuangJiangLiFragment(int id,String daiLiId) {
+    public TuiGuangJiangLiFragment(int id, String daiLiId) {
         mId = id;
         this.daiLiId = daiLiId;
     }
@@ -74,7 +73,7 @@ public class TuiGuangJiangLiFragment extends BaseFragment<TuiGuangJiangLiPresent
         if (!TextUtils.isEmpty(duration)) {
             duration = event.geTitle() + "";
             page = 1;
-            mPresenter.getTuiGuang(page + "",daiLiId,mId+"",duration);
+            mPresenter.getTuiGuang(page + "", daiLiId, mId + "", duration);
         } else {
             ToastUtil.show("查询失败");
         }
@@ -111,13 +110,13 @@ public class TuiGuangJiangLiFragment extends BaseFragment<TuiGuangJiangLiPresent
             @Override
             public void onRefresh() {
                 page = 1;
-                mPresenter.getTuiGuang(page + "",daiLiId,mId+"",duration);
+                mPresenter.getTuiGuang(page + "", daiLiId, mId + "", duration);
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                mPresenter.getTuiGuang(page + "",daiLiId,mId+"",duration);
+                mPresenter.getTuiGuang(page + "", daiLiId, mId + "", duration);
             }
         });
 
@@ -154,6 +153,7 @@ public class TuiGuangJiangLiFragment extends BaseFragment<TuiGuangJiangLiPresent
     public void setTuiGuang(ExtensionDetailQueryBean mBean) {
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();
+        btnTotal.setText("总计："+mBean.data.get(0).sumMoney+"元");
         if (mBean.data != null) {
             if (page == 1) {
                 mList.clear();

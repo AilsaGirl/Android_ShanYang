@@ -6,19 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <View
+    <com.circle.common.view.MyToolBar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="26dp"
-        android:background="@mipmap/tool"
-        />
+        android:layout_height="wrap_content"/>
     <com.youth.banner.Banner
         android:id="@+id/ivBackground"
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:background="@mipmap/chngzhi_icon"
         style="@style/baotui_banner"
         android:layout_below="@+id/toolbar"
-        app:banner_default_image="@mipmap/ic_launcher" />
+        app:banner_default_image="@mipmap/chngzhi_icon" />
 
     <LinearLayout
         android:layout_below="@+id/ivBackground"
@@ -37,7 +36,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_below="@+id/ivBackground"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/laba"
                 android:padding="5dp"
                 />
             <TextView
@@ -67,6 +66,7 @@
                 android:id="@+id/linFaHuo"
                 android:orientation="vertical"
                 android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView
@@ -86,6 +86,7 @@
                 android:id="@+id/linQiangDan"
                 android:orientation="vertical"
                 android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <ImageView

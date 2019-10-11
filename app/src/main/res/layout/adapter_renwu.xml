@@ -89,8 +89,6 @@
         android:layout_marginTop="3dp"
         android:layout_marginRight="40dp"
         android:textColor="#BBBBBB"
-        android:ellipsize="end"
-        android:singleLine="true"
         android:textSize="14dp"
         android:text="山东省聊城市东城府区东昌路123号"
         />
@@ -139,8 +137,6 @@
             android:layout_marginTop="3dp"
             android:layout_marginRight="40dp"
             android:textColor="#BBBBBB"
-            android:ellipsize="end"
-            android:singleLine="true"
             android:textSize="14dp"
             android:text="山东省聊城市东城府区东昌路123号"
             />

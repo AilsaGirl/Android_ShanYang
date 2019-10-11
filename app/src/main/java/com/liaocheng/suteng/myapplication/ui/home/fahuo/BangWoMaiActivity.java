@@ -143,7 +143,7 @@ public class BangWoMaiActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
             dialog.setBackgroundResource(true);
             dialog.setVisibilityBtn(true);
             dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {

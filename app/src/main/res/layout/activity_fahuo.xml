@@ -43,19 +43,19 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/linBom"
         android:layout_width="match_parent"
-        android:layout_height="185dp">
+        android:layout_height="175dp">
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/stlTitle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            app:tl_indicator_color="#9E649E"
+            app:tl_indicator_color="@color/tab_color"
             android:background="#7eBBBBBB"
             app:tl_indicator_corner_radius="1dp"
             app:tl_indicator_margin_bottom="8dp"
             app:tl_indicator_height="2dp"
             app:tl_underline_color="#F0F0F0"
             app:tl_indicator_width_equal_title="true"
-            app:tl_textSelectColor="#9E649E"
+            app:tl_textSelectColor="@color/tab_color"
             app:tl_textUnselectColor="#333333"
             android:visibility="visible"
             app:tl_textsize="15sp" />

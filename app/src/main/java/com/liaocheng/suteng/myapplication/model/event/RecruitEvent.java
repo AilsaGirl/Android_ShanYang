@@ -10,9 +10,14 @@ public class RecruitEvent {
     public String title;
   boolean isShow;
 
-    public FaHuoAddressModel addressModel;
-    public RecruitEvent(FaHuoAddressModel addressModel) {
-        this.addressModel = addressModel;
+    public FaHuoAddressModel addressModelFa;
+    public FaHuoAddressModel addressModelShou;
+    public RecruitEvent(FaHuoAddressModel addressModelFa) {
+        this.addressModelFa = addressModelFa;
+    }
+    public RecruitEvent(FaHuoAddressModel addressModelFa,FaHuoAddressModel addressModelShou) {
+        this.addressModelShou = addressModelShou;
+        this.addressModelFa = addressModelFa;
     }
     public RecruitEvent(boolean isShow) {
         this.isShow = isShow;
@@ -34,10 +39,15 @@ public class RecruitEvent {
         this.title = title;
     }
     public FaHuoAddressModel getAddressModel() {
-        return addressModel;
+        return addressModelFa;
     }
-
+    public FaHuoAddressModel getAddressModelShou() {
+        return addressModelShou;
+    }
     public void setAddressModel(FaHuoAddressModel addressModel) {
-        this.addressModel = addressModel;
+        this.addressModelFa = addressModel;
+    }
+    public void setAddressModelShou(FaHuoAddressModel addressModel) {
+        this.addressModelShou = addressModelShou;
     }
 }

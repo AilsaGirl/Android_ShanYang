@@ -37,7 +37,28 @@ public class FaDanDingDanInfoPresenter extends RxPresenter<FaDanDingDanInfoConte
                 })
         );
     }
+    @Override
+    public void order_pay(String code, String type) {
+        addSubscribe(Api.createTBService().order_pay(SPCommon.getString("token",""),code,type)
+                .compose(RxUtil.<BaseResponse<PayModel>>rxSchedulerHelper())
+                .compose(RxUtil.<PayModel>handleResult())
+                .subscribeWith(new CommonSubscriber<PayModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(PayModel commonRes) {
 
+                        if (commonRes != null) {
+                            mView.order_pay(commonRes);
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
     @Override
     public void order_submit(String code) {
         addSubscribe(Api.createTBService().order_submit(SPCommon.getString("token",""),code)
@@ -62,8 +83,8 @@ public class FaDanDingDanInfoPresenter extends RxPresenter<FaDanDingDanInfoConte
     }
 
     @Override
-    public void addOrderTip(String code, String type) {
-        addSubscribe(Api.createTBService().addOrderTip(SPCommon.getString("token",""),code,type)
+    public void addOrderTip(String code, String type,String num) {
+        addSubscribe(Api.createTBService().addOrderTip(SPCommon.getString("token",""),code,type,num)
                 .compose(RxUtil.<BaseResponse<PayModel>>rxSchedulerHelper())
                 .compose(RxUtil.<PayModel>handleResult())
                 .subscribeWith(new CommonSubscriber<PayModel>(mContext, true) {
@@ -118,6 +139,29 @@ public class FaDanDingDanInfoPresenter extends RxPresenter<FaDanDingDanInfoConte
 
                         if (commonRes != null) {
                             mView.addBlacklist();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void checkSecondPassword(String pass) {
+        addSubscribe(Api.createTBService().checkSecondPassword(SPCommon.getString("token",""),pass)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.checkSecondPassword();
                         } else {
                             mView.showError(0, "");
                         }

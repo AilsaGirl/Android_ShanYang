@@ -77,7 +77,7 @@ public class FaHuoWeiZhiFragment extends BaseFragment<DingDanWeiZhiPresenter> im
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //获取最近3s内精度最高的一次定位结果：
         //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
+//        mLocationOption.setOnceLocationLatest(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -89,6 +89,7 @@ public class FaHuoWeiZhiFragment extends BaseFragment<DingDanWeiZhiPresenter> im
     String lat;
     String mQu;
     String mCity;
+    int dingwei = 1;
     //声明定位回调监听器
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
         @Override
@@ -104,8 +105,10 @@ public class FaHuoWeiZhiFragment extends BaseFragment<DingDanWeiZhiPresenter> im
                     SPCommon.setString("lat", aMapLocation.getLatitude() + "");
                     SPCommon.setString("qu", aMapLocation.getDistrict() + "");
                     SPCommon.setString("city", aMapLocation.getCity() + "");
-
-                    mPresenter.initMap(mapView, lat + "", lon + "", starWeiDu, starJingdu, endWeiDu, endJingdu, 1);
+if (dingwei==1){
+//    mPresenter.initMap(mapView, lat + "", lon + "", starWeiDu, starJingdu, endWeiDu, endJingdu, 1);
+}
+                  dingwei++;
 //                    mPresenter.initMap(mapView,lat+"",lon+"", "36.46807421644299", "115.95567726928711", "36.47028295377302", "115.97867989379883",1);
 
 //        distance = AMapUtils.calculateLineDistance(latlngA, marker.getPosition());//计算距离
@@ -166,7 +169,7 @@ public class FaHuoWeiZhiFragment extends BaseFragment<DingDanWeiZhiPresenter> im
     public void initEventAndDataNoLazy() {
         super.initEventAndDataNoLazy();
         mPresenter.getCoordByOrderCode(mCode+"");
-
+        initListener();
     }
 
 
@@ -174,7 +177,26 @@ public class FaHuoWeiZhiFragment extends BaseFragment<DingDanWeiZhiPresenter> im
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        lat = "";
+        lon = "";
+         starWeiDu ="";
+         starJingdu  ="";
+         endWeiDu  ="";
+         endJingdu  ="";
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        lat = "";
+        lon = "";
+        starWeiDu ="";
+        starJingdu  ="";
+        endWeiDu  ="";
+        endJingdu  ="";
+
+    }
+
     String starWeiDu;
     String starJingdu;
     String endWeiDu;

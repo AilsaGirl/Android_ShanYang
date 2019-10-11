@@ -41,7 +41,7 @@
         android:textColor="#BBBBBB"
         android:gravity="center"
         android:padding="5dp"
-        android:text="帮我送"
+        android:text=""
         />
 </LinearLayout>
     <View
@@ -109,8 +109,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
         android:textColor="#BBBBBB"
-        android:ellipsize="end"
-        android:singleLine="true"
         android:textSize="14dp"
         android:text="山东省聊城市东城府区东昌路123号"
         />
@@ -149,8 +147,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="3dp"
             android:textColor="#BBBBBB"
-            android:ellipsize="end"
-            android:singleLine="true"
             android:textSize="14dp"
             android:text="山东省聊城市东城府区东昌路123号"
             />
@@ -198,7 +194,7 @@
             android:layout_width="83dp"
             android:layout_height="34dp"
             android:background="@drawable/zhifu_bg"
-            android:text="去支付"
+            android:text=""
             android:textSize="14dp"
             android:textColor="#333333"
             android:gravity="center"

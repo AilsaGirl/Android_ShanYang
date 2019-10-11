@@ -66,6 +66,10 @@ public class FaHuoPresenter extends RxPresenter{
     private RideRouteResult mRideRouteResult;
 
     public void initMap(MapView mapView, final String starWeiDu, final String starJingdu, final String endWeiDu, final String endJingdu) {
+        if (aMap!=null){
+            aMap.clear();
+            aMap =null;
+        }
         if (aMap == null) {
             aMap = mapView.getMap();
 //            aMap.setLocationSource(this);// 设置定位监听
@@ -154,6 +158,8 @@ public class FaHuoPresenter extends RxPresenter{
                         public void onArrivedWayPoint(int i) {
 
                         }
+
+
                     });
                 }
             });

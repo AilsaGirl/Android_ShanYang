@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.circle.common.view.MyToolBar
+    android:id="@+id/myToolBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+</com.circle.common.view.MyToolBar>
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@mipmap/weifu500"
+        android:layout_marginTop="20dp"
+        >
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@mipmap/weifu700"
+        android:layout_marginTop="20dp"
+        >
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl3"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@mipmap/yifu500"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/tvTime3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="right"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSize_13"
+            android:layout_alignParentBottom="true"
+            android:text=""
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl4"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@mipmap/yifu700"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/tvTime4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="right"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textSize_13"
+            android:layout_alignParentBottom="true"
+            android:text=""
+            />
+    </RelativeLayout>
+</LinearLayout>

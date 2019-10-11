@@ -16,7 +16,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.circle.common.base.BaseActivity;
@@ -27,10 +30,13 @@ import com.circle.common.view.LoadingDialog;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.AuthBean;
+import com.liaocheng.suteng.myapplication.model.BaoXianModel;
 import com.liaocheng.suteng.myapplication.presenter.IdentityPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.IdentityContract;
 import com.liaocheng.suteng.myapplication.util.Util;
 import com.squareup.picasso.Picasso;
+import com.zmxy.ZMCertification;
+import com.zmxy.ZMCertificationListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,6 +64,14 @@ public class MyUpdateIdentityActivity extends BaseActivity<IdentityPresenter> im
     //手持
     @BindView(R.id.IV_reverse_he)
     ImageView IVReverseHe;
+    @BindView(R.id.linRenZheng)
+    LinearLayout linRenZheng;
+    @BindView(R.id.xiugai)
+    Button xiugai;
+    @BindView(R.id.q_renzheng)
+    Button qRenzheng;
+    @BindView(R.id.zhima)
+    RelativeLayout zhima;
     ImageView back, imagebig;
     //显示隐藏
     boolean isselect = false;
@@ -152,7 +166,7 @@ public class MyUpdateIdentityActivity extends BaseActivity<IdentityPresenter> im
         String photo1 = Util.imageToBase64(renxiangpath);
         String photo2 = Util.imageToBase64(guohuipath);
         String photo3 = Util.imageToBase64(hepath);
-        mPresenter.Identity(SPCommon.getString("token",""),xingming,SPCommon.getString("phone",""),idnumber,photo1,photo2,photo3);
+        mPresenter.Identity(SPCommon.getString("token",""),xingming,SPCommon.getString("phone",""),idnumber,photo1,photo2,photo3,sex,nation,address,authority,validDate);
         if (loadingDialog == null)
             loadingDialog = new LoadingDialog(mContext);
         loadingDialog.setCancelable(true);
@@ -164,7 +178,8 @@ public class MyUpdateIdentityActivity extends BaseActivity<IdentityPresenter> im
     public void IdentitySucss() {
         loadingDialog.cancelDialog();
         ToastUtil.show("提交成功，等待审核");
-        finish();
+        zhima.setVisibility(View.VISIBLE);
+        linRenZheng.setVisibility(View.GONE);
     }
 
     @Override
@@ -178,28 +193,56 @@ public class MyUpdateIdentityActivity extends BaseActivity<IdentityPresenter> im
 
     }
 
+    @Override
+    public void zhiMaAuth(BaoXianModel baoXianModel) {
+        ZMCertification.getInstance().startCertification(MyUpdateIdentityActivity.this, baoXianModel.biz_no,"2088022302379473",null);
+        ZMCertification.getInstance().setZMCertificationListener(new ZMCertificationListener() {
+            @Override
+            public void onFinish(boolean b, final boolean b1, int i) {
+//                                Log.d("-----","b = " + b + " - b1 = " + b1 + " - i = " + i);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //认证成功  b1为true
+                        if (b1){
+                            mPresenter.user_authOk(SPCommon.getString("token", ""));
+                        }else {
+                            Toast.makeText(mContext, "认证失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-    @OnClick({R.id.IV_face_photo, R.id.IV_reverse_side, R.id.IV_reverse_he})
+    @Override
+    public void user_authOk() {
+        loadingDialog.cancelDialog();
+        ToastUtil.show("提交成功");
+        Intent intent = new Intent(mContext, IdentityPayActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    @OnClick({R.id.IV_face_photo, R.id.IV_reverse_side, R.id.IV_reverse_he,R.id.q_renzheng,R.id.xiugai})
     public void onViewClicked(View view) {
         String dirPath = Environment.getExternalStorageDirectory() + "/images";
         switch (view.getId()) {
-            //人像删除
-//            case R.id.renxiang_shanchu:
-//                i--;
-//                renxiangShanchu.setVisibility(View.GONE);
-//                renxiangFangda.setVisibility(View.GONE);
-//                IVFacePhoto.setImageResource(R.mipmap.paisherenxiang);
-//                IVFacePhoto.setBackgroundColor(getResources().getColor(R.color.background));
+            case R.id.q_renzheng:
 //
-//                break;
+                mPresenter.zhiMaAuth(xingming,idnumber);
+                break;
             //人像拍照
             case R.id.IV_face_photo:
                 CoustomCaptureActivity.startAction(this, CardType.TYPE_ID_CARD_FRONT, dirPath, 0);//人像照
                 break;
-            //人像放大
-//            case R.id.renxiang_fangda:
-//                showpopuwindow(integer_renxiang);
-//                break;
+            case R.id.xiugai:
+                zhima.setVisibility(View.GONE);
+                linRenZheng.setVisibility(View.VISIBLE);
+//                Intent  intent = new Intent(mContext, MyUpdateIdentityActivity.class);
+//                startActivity(intent);
+                break;
             //手持
             case R.id.IV_reverse_he:
                 openCamera(this);

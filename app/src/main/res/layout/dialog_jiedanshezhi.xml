@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/diandongche"
             android:textColor="@color/hl_6x3"
             android:drawablePadding="3dp"
             android:text="两轮车"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/sanlun"
             android:textColor="@color/hl_6x3"
             android:text="三轮车"
             />
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/jiaoche"
             android:textColor="@color/hl_6x3"
             android:text="小轿车"
             />
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
        android:orientation="horizontal"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         >
         <TextView
             android:id="@+id/tvChe4"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/xiaohuoche"
             android:textColor="@color/hl_6x3"
             android:drawablePadding="3dp"
             android:text="小货车"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:drawableTop="@mipmap/ic_launcher"
+            android:drawableTop="@mipmap/dahuoche"
             android:textColor="@color/hl_6x3"
             android:text="大货车"
             />

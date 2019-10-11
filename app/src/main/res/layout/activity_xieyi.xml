@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.circle.common.view.MyToolBar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.circle.common.view.MyToolBar>
+    <TextView
+        android:id="@+id/tvXieYi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:layout_margin="15dp"
+        android:singleLine="false"
+        android:textColor="@color/hl_6x3"
+        android:textSize="@dimen/textSize_14"
+        />
+</LinearLayout>

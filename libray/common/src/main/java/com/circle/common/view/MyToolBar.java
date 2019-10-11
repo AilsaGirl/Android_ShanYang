@@ -111,7 +111,14 @@ public class MyToolBar extends Toolbar {
         tvBack.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         return this;
     }
-
+    public MyToolBar setBackDrawable() {
+        tvBack.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        return this;
+    }
+    public MyToolBar setLeftText(String title) {
+        tvBack.setText(title);
+        return this;
+    }
     public MyToolBar setBackFinish() {
         tvBack.setOnClickListener(new OnClickListener() {
             @Override

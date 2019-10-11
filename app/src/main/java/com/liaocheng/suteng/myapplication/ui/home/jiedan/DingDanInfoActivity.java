@@ -18,7 +18,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.circle.common.base.BaseActivity;
@@ -30,8 +29,7 @@ import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
 import com.liaocheng.suteng.myapplication.presenter.DingDanInfoPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.DingDanInfoContent;
-import com.liaocheng.suteng.myapplication.ui.my.YouHuiQuanActivity;
-import com.liaocheng.suteng.myapplication.view.YouHuiQuanDialog;
+import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
 import com.liaocheng.suteng.myapplication.view.ZhuanRangDialog;
 
 import butterknife.BindView;
@@ -110,6 +108,8 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
     TextView tvQuanCheng;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
+    @BindView(R.id.linYoyHuiQuan)
+    LinearLayout linYoyHuiQuan;
 
 
     @Override
@@ -133,7 +133,7 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //获取最近3s内精度最高的一次定位结果：
         //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
+//        mLocationOption.setOnceLocationLatest(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -141,8 +141,9 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
 
     }
 
-    double lon;
-    double lat;
+    int dingwei = 1;
+    String lon;
+    String lat;
     String mQu;
     String mCity;
     //声明定位回调监听器
@@ -154,23 +155,26 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
                     //可在其中解析amapLocation获取相应内容。
                     mQu = aMapLocation.getDistrict();
                     mCity = aMapLocation.getCity();
-                    lon = aMapLocation.getLongitude();
-                    lat = aMapLocation.getLatitude();
+                    lon = aMapLocation.getLongitude() + "";
+                    lat = aMapLocation.getLatitude() + "";
                     SPCommon.setString("lon", aMapLocation.getLongitude() + "");
                     SPCommon.setString("lat", aMapLocation.getLatitude() + "");
                     SPCommon.setString("qu", aMapLocation.getDistrict() + "");
                     SPCommon.setString("city", aMapLocation.getCity() + "");
-                    if (status.equals("2")||status.equals("3")){
-                        LatLng start = new LatLng(lat, lon);
-                        LatLng end = new LatLng(Double.parseDouble(starWeiDu), Double.parseDouble(starJingdu));
-                        tvJuLi.setText("距离发货地"+String.format("%.2f", getDistance(start,end))+"公里");
+//                    if (status.equals("2")||status.equals("3")){
+//                        LatLng start = new LatLng(lat, lon);
+//                        LatLng end = new LatLng(Double.parseDouble(starWeiDu), Double.parseDouble(starJingdu));
+//                        tvJuLi.setText("距离发货地"+String.format("%.2f", getDistance(start,end))+"公里");
+//                    }
+//                    if (status.equals("5")){
+//                        LatLng start = new LatLng(lat, lon);
+//                        LatLng end = new LatLng(Double.parseDouble(endWeiDu), Double.parseDouble(endJingdu));
+//                        tvJuLi.setText("距离送货地"+String.format("%.2f", getDistance(start,end))+"公里");
+//                    }
+                    if (dingwei == 1) {
+                        mPresenter.initMap(mapView, lat + "", lon + "", starWeiDu, starJingdu, endWeiDu, endJingdu, 1);
                     }
-                    if (status.equals("5")){
-                        LatLng start = new LatLng(lat, lon);
-                        LatLng end = new LatLng(Double.parseDouble(endWeiDu), Double.parseDouble(endJingdu));
-                        tvJuLi.setText("距离送货地"+String.format("%.2f", getDistance(start,end))+"公里");
-                    }
-                    mPresenter.initMap(mapView, lat + "", lon + "", starWeiDu, starJingdu, endWeiDu, endJingdu, 1);
+                    dingwei++;
 //                    mPresenter.initMap(mapView,lat+"",lon+"", "36.46807421644299", "115.95567726928711", "36.47028295377302", "115.97867989379883",1);
 
 //        distance = AMapUtils.calculateLineDistance(latlngA, marker.getPosition());//计算距离
@@ -187,6 +191,7 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         }
     };
     String mCode;
+
     public double getDistance(LatLng start, LatLng end) {
 
         double lon1 = (Math.PI / 180) * start.longitude;
@@ -201,8 +206,10 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         double d = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1))
                 * R;
 
-        return d ;
+        return d;
     }
+
+    int mType = 1;
 
     @Override
     public void initEventAndData() {
@@ -210,12 +217,22 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
 //        mPresenter.initMap(mapView,lat+"",lon+"", "36.46807421644299", "115.95567726928711", "36.47028295377302", "115.97867989379883");
         Intent intent = getIntent();
         mCode = intent.getStringExtra("code");
+        mType = intent.getIntExtra("type", 1);
         if (TextUtils.isEmpty(mCode)) {
             ToastUtil.show("订单号不正确");
             finish();
             return;
         } else {
-            mPresenter.getDingDa(mCode);
+            if (mType == 0) {
+                mPresenter.order_info_detail(mCode);
+            }
+            if (mType == 1) {
+                mPresenter.queryReceiveOrderDetail(mCode);
+            }
+//            if (mType==2){
+//                mPresenter.getDingDa(mCode);
+//            }
+
         }
     }
 
@@ -249,6 +266,22 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         if (msg != null && !msg.equals("")) {
             ToastUtil.show(CommonUtil.splitMsg(msg + "") + "");
         }
+        if (reqCode == 1) {
+            ToastUtil.show("订单异常");
+            finish();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        lat = "";
+        lon = "";
+        starWeiDu = "";
+        starJingdu = "";
+        endWeiDu = "";
+        endJingdu = "";
+
     }
 
     String status;
@@ -256,16 +289,21 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
     String starJingdu;
     String endWeiDu;
     String endJingdu;
+    String sendUserId;
 
     @Override
     public void setDingDa(DingDanBuyInfoModel DingDanBean) {
         status = DingDanBean.status;
+        sendUserId = DingDanBean.sendUserId;
         if (DingDanBean.status.equals("2")) {
             tvQiangDan.setText("抢单");
         }
         if (DingDanBean.status.equals("3")) {
             tvQiangDan.setText("转让订单");
         }
+//        if (DingDanBean.status.equals("4")&&DingDanBean.recIsComment.equals("0")) {
+//            tvQiangDan.setText("去评价");
+//        }
         starWeiDu = DingDanBean.sendLat;
         starJingdu = DingDanBean.sendLong;
         endWeiDu = DingDanBean.latitude;
@@ -273,15 +311,15 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
 
         tvJuLi.setText("距离取货地");
 //        distance = AMapUtils.calculateLineDistance(latlngA, marker.getPosition());//计算距离
-        tvFaJL.setText(DingDanBean.distance + "");
-        tvShouJL.setText(DingDanBean.distance + "");
+        tvFaJL.setText(DingDanBean.sendDistance + "");
+        tvShouJL.setText(DingDanBean.receiveDistance + "");
         tvFaHuo.setText(DingDanBean.sendAddress + "");
-        tvFaHUoXQ.setText(DingDanBean.sendConcreteAdd + "");
+        tvFaHUoXQ.setText(DingDanBean.sendConcreteAdd + "" + DingDanBean.sendDetailAdd);
         tvShouHuo.setText(DingDanBean.receiveAddress + "");
-        tvShouHUoXQ.setText(DingDanBean.receiveConcreteAdd + "");
+        tvShouHUoXQ.setText(DingDanBean.receiveConcreteAdd + "" + DingDanBean.receiveDetailAdd);
         tvTime.setText("约定时间：" + DingDanBean.appointTime);
-        mShouHuoTel = DingDanBean.sendPhone;
-        mFaHUoTel = DingDanBean.contactPhone;
+        mShouHuoTel = DingDanBean.contactPhone;
+        mFaHUoTel = DingDanBean.sendPhone;
 //        货品类型:1-鲜花2-食品3-文体4-蛋糕5-电子产品6-生活用品
         switch (DingDanBean.goods) {
             case "1":
@@ -331,49 +369,72 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
         tvDingDanJiaJia.setText("￥" + DingDanBean.addTips);
         tvXiaoFei.setText("￥" + DingDanBean.tip);
         tvBaoJia.setText("￥" + DingDanBean.parcel_insurance_fee);
-        tvYouHuiQuan.setText("￥" + DingDanBean.coupon);
+
+        tvYouHuiQuan.setText("￥ - " + DingDanBean.coupon);
+        linYoyHuiQuan.setVisibility(View.GONE);
+
         tvZhongliang.setText("￥" + DingDanBean.weightPrice);
         tvQuanCheng.setText("全程约：" + DingDanBean.distance);
-        tvNum.setText("接单总计：￥" + DingDanBean.total);
+        tvNum.setText("接单总计：￥" + DingDanBean.remuneration);
         tvBianHao.setText("订单编号：" + DingDanBean.orderCode);
-        tvShiJian.setText("创建时间：" + DingDanBean.payTime);
+        tvShiJian.setText("创建时间：" + DingDanBean.createTime);
         switch (DingDanBean.status) {
             case "1"://未付款
                 break;
             case "2"://未被抢
                 mapView.setVisibility(View.VISIBLE);
+                tvJuLi.setText("距离发货地" + DingDanBean.sendDistance + "公里");
                 initListener();
                 break;
             case "3"://取货中
                 mapView.setVisibility(View.VISIBLE);
+                tvJuLi.setText("距离发货地" + DingDanBean.sendDistance + "公里");
                 initListener();
                 break;
-            case "4"://已完成
-                mapView.setVisibility(View.GONE);
-                tvFaHuo.setText("************************");
-                tvFaHUoXQ.setText("************************");
-                tvShouHuo.setText("************************");
-                tvShouHUoXQ.setText("************************");
+
+            case "4"://去评价
+//                if (DingDanBean.recIsComment.equals("0")){
+//                    tvQiangDan.setVisibility(View.VISIBLE);
+//                }else {
+//                    tvQiangDan.setVisibility(View.GONE);
+//                }
+                tvQiangDan.setVisibility(View.GONE);
+                mapView.setVisibility(View.VISIBLE);
+//                tvFaHuo.setText("************************");
+//                tvFaHUoXQ.setText("************************");
+//                tvShouHuo.setText("************************");
+//                tvShouHUoXQ.setText("************************");
+                initListener();
                 break;
             case "5"://送货中
                 mapView.setVisibility(View.VISIBLE);
+                tvQiangDan.setVisibility(View.GONE);
+                tvJuLi.setText("距离收货地" + DingDanBean.receiveDistance + "公里");
                 initListener();
                 break;
             case "6"://待提交
+                tvQiangDan.setVisibility(View.GONE);
                 mapView.setVisibility(View.VISIBLE);
+                tvJuLi.setText("距离收货地" + DingDanBean.receiveDistance + "公里");
                 initListener();
                 break;
             case "7"://已退款
-                mapView.setVisibility(View.GONE);
+                tvQiangDan.setVisibility(View.GONE);
+                relHead.setVisibility(View.GONE);
                 break;
             case "8"://指定接单中
+                tvQiangDan.setVisibility(View.GONE);
                 mapView.setVisibility(View.VISIBLE);
+                tvJuLi.setText("距离发货地" + DingDanBean.sendDistance + "公里");
                 initListener();
                 break;
             case "9"://转让订单中
+                tvQiangDan.setVisibility(View.GONE);
                 mapView.setVisibility(View.VISIBLE);
+                tvJuLi.setText("距离发货地" + DingDanBean.sendDistance + "公里");
                 initListener();
                 break;
+
         }
 
     }
@@ -384,7 +445,19 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
     @Override
     public void order_grab() {
         ToastUtil.show("抢单成功");
-        mPresenter.getDingDa(mCode);
+        Intent intent = new Intent(mContext, WoDeRenWuActivity.class);
+        intent.putExtra("tab", 0);
+        mContext.startActivity(intent);
+        finish();
+//        if (mType==0){
+//            mPresenter.order_info_detail(mCode);
+//        }
+//        if (mType==1){
+//            mPresenter.queryReceiveOrderDetail(mCode);
+//        }
+//        if (mType==2){
+//            mPresenter.getDingDa(mCode);
+//        }
     }
 
     @Override
@@ -396,12 +469,31 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
     boolean isJieDan = true;
     boolean isZhuanDan = true;
 
-    @OnClick({R.id.tvQiangDan, R.id.tvMore,R.id.ivFaTel,R.id.ivShouTel})
+    @OnClick({R.id.tvQiangDan, R.id.tvMore, R.id.ivFaTel, R.id.ivShouTel})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tvQiangDan:
                 if (status.equals("2")) {
-                    mPresenter.order_grab(mCode);//抢单
+                    final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(DingDanInfoActivity.this);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.setMessage("亲，您确认要抢这个订单吗，抢单成功以后，必须要做到10分钟取货，3公里内30分钟必须送达，超过1公里加时10分钟。抢单以后不要随意撤销订单，随意撤销的话会处罚10-200元。请谨慎操作，不要胡乱抢单。", "");
+                    dialog.setBackgroundResource(true);
+                    dialog.setVisibilityBtn(true);
+                    dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
+                        @Override
+                        public void onYesClick() {
+                            mPresenter.order_grab(mCode);
+                            dialog.dismiss();
+
+                        }
+                    });
+                    dialog.setOnOnclickListener("取消", new ApplyAndAlterDialog.onOnOnclickListener() {
+                        @Override
+                        public void onOnClick() {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 } else if (status.equals("3")) {
                     final ZhuanRangDialog dialog = new ZhuanRangDialog(DingDanInfoActivity.this);
                     dialog.setCanceledOnTouchOutside(true);
@@ -422,6 +514,11 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
                     });
                     dialog.show();
 
+                } else if (status.equals("4")) {
+//                    Intent   intent = new Intent(mContext, PingJiaActivity.class);
+//                    intent.putExtra("orderCode",mCode+"");
+//                    intent.putExtra("eva_userId",sendUserId+"");
+//                    mContext.startActivity(intent);
                 }
 
                 break;
@@ -438,7 +535,10 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
 
                 break;
             case R.id.ivFaTel:
-                if (status.equals("4")){
+                if (status.equals("4")) {
+                    return;
+                }
+                if (status.equals("10")) {
                     return;
                 }
                 Intent intent = new Intent(Intent.ACTION_DIAL);
@@ -450,7 +550,10 @@ public class DingDanInfoActivity extends BaseActivity<DingDanInfoPresenter> impl
                 startActivity(intent);
                 break;
             case R.id.ivShouTel:
-                if (status.equals("4")){
+                if (status.equals("4")) {
+                    return;
+                }
+                if (status.equals("10")) {
                     return;
                 }
                 Intent intents = new Intent(Intent.ACTION_DIAL);

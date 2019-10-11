@@ -22,12 +22,15 @@ import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.api.MyApplication;
 import com.liaocheng.suteng.myapplication.model.LoginBean;
 import com.liaocheng.suteng.myapplication.model.NullBean;
+import com.liaocheng.suteng.myapplication.model.ThirdLoginModel;
 import com.liaocheng.suteng.myapplication.presenter.LoginPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.LoginContact;
 import com.liaocheng.suteng.myapplication.ui.MainActivity;
+import com.tencent.connect.common.Constants;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tencent.tauth.Tencent;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -79,8 +82,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void initEventAndData() {
-        wxApi = WXAPIFactory.createWXAPI(this, MyApplication.wechatAppid, false);
-        wxApi.registerApp(MyApplication.wechatAppid);
+//        wxApi = WXAPIFactory.createWXAPI(this, MyApplication.wechatAppid, false);
+//        wxApi.registerApp(MyApplication.wechatAppid);
+        mPresenter.loginEvent();
 
     }
 
@@ -88,6 +92,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void showError(int reqCode, String msg) {
         if (!TextUtils.isEmpty(msg)){
             ToastUtil.show( CommonUtil.splitMsg(msg));
+        }
+        if (reqCode==1){
+            Intent intent = new Intent();
+            intent.setClass(this,BangDingActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
     private static final int NTF_SECOND = 0x1;
@@ -215,43 +225,45 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 startActivity(intent);
                 break;
             case R.id.ivWeiXin:
-                if (!isWxInstall(this)) {
-                    ToastUtil.show("您还未安装客户端");
-                    return;
-                }
-                SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
-                wxApi.sendReq(req);
+                mPresenter.weChatLogin();
+//                if (!isWxInstall(this)) {
+//                    ToastUtil.show("您还未安装客户端");
+//                    return;
+//                }
+//                SendAuth.Req req = new SendAuth.Req();
+//                req.scope = "snsapi_userinfo";
+//                req.state = "wechat_sdk_demo_test";
+//                wxApi.sendReq(req);
                 break;
             case R.id.ivQQ:
-                umShareAPI = UMShareAPI.get(this);
-                platform = SHARE_MEDIA.QQ;
-                final UMAuthListener umAuthListener = new UMAuthListener() {
-                    String openid;
-                    String screen_name;
-                    String profile_image_url;
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-
-                    }
-
-                    @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-
-                    }
-
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        ToastUtil.show("取消授权");
-
-                    }
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
-                        ToastUtil.show("授权失败");
-                    }
-                };
-                umShareAPI.getPlatformInfo(this, platform, umAuthListener);
+                mPresenter.qqLogin();
+//                umShareAPI = UMShareAPI.get(this);
+//                platform = SHARE_MEDIA.QQ;
+//                final UMAuthListener umAuthListener = new UMAuthListener() {
+//                    String openid;
+//                    String screen_name;
+//                    String profile_image_url;
+//                    @Override
+//                    public void onStart(SHARE_MEDIA share_media) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+//                        ToastUtil.show("取消授权");
+//
+//                    }
+//                    @Override
+//                    public void onCancel(SHARE_MEDIA share_media, int i) {
+//                        ToastUtil.show("授权失败");
+//                    }
+//                };
+//                umShareAPI.getPlatformInfo(this, platform, umAuthListener);
                 break;
         }
     }
@@ -276,6 +288,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         SPCommon.setString("token",loginBean.token);
         SPCommon.setString("userId",loginBean.userId);
         SPCommon.setString("phone",phone);
+        SPCommon.setString("tel",phone);
         intent = new Intent();
         intent.setClass(this,MainActivity.class);
         startActivity(intent);
@@ -287,7 +300,34 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         ToastUtil.show("发送验证码成功！");
     }
 
+    @Override
+    public void setWeChatOrTencentLogin(ThirdLoginModel model) {
+        SPCommon.setString("token",model.token);
+        SPCommon.setString("userId",model.userId);
+        intent = new Intent();
+        intent.setClass(this,MainActivity.class);
+        startActivity(intent);
+
+        ToastUtil.show("登录成功");
+        finish();
+    }
+
     public boolean isWxInstall(Context context) {
         return wxApi.isWXAppInstalled();
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_LOGIN ||
+                requestCode == Constants.REQUEST_APPBAR) {
+            Tencent.onActivityResultData(requestCode, resultCode, data, mPresenter);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+    }
+
 }

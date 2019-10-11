@@ -58,7 +58,7 @@ public class BangWoBanFrafment extends BaseFragment {
     @Override
     public void initEventAndData() {
         EventBus.getDefault().register(this);
-        tvTel.setText(SPCommon.getString("tel","1882929292929"));
+        tvTel.setText(SPCommon.getString("tel"," "));
         EventBus.getDefault().post(new FaHuoAddressEvent(true));
     }
 
@@ -66,6 +66,7 @@ public class BangWoBanFrafment extends BaseFragment {
     String mXiangQing;
     String lon;
     String lat;
+    String city;
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(FaHuoAddressEvent event) {
         if (event == null)
@@ -74,6 +75,7 @@ public class BangWoBanFrafment extends BaseFragment {
         mXiangQing = event.getXiangqing()+"";
         lat = event.getLat();
         lon = event.getLon();
+        city = event.getCity();
         tvDiZhi.setText(event.getDizhi()+"");
         tvDiZhiXiangQing.setText(event.getXiangqing()+"");
     }
@@ -110,7 +112,7 @@ public class BangWoBanFrafment extends BaseFragment {
         switch (view.getId()) {
             case R.id.linAddress:
             case R.id.etMai:
-                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                if (System.currentTimeMillis() - mLasttime < 1700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
 
@@ -118,10 +120,11 @@ public class BangWoBanFrafment extends BaseFragment {
                 addressModel = new FaHuoAddressModel();
                 addressModel.address = mDiZhi;
                 addressModel.ConcreteAdd = mXiangQing;
-                addressModel.contactName = "";
-                addressModel.contactPhone = "";
+                addressModel.contactName = SPCommon.getString("username", "")+"";
+                addressModel.contactPhone = SPCommon.getString("tel", "")+"";
                 addressModel.lon =lon;
                 addressModel.lat = lat;
+                addressModel.city = city;
                 addressModel.type = 2;
                 addressModel.is_result = 0;
                 addressModel.is_new_address =0;
@@ -129,7 +132,7 @@ public class BangWoBanFrafment extends BaseFragment {
                 mContext.startActivity(intent);
                 break;
             case R.id.tvDiZhiChangYong:
-                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                if (System.currentTimeMillis() - mLasttime < 1700)//防止快速点击操作
                     return;
                 mLasttime = System.currentTimeMillis();
                 intent = new Intent(mContext, AddressList.class);
@@ -137,6 +140,7 @@ public class BangWoBanFrafment extends BaseFragment {
                 addressModel.type = 2;
                 addressModel.is_result = 0;
                 addressModel.lon =lon;
+                addressModel.city = city;
                 addressModel.lat = lat;
                 addressModel.is_new_address =0;
                 intent.putExtra("address_data", addressModel);

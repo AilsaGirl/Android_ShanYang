@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginLeft="5dp"
-                android:text="18888888888"
+                android:text=""
                 />
         </LinearLayout>
         <TextView

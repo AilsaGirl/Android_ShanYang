@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -222,8 +224,29 @@ public class UpdateManager {
         //////
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("file://" + apkfile.toString()),"application/vnd.android.package-archive");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setDataAndType(Uri.parse("file://" + apkfile.toString()),"application/vnd.android.package-archive");
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//添加这一句表示对目标应用临时授权该Uri所代表的文件
+//        mContext.startActivity(intent);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N) {
+
+            Uri contentUri = FileProvider.getUriForFile(mContext,"com.liaocheng.suteng.myapplication.FileProvider",apkfile);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            intent.setDataAndType(contentUri,"application/vnd.android.package-archive");
+
+        }else{
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            intent.setDataAndType(Uri.fromFile(apkfile),"application/vnd.android.package-archive");
+
+        }
+
         mContext.startActivity(intent);
     }
 }

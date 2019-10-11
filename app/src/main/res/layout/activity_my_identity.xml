@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
   >
-    <com.circle.common.view.MyToolBar
-        android:id="@+id/mybar"
+    <LinearLayout
+        android:id="@+id/linRenZheng"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <com.circle.common.view.MyToolBar
+            android:id="@+id/mybar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </com.circle.common.view.MyToolBar>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E1E1E1"
-        />
+        </com.circle.common.view.MyToolBar>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E1E1E1"
+            />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,11 +31,7 @@
         android:text="拍摄您的二代身份证原件。请确保图片清晰，四角完整"
         android:textSize="13sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="228dp"
             android:layout_height="137dp"
@@ -127,5 +129,51 @@
         </LinearLayout>
 
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/zhima"
+        android:visibility="gone"
+        android:background="#5e000000"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:background="@drawable/dingdan_bg"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+            <TextView
+                android:id="@+id/tvMsg"
+                android:text="您的身份证信息已提交 ! /n 请进行芝麻认证"
+                android:textSize="20dp"
+                android:textColor="#000"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
 
-</LinearLayout>
+                <Button
+                    android:id="@+id/xiugai"
+                    android:text="修改信息"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:background="@drawable/dingdan_bg"
+                    android:layout_margin="6dp"
+                    android:textSize="17dp"
+                    android:layout_height="match_parent" />
+                <Button
+                    android:id="@+id/q_renzheng"
+                    android:text="去认证"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:background="@drawable/login_btn_bg"
+                    android:layout_margin="6dp"
+                    android:textSize="17dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

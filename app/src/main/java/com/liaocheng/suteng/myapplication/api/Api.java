@@ -27,9 +27,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
     //读超时长，单位：毫秒
-    private static final int READ_TIME_OUT = 7676;
+    private static final int READ_TIME_OUT = 176760;
     //连接时长，单位：毫秒
-    private static final int CONNECT_TIME_OUT = 7676;
+    private static final int CONNECT_TIME_OUT = 176760;
     private static final int TYPE_TB = 0;
 
     private static final String HTTP_BASE_HOST = BuildConfig.SYPT_Url;
@@ -65,8 +65,14 @@ public class Api {
         }
 
         String host = "";
-        host =HTTP_BASE_HOST;
 
+        host =HTTP_BASE_HOST;
+        if (type==1){
+            host = "https://api.weixin.qq.com/sns/";
+        }
+        if (type==2){
+            host = "https://restapi.amap.com/v3/assistant/";
+        }
         if (host.endsWith("\\?")) {
             host = host.substring(0, host.length() - 1);
         }
@@ -82,16 +88,21 @@ public class Api {
 
 
     public synchronized static SYPTService createTBService() {
-        if (PTService == null)
             return PTService = initRetrofit(TYPE_TB).create(SYPTService.class);
-        else
-            return PTService;
     }
-
+    public synchronized static SYPTService createWeiXinService() {
+            return PTService = initRetrofit(1).create(SYPTService.class);
+    }
+    public synchronized static SYPTService createDiTuService() {
+        return PTService = initRetrofit(2).create(SYPTService.class);
+    }
 
     public static <T> Flowable<T> toScheculer(Flowable<T> flowable) {
         return flowable.compose(RxUtil.<T>rxSchedulerHelper());
     }
+//    public static <T> Flowable<T> toScheculers(Flowable<T> flowable) {
+//        return flowable.compose(RxUtil.<T>rxSchedulerHelpers());
+//    }
     public static <T> void toSubscriber(Flowable<T> flowable, CommonSubscriber subscriber) {
         addSubscribe(flowable.subscribeWith(subscriber));
     }

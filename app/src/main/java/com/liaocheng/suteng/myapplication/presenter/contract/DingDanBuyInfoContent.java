@@ -23,13 +23,14 @@ public interface DingDanBuyInfoContent {
         void executeSpecificOrder();
         void executeTransferOrder();
         void transferOrder();
+        void checkSecondPassword();
     }
     interface Presenter extends BasePresenter<View> {//过程
         void  getDingDa(String code);
         void  order_cancell(String code);
         void  order_pay(String code,String type);
         void user_order_refund(String code);
-        void  addOrderTip(String code,String type);
+        void  addOrderTip(String code,String type,String addTips);
         void order_grab(String code);
         void order_submit(String code);
         void order_revoke(String code);
@@ -40,6 +41,9 @@ public interface DingDanBuyInfoContent {
         void executeSpecificOrder(String code,String type);
         void executeTransferOrder(String code,String type);
         void transferOrder(String code,String phone);
+        void checkSecondPassword(String secondPwd);
+        void queryReceiveOrderDetail(String code);
+        void order_info_detail(String code);
 
     }
 }

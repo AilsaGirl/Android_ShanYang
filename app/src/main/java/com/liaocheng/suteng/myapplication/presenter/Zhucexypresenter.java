@@ -14,8 +14,8 @@ import com.liaocheng.suteng.myapplication.presenter.contract.ZhuceContact;
 
 public class Zhucexypresenter extends RxPresenter<ZhuceContact.View> implements ZhuceContact.Presenter{
     @Override
-    public void getzhucexy(String code, String type) {
-        addSubscribe(Api.createTBService().zcxieyi(code, type)
+    public void getzhucexy(String code) {
+        addSubscribe(Api.createTBService().zcxieyi(code)
                 .compose(RxUtil.<BaseResponse<Zcxiybean>>rxSchedulerHelper())
                 .compose(RxUtil.<Zcxiybean>handleResult())
                 .subscribeWith(new CommonSubscriber<Zcxiybean>(mContext, true) {

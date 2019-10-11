@@ -19,13 +19,11 @@ import java.util.regex.Pattern;
 
 
 /**
- * name:xukang
- * company:山东博界科技
  * DATA: 2018/8/16-10:10
  * Descript:
  */
 public class ZhuanRangDialog extends Dialog {
-    private TextView tv_name;
+    private TextView tv_name,tvtext;
     private String titleStr, okmName,nomName,dialogcontext;
 
     private View viewid;
@@ -45,6 +43,7 @@ public class ZhuanRangDialog extends Dialog {
         setContentView(R.layout.activity_dialog_youhuiquan);
         tv_name=findViewById(R.id.tv_konw_un);
         etTel=findViewById(R.id.etTel);
+        tvtext =findViewById(R.id.tvtext);
         etNum=findViewById(R.id.etNum);
         tv_quxiao=findViewById(R.id.tv_quxiao);
         viewid=findViewById(R.id.viewid);
@@ -53,6 +52,11 @@ public class ZhuanRangDialog extends Dialog {
         initData();
         initEvent();
     }
+    public void setText(String str){
+        mText = str;
+
+    }
+    String mText = "";
     public void setYesOnclickListener(String str, onYesOnclickListener onYesOnclickListener) {
         if (str != null) {
             okmName = str;
@@ -76,7 +80,9 @@ public class ZhuanRangDialog extends Dialog {
         //如果用户自定了title和message
 
 
-
+if (!TextUtils.isEmpty(mText)){
+    tvtext.setText(mText);
+}
         if (okmName != null) {
             tv_name.setText(okmName);
         }

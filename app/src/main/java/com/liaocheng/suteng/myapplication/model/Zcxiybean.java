@@ -4,10 +4,7 @@ import java.util.List;
 
 public class Zcxiybean {
 
-    public  List<DataBean> data;
 
-
-    public  class DataBean {
         /**
          * agreement_title : 三羊用户发单协议
          * agreement_content :
@@ -48,5 +45,5 @@ public class Zcxiybean {
         public  String agreement_content;
 
 
-    }
+
 }

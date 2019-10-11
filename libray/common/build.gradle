@@ -32,29 +32,29 @@ ext {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:26.1.0'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:support-v4:26.1.0'
     //retrofit和rxjava  请求
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'com.squareup.okhttp3:okhttp:3.10.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    api 'io.reactivex.rxjava2:rxjava:2.1.0'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //单Activity ＋ 多Fragment","多模块Activity + 多Fragment"架构
-    compile 'com.google.code.gson:gson:2.8.0'
+    api 'com.google.code.gson:gson:2.8.0'
     //TabLayout
-    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    api 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    api 'com.squareup.picasso:picasso:2.5.2'
     //权限管理
-    compile 'pub.devrel:easypermissions:0.4.3'
-    compile project(':libray:xrecyclerview')
+    api 'pub.devrel:easypermissions:0.4.3'
+    api project(':libray:xrecyclerview')
     //umeng统计
     implementation files('libs/umeng-analytics-7.5.1.jar')
     implementation files('libs/umeng-common-1.5.1.jar')
-    compile 'com.youth.banner:banner:1.4.10'
+    api 'com.youth.banner:banner:1.4.10'
     implementation 'com.gyf.immersionbar:immersionbar:2.3.2'
 }

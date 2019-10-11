@@ -2,6 +2,7 @@ package com.liaocheng.suteng.myapplication.ui.my;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,9 +19,13 @@ import com.liaocheng.suteng.myapplication.presenter.contract.MyTeaContact;
 import com.liaocheng.suteng.myapplication.ui.login.LoginActivity;
 import com.liaocheng.suteng.myapplication.view.CustomMenuView;
 
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class ZhangHuSetingActivity extends BaseActivity<MyTeapresenter>implements MyTeaContact.View {
     @BindView(R.id.toolBar)
@@ -132,6 +137,24 @@ public class ZhangHuSetingActivity extends BaseActivity<MyTeapresenter>implement
         SPCommon.setString("token", "");
         SPCommon.setString("phone", "");
         SPCommon.setString("userId","");
+        SPCommon.setString("tuisong", "");
+        SPCommon.setString("zhifumima", "");
+        SPCommon.setString("auth", "");
+        SPCommon.setString("username", "");
+        SPCommon.setString("tel","");
+        SPCommon.setString("baozhengjin", "");
+        SPCommon.setString("baoxian","");
+        SPCommon.setBoolean("iswork", false);
+        JPushInterface.deleteAlias(mContext, 100);
+        JPushInterface.cleanTags(mContext, 100);
+        JPushInterface.setAlias(mContext, //上下文对象
+                "", //别名
+                new TagAliasCallback() {//回调接口,i=0表示成功,其它设置失败
+                    @Override
+                    public void gotResult(int i, String s, Set<String> set) {
+                        Log.d("alias","111"+i);
+                    }
+                });
         AppManager.getAppManager().finishAllActivity();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

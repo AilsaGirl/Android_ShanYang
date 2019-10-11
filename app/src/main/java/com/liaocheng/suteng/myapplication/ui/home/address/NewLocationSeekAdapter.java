@@ -42,15 +42,15 @@ public class NewLocationSeekAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        NewLocationSeekAdapter.ViewHolder holder;
+        ViewHolder holder;
         if (convertView == null) {
-            holder = new NewLocationSeekAdapter.ViewHolder();
+            holder = new ViewHolder();
             convertView = View.inflate(ctx, R.layout.item_poisearch, null);
             holder.poititle = (TextView) convertView.findViewById(R.id.poititle);
             holder.poititle2 = (TextView) convertView.findViewById(R.id.poititle2);
             convertView.setTag(holder);
         } else {
-            holder = (NewLocationSeekAdapter.ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
         LocationBean item = (LocationBean) getItem(position);
         holder.poititle.setText(item.getTitle());

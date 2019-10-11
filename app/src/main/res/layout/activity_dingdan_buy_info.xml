@@ -20,7 +20,7 @@
             android:textSize="14dp"
             android:padding="10dp"
             android:textColor="@color/hl_6x3"
-            android:text="帮我买帮我买帮我买"
+            android:text=""
             />
 <View
     android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text=" 开机"
+                    android:text=" "
                     android:textColor="@color/hl_6x3"
                     />
             </LinearLayout>
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="19009887777"
+                    android:text=""
                     android:textColor="@color/hl_6x3"
                     />
             </LinearLayout>
@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="山东省聊城市东昌府区柳园南路与东昌路交界口路南"
+                    android:text=""
                     android:textColor="@color/hl_6x3"
                     />
             </LinearLayout>
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="山东省聊城市东昌府区柳园南路与东昌路交界口路南"
+                    android:text=""
                     android:textColor="@color/hl_6x3"
                     />
             </LinearLayout>
@@ -143,18 +143,19 @@
             android:orientation="horizontal"
             >
             <TextView
+                android:id="@+id/tvChouJin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_weight="1"
-                android:text="货款："
+                android:text="酬金："
                 />
             <TextView
                 android:id="@+id/tvHuoKuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
-                android:text="￥300"
+                android:text="￥00"
                 />
         </LinearLayout>
             <LinearLayout
@@ -175,7 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥300"
+                    android:text="￥00"
                     />
             </LinearLayout>
             <LinearLayout
@@ -200,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tab_color"
-                    android:text="￥20.00"
+                    android:text="￥"
                     />
             </LinearLayout>
 
@@ -218,14 +219,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginBottom="10dp"
-                android:text="订单编号：5959858585585885"
+                android:text="订单编号："
                 />
             <TextView
                 android:id="@+id/tvShiJian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
-                android:text="创建时间：2018-01-01"
+                android:text="创建时间："
                 />
         </LinearLayout>
         <LinearLayout
@@ -242,14 +243,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginBottom="10dp"
-                android:text="接单人：李丽丽"
+                android:text="接单人："
                 />
             <TextView
                 android:id="@+id/tvJieDanRenTel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
-                android:text="手机号：188737738388"
+                android:text="手机号："
                 />
         </LinearLayout>
         <LinearLayout

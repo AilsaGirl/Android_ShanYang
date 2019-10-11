@@ -21,6 +21,21 @@ public class JieDanDaTingModel {
       public String   distance;//	String	配送距离
 
       public String   finishTime;//	String	订单完成时间
+
+      /**
+       * createTime : 2019-08-02 17:57:58.0
+       * status : 9
+       */
+
+      public String createTime;
+      public String status;
+      public String   sendDetailAdd;
+      public String   receiveDetailAdd;
+      public String sendDistance;
+      public String receiveDistance;
+      public String recIsComment;//	String	接单员是否评价0-未评价1-已评价
+      public String sendIsComment;//	String	发单员是否评价0-未评价1-已评价
+
    }
 
 }

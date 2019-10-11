@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -30,6 +31,7 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
@@ -41,18 +43,26 @@ import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.circle.common.base.BaseActivity;
+import com.circle.common.baserx.CommonSubscriber;
+import com.circle.common.baserx.RxUtil;
+import com.circle.common.response.CommonRes;
 import com.circle.common.util.CommonUtil;
+import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.api.Api;
+import com.liaocheng.suteng.myapplication.model.FuJinModel;
 import com.liaocheng.suteng.myapplication.model.LocationBean;
+import com.liaocheng.suteng.myapplication.model.MainModel;
 import com.liaocheng.suteng.myapplication.model.event.FaHuoAddressEvent;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.ui.home.address.CityListActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.NewLocationActivity;
 import com.liaocheng.suteng.myapplication.ui.home.address.PoiSearchAdapter;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.adapter.WindowAdapter;
 import com.liaocheng.suteng.myapplication.ui.my.MyActivity;
 import com.liaocheng.suteng.myapplication.ui.my.fragment.FaHuoDingDanFragment;
 import com.liaocheng.suteng.myapplication.ui.my.fragment.JieDanDingDanFragment;
@@ -62,7 +72,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -125,21 +137,21 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         toolBar.setTitleText("我要发货").setBackFinish();
         titleList = new String[6];
         for (int i = 1; i < 7; i++) {
-
             if (i == 1) {
-                titleList[0] = "帮我买";
-                mFragmentList.add(new BangWoMaiFrafment(i));
+                titleList[0] = "帮我送";
+                mFragmentList.add(new BangWoSongFragment(i));
             }
+
             if (i == 2) {
                 titleList[1] = "帮我办";
                 mFragmentList.add(new BangWoBanFrafment(i));
             }
             if (i == 3) {
-                titleList[2] = "帮我送";
-                mFragmentList.add(new BangWoSongFragment(i));
+                titleList[2] = "帮我买";
+                mFragmentList.add(new BangWoMaiFrafment(i));
             }
             if (i == 4) {
-                titleList[3] = "合作商家";
+                titleList[3] = "当日达";
                 mFragmentList.add(new HeZuoShangJiaFragment(i));
             }
             if (i == 5) {
@@ -170,6 +182,98 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         mapView.onCreate(savedInstanceState);
         onCallWrapper();
         init();
+    }
+    private void getJieDanYuan(){
+        Api.toSubscriber(Api.toScheculer(Api.createTBService().showVicinityCustomer(SPCommon.getString("token",""),lon+"",lat+""))
+                .compose(RxUtil.<FuJinModel>handleResult()), new CommonSubscriber<FuJinModel>(this) {
+            @Override
+            protected void _onNext(FuJinModel res) {
+                if (res.data!=null&&res.data.size()>0){
+                    marketList.clear();
+                    marketList = res.data;
+                    addMoreMarket();
+                }
+            }
+
+            @Override
+            protected void _onError(String message) {
+
+            }
+        });
+    }
+    /**
+     * 添加多个market
+     */
+    private List<FuJinModel.DataBean> marketList  = new ArrayList<>();
+
+    private void addMoreMarket() {
+
+        for (int i = 0; i < marketList.size(); i++) {
+//            aMap.addMarker(new MarkerOptions().anchor(1.5f, 3.5f)
+//                    .position(new LatLng(Double.parseDouble(marketList.get(i).lat) ,//设置纬度
+//                            Double.parseDouble(marketList.get(i).lon)))//设置经度
+//                    .title(marketList.get(i).name)//设置标题
+//                    .snippet(marketList.get(i).phone)//设置内容
+//                    // .setFlat(true) // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//                    .draggable(false) //设置Marker可拖动
+//                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker)));
+            //设置自定义弹窗
+//        aMap.setInfoWindowAdapter(new WindowAdapter(this));
+//        //绑定信息窗点击事件
+//        aMap.setOnInfoWindowClickListener(new WindowAdapter(this));
+//        aMap.setOnMarkerClickListener(new WindowAdapter(this));
+
+            MarkerOptions markerOption = new MarkerOptions();
+            markerOption.anchor(1.5f, 3.5f).position(new LatLng(Double.parseDouble(marketList.get(i).lat) ,//设置纬度
+                    Double.parseDouble(marketList.get(i).lon)));//设置经度
+            markerOption.draggable(false);//设置Marker可拖动
+            markerOption .title("姓名："+marketList.get(i).name)//设置标题
+                    .snippet("电话："+marketList.get(i).phone);//设置内容;
+//            markerOption.icon(BitmapDescriptorFactory.fromView(getMyView(marketList.get(i).name,marketList.get(i).phone )));
+            markerOption.icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker));
+            aMap.addMarker(markerOption);
+
+        }
+
+
+        aMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (!isMarker){
+                    isMarker = true;
+                    marker.showInfoWindow();
+                }else {
+                    isMarker = false;
+                    marker.hideInfoWindow();
+                }
+                return true;
+//                MarkerListEntity listEntity=list.get(Integer.valueOf(id));//拿到这个实体类了  就可以做操作了
+
+
+            }
+        });
+
+    }
+
+    protected View getMyView(String name,String phone) {
+        View view = getLayoutInflater().inflate(R.layout.adapter_fujin, null);
+        //标题
+        TextView title = (TextView) view.findViewById(R.id.tvName);
+        //地址信息
+        TextView address = (TextView) view.findViewById(R.id.tvPhone);
+        final LinearLayout linInfo = view.findViewById(R.id.linInfo);
+        ImageView imageView = view.findViewById(R.id.ivImg);
+
+        title.setText(name);
+        address.setText(phone);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linInfo.setVisibility(View.VISIBLE);
+            }
+        });
+        return view;
     }
 
     /**
@@ -234,13 +338,14 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
             mLocationClient.setLocationListener(this);
             //设置为高精度定位模式
             mLocationOption.setOnceLocation(true);
+            mLocationOption.setMockEnable(false);
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位参数
             mLocationClient.setLocationOption(mLocationOption);
             mLocationClient.startLocation();
         }
         aMap.setLocationSource(this);// 设置定位监听
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+        aMap.getUiSettings().setMyLocationButtonEnabled(false);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         aMap.getUiSettings().setZoomGesturesEnabled(false);
 
@@ -258,13 +363,13 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         //金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
         // S3：城市，可以空字符串，空字符串代表全国
         // 三个个都可以为空）
-        query = new PoiSearch.Query(deepType, "", "");
+        query = new PoiSearch.Query(deepType, "", city+"");
         query.setPageSize(20);// 设置每页最多返回多少条poiitem
         query.setPageNum(currentPage);// 设置查第一页
         poiSearch = new PoiSearch(this, query);
         poiSearch.setOnPoiSearchListener(this);
         lp = new LatLonPoint(latlng.latitude, latlng.longitude);//检索的经纬度
-        poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
+        poiSearch.setBound(new PoiSearch.SearchBound(lp, 50000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
         poiSearch.searchPOIAsyn();// 异步搜索
 
     }
@@ -290,10 +395,25 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                     lon = aMapLocation.getLongitude();
                     lat = aMapLocation.getLatitude();
                     latlng = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());//获取经纬度
+
                 }
+                aMapLocation.getAccuracy();//获取精度信息
+                String s1 =     aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                String s11 =     aMapLocation.getCountry();//国家信息
+                String s111 =     aMapLocation.getProvince();//省信息
+                city =   aMapLocation.getCity();//城市信息
+                String s13 =    aMapLocation.getDistrict();//城区信息
+                String s14 =    aMapLocation.getStreet();//街道信息
+                String s15 =     aMapLocation.getStreetNum();//街道门牌号信息
+                String s16 =     aMapLocation.getCityCode();//城市编码
+                String s17 =     aMapLocation.getAdCode();//地区编码
+                String s18 =      aMapLocation.getAoiName();//获取当前定位点的AOI信息
+                String s19 =      aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
+                String s10 =      aMapLocation.getFloor();//获取当前室内定位的楼层
 
+//                EventBus.getDefault().post(new FaHuoAddressEvent(aMapLocation.getAoiName(), aMapLocation.getAddress(),aMapLocation.getLongitude()+"",aMapLocation.getLatitude()+""));
 
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 18), 1000, null);//搜索的（latlag(经纬度)，V:20(缩放大小(10-20)，l:1000(搜索范围)）
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17), 1000, null);//搜索的（latlag(经纬度)，V:20(缩放大小(10-20)，l:1000(搜索范围)）
 
                 doSearchQuery();
             } else {
@@ -322,17 +442,35 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         }
         mLocationClient = null;
     }
-
+    boolean isMarker = false;
     @Override
     public void onCameraChange(CameraPosition cameraPosition) {
     }
-
+    private Map<String, Marker> markerMap = new HashMap<>(); // 管理地图标记的集合
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         latlng = cameraPosition.target;
-        aMap.clear();
-        aMap.addMarker(new MarkerOptions().position(latlng));
+//        aMap.clear();
+        Marker storeMarker = markerMap.get("dingwei");
+
+        if (storeMarker != null) {
+            // 如果已经存在则更新
+
+            storeMarker.setPosition(latlng);
+
+        } else {
+            aMap.clear();
+            // 如果没有则创建
+            MarkerOptions options = new MarkerOptions();
+            options.position(latlng);
+            Marker marker = aMap.addMarker(options);
+            markerMap.put("dingwei", marker);
+            getJieDanYuan();
+        }
+//        aMap.addMarker(new MarkerOptions().position(latlng));
+
         doSearchQuery();
+
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(FaHuoAddressEvent event) {
@@ -341,7 +479,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
         if (event.isDingWei()){
             if (data != null && data.size() > 0) {
 //                        final PoiSearchAdapter adapter = new PoiSearchAdapter(this, data);
-                EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(), data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+""));
+                EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(), data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+"",data.get(0).getShi()+""));
             }
         }
     }
@@ -365,6 +503,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                     //清空数据
                     data.clear();
                     aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+
                     for (PoiItem item : poiItems) {
                         //获取经纬度对象
                         LatLonPoint llp = item.getLatLonPoint();
@@ -380,13 +519,14 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                         String sheng = item.getProvinceName();
                         String shi = item.getCityName();
                         String qu = item.getAdName();
+//                        city = item.getCityName();
                         //添加数据
                         data.add(new LocationBean(lon, lat, title, text, texta, sheng, shi, qu));
                     }
 
                     if (data != null && data.size() > 0) {
 //                        final PoiSearchAdapter adapter = new PoiSearchAdapter(this, data);
-                        EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(),data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+""));
+                        EventBus.getDefault().post(new FaHuoAddressEvent(data.get(0).getTitle(),data.get(0).getContent(),data.get(0).getLon()+"",data.get(0).getLat()+"",data.get(0).getShi()+""));
 //                        mapList.setAdapter(adapter);
 //                        //poi列表的item的点击事件
 //                        mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -453,6 +593,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
     }
 
     private void getLatlon(String cityName) {
+        city = cityName;
 
         GeocodeSearch geocodeSearch = new GeocodeSearch(this);
         geocodeSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener() {
@@ -472,22 +613,25 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
                         lat = geocodeAddress.getLatLonPoint().getLatitude();//纬度
                         lon = geocodeAddress.getLatLonPoint().getLongitude();//经度
                         String adcode = geocodeAddress.getAdcode();//区域编码
+                        // 如果没有则创建
+
                         MarkerOptions mk = new MarkerOptions();
                         mk.icon(BitmapDescriptorFactory.defaultMarker());
                         //获取点击的经纬度，并且传给新的LatLng
                         latlng = new LatLng(lat, lon);
-                        mk.position(latlng);
-                        //清除所有marker等，保留自身
-                        aMap.clear();
-                        //输入新的经纬度和地图缩放发小（数字越大就是放大）
-                        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latlng, 18);
+//                        mk.position(latlng);
+//                        //清除所有marker等，保留自身
+//                        aMap.clear();
+//                        //输入新的经纬度和地图缩放发小（数字越大就是放大）
+                        CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(latlng, 17);
                         aMap.animateCamera(cu);
-                        aMap.addMarker(mk);
-                        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+                        markerMap.clear();
+//                        aMap.addMarker(mk);
+//                        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
                         Log.e("地理编码", geocodeAddress.getAdcode() + "");
                         Log.e("纬度latitude", lat + "");
                         Log.e("经度longititude", lon + "");
-                        doSearchQuery();
+//                        doSearchQuery();
                     } else {
                         ToastUtil.show("地址名出错");
                     }
@@ -511,7 +655,7 @@ public class FaHuoActivity extends BaseActivity implements LocationSource,
 
 
     }
-Intent intent;
+    Intent intent;
     long mLasttime;
     @OnClick({R.id.ivMy, R.id.ivCity})
     public void onViewClicked(View view) {

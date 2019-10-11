@@ -9,6 +9,7 @@ import com.liaocheng.suteng.myapplication.api.Api;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
+import com.liaocheng.suteng.myapplication.model.PayModel;
 import com.liaocheng.suteng.myapplication.presenter.contract.FaHuoContact;
 
 public class FaHuoXiaDanPersenter extends RxPresenter<FaHuoContact.View> implements FaHuoContact.Presenter {
@@ -55,6 +56,52 @@ public class FaHuoXiaDanPersenter extends RxPresenter<FaHuoContact.View> impleme
                     @Override
                     protected void _onError(String message) {
                         mView.showError(1, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void order_pay(String code, String type) {
+        addSubscribe(Api.createTBService().order_pay(SPCommon.getString("token",""),code,type)
+                .compose(RxUtil.<BaseResponse<PayModel>>rxSchedulerHelper())
+                .compose(RxUtil.<PayModel>handleResult())
+                .subscribeWith(new CommonSubscriber<PayModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(PayModel commonRes) {
+
+                        if (commonRes != null) {
+                            mView.order_pay(commonRes);
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void checkSecondPassword(String secondPwd) {
+        addSubscribe(Api.createTBService().checkSecondPassword(SPCommon.getString("token",""),secondPwd)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.checkSecondPassword();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
                     }
                 })
         );

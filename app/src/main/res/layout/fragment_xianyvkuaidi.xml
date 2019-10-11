@@ -17,8 +17,9 @@
             android:src="@mipmap/icon_wizhilvfa"
             />
         <LinearLayout
+            android:id="@+id/linFa"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ivFaAddress"
             android:layout_toLeftOf="@+id/tvFaDiZhiChangYong"
@@ -52,14 +53,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginLeft="5dp"
-                android:text="18888888888"
+                android:text=""
                 />
         </LinearLayout>
         <TextView
             android:id="@+id/tvFaDiZhiChangYong"
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:background="@drawable/dizhi_bg"
+            android:background="@drawable/zhuce_bg"
             android:text="常用"
             android:textColor="@color/hl_white"
             android:gravity="center"
@@ -86,8 +87,9 @@
             android:src="@mipmap/icon_weizhihongshou"
             />
         <LinearLayout
+            android:id="@+id/linShou"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ivShouAddress"
             android:layout_toLeftOf="@+id/tvShouDiZhiChangYong"
@@ -121,14 +123,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginLeft="5dp"
-                android:text="18888888888"
+                android:text=""
                 />
         </LinearLayout>
         <TextView
             android:id="@+id/tvShouDiZhiChangYong"
             android:layout_width="50dp"
             android:layout_height="30dp"
-            android:background="@drawable/dizhi_bg"
+            android:background="@drawable/zhuce_bg"
             android:text="常用"
             android:textColor="@color/hl_white"
             android:gravity="center"

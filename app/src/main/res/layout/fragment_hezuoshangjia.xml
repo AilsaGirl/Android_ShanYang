@@ -17,8 +17,9 @@
             android:src="@mipmap/icon_wizhilvfa"
             />
         <LinearLayout
+            android:id="@+id/linFa"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ivFaAddress"
             android:layout_toLeftOf="@+id/tvFaDiZhiChangYong"
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginLeft="5dp"
-                android:text="18888888888"
+                android:text=""
                 />
         </LinearLayout>
         <TextView
@@ -86,8 +87,9 @@
             android:src="@mipmap/icon_weizhihongshou"
             />
         <LinearLayout
+            android:id="@+id/linShou"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ivShouAddress"
             android:layout_toLeftOf="@+id/tvShouDiZhiChangYong"
@@ -121,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/hl_6x3"
                 android:layout_marginLeft="5dp"
-                android:text="18888888888"
+                android:text=""
                 />
         </LinearLayout>
         <TextView

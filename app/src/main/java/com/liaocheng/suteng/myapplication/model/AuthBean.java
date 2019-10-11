@@ -15,4 +15,15 @@ public class AuthBean {
     public String    astrictReason;//	String	接单限制原因
     public String    workState;//	String	上班状态
     public String     trafficTool;//	String	上班登记的交通工具
+  public String sex;
+  public  String ethnic;
+  public  String address;
+  public  String organ;
+  public String validity;
+  public  String insurancePayTime;
+  public String insuranceEndTime;
+  public String member;//0-未交1-缴纳500元2-缴纳700元
+  public  String memberPayTime;
+  public String memberEndTime;
+
 }

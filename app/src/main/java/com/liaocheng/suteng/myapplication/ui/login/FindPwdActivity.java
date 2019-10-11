@@ -72,6 +72,12 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     }
     @Override
     public void initEventAndData() {
+        tvFindPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     @Override
     public void showError(int reqCode, String msg) {
@@ -146,10 +152,11 @@ public class FindPwdActivity extends BaseActivity <ForgetPersenter>implements Fo
     }
     @Override
     public void setforget(NullBean nullBean) {
-        ToastUtil.show("成功了");
+        finish();
+        ToastUtil.show("修改成功");
     }
     @Override
     public void setforcode(NullBean nullBean) {
-        ToastUtil.show("成功了");
+        ToastUtil.show("发送验证码成功");
     }
 }

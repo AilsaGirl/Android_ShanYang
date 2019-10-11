@@ -78,20 +78,20 @@ public class JieDanAdapter extends RecyclerView.Adapter<JieDanAdapter.ViewHolder
             }else  if (model.orderType.equals("4")){
                 holder.tvType.setText("同校快送");
             }else  if (model.orderType.equals("5")){
-                holder.tvType.setText("合作商家");
+                holder.tvType.setText("当日达");
             }else  if (model.orderType.equals("6")){
                 holder.tvType.setText("县域快送");
             }
             holder.tvDingDanTime.setText(model.appointTime+"");
             holder.tvNum.setText("￥"+model.remuneration+"");
-            holder.tvFaJL.setText(model.distance+"");
+            holder.tvFaJL.setText(model.sendDistance+"");
 //            holder.tvFa.setText("");
             holder.tvFaHuo.setText(model.sendAddress+"");
-            holder.tvFaHUoXQ.setText(model.sendConcreteAdd+"");
-            holder.tvShouJL.setText(model.distance+"");
+            holder.tvFaHUoXQ.setText(model.sendConcreteAdd+""+model.sendDetailAdd);
+            holder.tvShouJL.setText(model.receiveDistance+"");
 //            holder.tvShou.setText("");
             holder.tvShouHuo.setText(model.receiveAddress+"");
-            holder.tvShouHUoXQ.setText(model.receiveConcreteAdd+"");
+            holder.tvShouHUoXQ.setText(model.receiveConcreteAdd+""+model.receiveDetailAdd);
             holder.tvJuLi.setText("全程："+model.distance);
             holder.tvZhiFu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,12 +107,14 @@ public class JieDanAdapter extends RecyclerView.Adapter<JieDanAdapter.ViewHolder
 //                    recyclerView.refresh();
                         Intent intent = new Intent();
                         intent.putExtra("code", model.orderCode);
+                        intent.putExtra("type",0);
                         intent.putExtra("isJieDanYuan", true);
                         intent.setClass(mContext, DingDanBuyInfoActivity.class);
                         mContext.startActivity(intent);
                     } else {
                         Intent intent = new Intent();
                         intent.putExtra("code", model.orderCode);
+                        intent.putExtra("type",0);
                         intent.setClass(mContext, DingDanInfoActivity.class);
                         mContext.startActivity(intent);
 

@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/hl_6x3"
-                    android:text="发货人：张三"
+                    android:text="发货人："
                     />
                 <TextView
                     android:id="@+id/tvFaTel"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/hl_6x3"
-                    android:text="1233444444"
+                    android:text=""
                     />
             </LinearLayout>
             <RelativeLayout
@@ -101,7 +101,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textSize="16dp"
-                    android:text="山东省聊城市东城府区东昌路123号"
+                    android:text=""
                     />
                 <TextView
                     android:id="@+id/tvFaHUoXQ"
@@ -116,7 +116,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textSize="14dp"
-                    android:text="山东省聊城市东城府区东昌路123号"
+                    android:text=""
                     />
                 <ImageView
                     android:id="@+id/ivFaTel"
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/hl_6x3"
-                    android:text="发货人：张三"
+                    android:text="发货人："
                     />
                 <TextView
                     android:id="@+id/tvShouTel"
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/hl_6x3"
-                    android:text="1233444444"
+                    android:text=""
                     />
             </LinearLayout>
             <RelativeLayout
@@ -196,7 +196,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textSize="16dp"
-                    android:text="山东省聊城市东城府区东昌路123号"
+                    android:text=""
                     />
                 <TextView
                     android:id="@+id/tvShouHUoXQ"
@@ -211,7 +211,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textSize="14dp"
-                    android:text="山东省聊城市东城府区东昌路123号"
+                    android:text=""
                     />
                 <ImageView
                     android:id="@+id/ivShouTel"
@@ -307,7 +307,7 @@
                 android:textColor="@color/hl_6x3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
-                android:text="备注信息：帮我带一瓶水"
+                android:text="备注信息："
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -348,7 +348,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -369,7 +369,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -390,7 +390,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -411,7 +411,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -432,7 +432,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -453,7 +453,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x3"
-                    android:text="￥56.00元"
+                    android:text="￥0.00元"
                     />
             </LinearLayout>
             <LinearLayout
@@ -469,14 +469,14 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x6"
                     android:layout_weight="1"
-                    android:text="全程约：8.19公里"
+                    android:text="全程约：0公里"
                     />
                 <TextView
                     android:id="@+id/tvNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/hl_6x6"
-                    android:text="接单总计：￥56.00元"
+                    android:text="接单总计：￥0.00元"
                     />
             </LinearLayout>
             <TextView
@@ -486,7 +486,7 @@
                 android:textColor="@color/hl_6x3"
                 android:visibility="gone"
                 android:layout_marginBottom="5dp"
-                android:text="订单编号：5959858585585885"
+                android:text="订单编号："
                 />
             <TextView
                 android:id="@+id/tvShiJian"
@@ -495,7 +495,7 @@
                 android:textColor="@color/hl_6x3"
                 android:layout_marginBottom="5dp"
                 android:visibility="gone"
-                android:text="创建时间：2018-01-01"
+                android:text="创建时间："
                 />
             <LinearLayout
                 android:id="@+id/linJieDan"
@@ -512,7 +512,7 @@
     android:layout_gravity="center_vertical"
     android:textSize="14dp"
     android:textColor="@color/hl_6x3"
-    android:text="接单人：哈哈哈哈"
+    android:text="接单人"
     />
                 <TextView
                     android:id="@+id/tvTel"
@@ -537,7 +537,22 @@
                     />
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/tvZhiFu"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="@color/hl_white"
+            android:background="@drawable/zhuce_bg"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:text="去支付"
+            />
         <LinearLayout
+            android:id="@+id/linQiang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"

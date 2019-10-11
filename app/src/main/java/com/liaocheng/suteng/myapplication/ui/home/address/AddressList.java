@@ -44,6 +44,7 @@ import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanXiaDanActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiXiaDanActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoXiaDanSongActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -134,7 +135,7 @@ public class AddressList extends BaseActivity<SitePresenter> implements SiteCont
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //获取最近3s内精度最高的一次定位结果：
         //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
+//        mLocationOption.setOnceLocationLatest(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -185,7 +186,9 @@ double lon;
     String mId = "";
     int page = 1;
     int is_result=0;
-
+    FaHuoAddressModel addressModelFaHuo;
+    int tip = 0;
+    String mCity;
     @Override
     public void initEventAndData() {
 //        AutoSizeConfig.getInstance();
@@ -193,12 +196,19 @@ double lon;
         toolBar.setBackFinish().setTitleText("地址管理");
         Intent intent = getIntent();
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
+        tip = getIntent().getIntExtra("tip",0);
+
         if (addressModel!=null){
             mId =addressModel.type+"";
             is_result = addressModel.is_result;
+            mCity = addressModel.city;
         }
         if (!TextUtils.isEmpty(mId)) {
             toolBar.setBackFinish().setTitleText("选择地址");
+            if (tip==32||tip==321||tip==42||tip==52||tip==62){
+                addressModelFaHuo = addressModel;
+                addressModel = null;
+            }
         }
 
         mRecyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -224,19 +234,34 @@ double lon;
         mRecyclerview.refresh();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
     public void onMessageEvent(RecruitEvent event) {
         if (event == null)
             return;
         if (event.getShow()) {
           mPresenter.getMyAddressList(SPCommon.getString("token",""));
         }
+        if (event.getAddressModel() != null&&event.getAddressModelShou() != null){
 
+            if (event.getAddressModel() != null) {
+                addressModelFaHuo = event.getAddressModel();
+                mCity = addressModelFaHuo.city;
+//            mPresenter.orderNum("","3",lat+"",lon+"","","","","","","","");
+            }
+            if (event.getAddressModelShou() != null) {
+                addressModelShou = event.getAddressModelShou();
+                mCity= addressModelShou.city;
+
+            }
+        }
     }
+
+    FaHuoAddressModel addressModelShou = new FaHuoAddressModel();
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
         EventBus.getDefault().unregister(this);
     }
 
@@ -312,6 +337,9 @@ int jia = 0;
         if (addressModel==null){
             addressModel = new FaHuoAddressModel();
         }
+        addressModel.city = mCity;
+        if (mId.equals("1")||mId.equals("2")){
+
         if (mId.equals("1")) {
             if (addressModel.is_new_address==1){
                  intent = new Intent(this, BangWoMaiXiaDanActivity.class);
@@ -343,6 +371,139 @@ int jia = 0;
                 addressModel.is_result =0;
                 startActivity(intent);
             }
+        }
+        if (mId.equals("3")||mId.equals("4")||mId.equals("5")||mId.equals("6")) {
+                if (tip==31){
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =3;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().post(new RecruitEvent(addressModel));
+                }
+                if (tip==32){
+                    intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =3;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                    startActivity(intent);
+                }
+                if (tip==41){
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =4;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().post(new RecruitEvent(addressModel));
+                }
+                if (tip==42){
+                    intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =4;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                    startActivity(intent);
+                }
+                if (tip==51){
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =5;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().post(new RecruitEvent(addressModel));
+                }
+                if (tip==52){
+                    intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =5;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                    startActivity(intent);
+                }
+                if (tip==61){
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =6;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().post(new RecruitEvent(addressModel));
+                }
+                if (tip==62){
+                    intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                    addressModel.address = mChangAddressList.get(pos).sendAddress;
+                    addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                    addressModel.contactName = mChangAddressList.get(pos).sendName;
+                    addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                    addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                    addressModel.lat = mChangAddressList.get(pos).sendLat;
+                    addressModel.lon = mChangAddressList.get(pos).sendLong;
+                    addressModel.type =6;
+                    addressModel.is_result =0;
+                    EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                    startActivity(intent);
+                }
+            if (tip==321){
+                addressModel.address = mChangAddressList.get(pos).sendAddress;
+                addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                addressModel.contactName = mChangAddressList.get(pos).sendName;
+                addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                addressModel.lat = mChangAddressList.get(pos).sendLat;
+                addressModel.lon = mChangAddressList.get(pos).sendLong;
+                addressModel.type =Integer.parseInt(mId);
+                addressModel.is_result =0;
+                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+            }
+            if (tip==311){
+//                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                addressModel.address = mChangAddressList.get(pos).sendAddress;
+                addressModel.detailAddress = mChangAddressList.get(pos).sendDetailAdd;
+                addressModel.contactName = mChangAddressList.get(pos).sendName;
+                addressModel.contactPhone = mChangAddressList.get(pos).sendPhone;
+                addressModel.ConcreteAdd = mChangAddressList.get(pos).sendConcreteAdd;
+                addressModel.lat = mChangAddressList.get(pos).sendLat;
+                addressModel.lon = mChangAddressList.get(pos).sendLong;
+                addressModel.type =Integer.parseInt(mId);
+                addressModel.is_result =0;
+                EventBus.getDefault().postSticky(new RecruitEvent(addressModel,addressModelShou));
+//                startActivity(intent);
+            }
+            }
             finish();
 
 
@@ -366,33 +527,172 @@ int jia = 0;
                 if (TextUtils.isEmpty(tvMoRenDiZhi.getText().toString())){
                     ToastUtil.show("请先编辑地址");
                 }else {
-
+                    if (addressModel == null) {
+                        addressModel = new FaHuoAddressModel();
+                    }
+                    addressModel.city = mCity;
                     if (listMyAddress.size()>moren){
-                        if (mId.equals("1")){
-                            intent = new Intent(this, BangWoMaiActivity.class);
-                            addressModel.type =1;
+                        if (mId.equals("1")||mId.equals("2")) {
+                            if (mId.equals("1")) {
+                                intent = new Intent(this, BangWoMaiActivity.class);
+                                addressModel.type = 1;
+                            }
+                            if (mId.equals("2")) {
+                                intent = new Intent(this, BangWoBanActivity.class);
+                                addressModel.type = 2;
+                            }
+
+                            addressModel.address = listMyAddress.get(moren).address;
+                            addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                            addressModel.contactName = listMyAddress.get(moren).contactName;
+                            addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                            addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                            addressModel.lat = listMyAddress.get(moren).latitude;
+                            addressModel.lon = listMyAddress.get(moren).accuracy;
+                            intent.putExtra("address_data", addressModel);
+                            addressModel.is_result = 0;
+                            if (is_result == 1) {
+                                setResult(110, intent);
+                            } else {
+                                startActivity(intent);
+                            }
                         }
-                        if (mId.equals("2")) {
-                             intent = new Intent(this, BangWoBanActivity.class);
-                            addressModel.type =2;
+                        if (mId.equals("3")||mId.equals("4")||mId.equals("5")||mId.equals("6")) {
+                            if (tip==31){
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==32){
+
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+
+                            }
+                            if (tip==41){
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==42){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==51){
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==52){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==61){
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==62){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==311){
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+
+                                addressModel.is_result =0;
+                                addressModel.type =Integer.parseInt(mId);
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModel,addressModelShou));
+                            }
+                            if (tip==321){
+//                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(moren).address;
+                                addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
+                                addressModel.contactName = listMyAddress.get(moren).contactName;
+                                addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
+                                addressModel.lat = listMyAddress.get(moren).latitude;
+                                addressModel.lon = listMyAddress.get(moren).accuracy;
+                                addressModel.type =Integer.parseInt(mId);
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+//                                startActivity(intent);
+                            }
                         }
-                        if (addressModel==null){
-                            addressModel = new FaHuoAddressModel();
-                        }
-                        addressModel.address = listMyAddress.get(moren).address;
-                        addressModel.detailAddress = listMyAddress.get(moren).detailAddress;
-                        addressModel.contactName = listMyAddress.get(moren).contactName;
-                        addressModel.contactPhone = listMyAddress.get(moren).contactPhone;
-                        addressModel.ConcreteAdd = listMyAddress.get(moren).concreteAddress;
-                        addressModel.lat = listMyAddress.get(moren).latitude;
-                        addressModel.lon = listMyAddress.get(moren).accuracy;
-                        intent.putExtra("address_data", addressModel);
-                        addressModel.is_result =0;
-                        if (is_result==1){
-                            setResult(110, intent);
-                        }else {
-                            startActivity(intent);
-                        }
+
 
                         finish();
                     }else {
@@ -415,34 +715,172 @@ int jia = 0;
                 }else {
 
                     if (listMyAddress.size()>gongsi){
-                        if (mId.equals("1")){
-                            intent = new Intent(this, BangWoMaiActivity.class);
-                            addressModel.type =1;
-                        }
-                        if (mId.equals("2")) {
-                            intent = new Intent(this, BangWoBanActivity.class);
-                            addressModel.type =2;
-                        }
-//                        intent.putExtra("id",listMyAddress.get(moren).id);
-                        if (addressModel==null){
+                        if (addressModel == null) {
                             addressModel = new FaHuoAddressModel();
                         }
-                        addressModel.address = listMyAddress.get(gongsi).address;
-                        addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
-                        addressModel.contactName = listMyAddress.get(gongsi).contactName;
-                        addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
-                        addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
-                        addressModel.lat = listMyAddress.get(gongsi).latitude;
-                        addressModel.lon = listMyAddress.get(gongsi).accuracy;
-                        intent.putExtra("address_data", addressModel);
-                        addressModel.is_result =0;
-                        if (is_result==1){
-                            setResult(110, intent);
-                        }else {
+                        addressModel.city = mCity;
+                        if (mId.equals("1")||mId.equals("2")) {
+                            if (mId.equals("1")) {
+                                intent = new Intent(this, BangWoMaiActivity.class);
+                                addressModel.type = 1;
+                            }
+                            if (mId.equals("2")) {
+                                intent = new Intent(this, BangWoBanActivity.class);
+                                addressModel.type = 2;
+                            }
+//                        intent.putExtra("id",listMyAddress.get(moren).id);
 
-                            startActivity(intent);
+                            addressModel.address = listMyAddress.get(gongsi).address;
+                            addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                            addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                            addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                            addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                            addressModel.lat = listMyAddress.get(gongsi).latitude;
+                            addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                            intent.putExtra("address_data", addressModel);
+                            addressModel.is_result = 0;
+                            if (is_result == 1) {
+                                setResult(110, intent);
+                            } else {
+
+                                startActivity(intent);
+                            }
                         }
 
+                        if (mId.equals("3")||mId.equals("4")||mId.equals("5")||mId.equals("6")) {
+                            if (tip==31){
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==32){
+
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                startActivity(intent);
+                            }
+                            if (tip==41){
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==42){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==51){
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==52){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==61){
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==62){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+
+                            if (tip==311){
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.is_result =0;
+                                addressModel.type =Integer.parseInt(mId);
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModel,addressModelShou));
+                            }
+                            if (tip==321){
+//                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(gongsi).address;
+                                addressModel.detailAddress = listMyAddress.get(gongsi).detailAddress;
+                                addressModel.contactName = listMyAddress.get(gongsi).contactName;
+                                addressModel.contactPhone = listMyAddress.get(gongsi).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(gongsi).concreteAddress;
+                                addressModel.lat = listMyAddress.get(gongsi).latitude;
+                                addressModel.lon = listMyAddress.get(gongsi).accuracy;
+                                addressModel.type =Integer.parseInt(mId);
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+//                                startActivity(intent);
+                            }
+                        }
                         finish();
                     }else {
                         ToastUtil.show("该地址返回错误，请输入地址");
@@ -463,32 +901,168 @@ int jia = 0;
                     ToastUtil.show("请先编辑地址");
                 }else {
                     if (listMyAddress.size()>jia){
-                        if (mId.equals("1")){
-                            intent = new Intent(this, BangWoMaiActivity.class);
-                            addressModel.type =1;
-                        }
-                        if (mId.equals("2")) {
-                            intent = new Intent(this, BangWoBanActivity.class);
-                            addressModel.type =2;
-                        }
-                        if (addressModel==null){
+                        if (addressModel == null) {
                             addressModel = new FaHuoAddressModel();
                         }
-                        addressModel.address = listMyAddress.get(jia).address;
-                        addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
-                        addressModel.contactName = listMyAddress.get(jia).contactName;
-                        addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
-                        addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
-                        addressModel.lat = listMyAddress.get(jia).latitude;
-                        addressModel.lon = listMyAddress.get(jia).accuracy;
-                        intent.putExtra("address_data", addressModel);
-                        addressModel.is_result =0;
-                        if (is_result==1){
-                            setResult(110, intent);
-                        }else {
+                        addressModel.city = mCity;
+                        if (mId.equals("1")||mId.equals("2")) {
+                            if (mId.equals("1")) {
+                                intent = new Intent(this, BangWoMaiActivity.class);
+                                addressModel.type = 1;
+                            }
+                            if (mId.equals("2")) {
+                                intent = new Intent(this, BangWoBanActivity.class);
+                                addressModel.type = 2;
+                            }
+                            addressModel.address = listMyAddress.get(jia).address;
+                            addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                            addressModel.contactName = listMyAddress.get(jia).contactName;
+                            addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                            addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                            addressModel.lat = listMyAddress.get(jia).latitude;
+                            addressModel.lon = listMyAddress.get(jia).accuracy;
+                            intent.putExtra("address_data", addressModel);
+                            addressModel.is_result = 0;
+                            if (is_result == 1) {
+                                setResult(110, intent);
+                            } else {
 
-                            startActivity(intent);
+                                startActivity(intent);
+                            }
                         }
+                        if (mId.equals("3")||mId.equals("4")||mId.equals("5")||mId.equals("6")) {
+                            if (tip==31){
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==32){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =3;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==41){
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==42){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =4;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==51){
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==52){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =5;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==61){
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            }
+                            if (tip==62){
+                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =6;
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+                                startActivity(intent);
+                            }
+                            if (tip==311){
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =Integer.parseInt(mId);
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModel,addressModelShou));
+                            }
+                            if (tip==321){
+//                                intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                addressModel.address = listMyAddress.get(jia).address;
+                                addressModel.detailAddress = listMyAddress.get(jia).detailAddress;
+                                addressModel.contactName = listMyAddress.get(jia).contactName;
+                                addressModel.contactPhone = listMyAddress.get(jia).contactPhone;
+                                addressModel.ConcreteAdd = listMyAddress.get(jia).concreteAddress;
+                                addressModel.lat = listMyAddress.get(jia).latitude;
+                                addressModel.lon = listMyAddress.get(jia).accuracy;
+                                addressModel.type =Integer.parseInt(mId);
+                                addressModel.is_result =0;
+                                EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo,addressModel));
+//                                startActivity(intent);
+                            }
+                        }
+
 
                         finish();
                     }else {
@@ -504,6 +1078,7 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
+                addressModel.city = mCity;
                 addressModel.lat = lat+"";
                 addressModel.lon = lon+"";
                 addressModel.tag = 1;
@@ -529,6 +1104,7 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
+                addressModel.city = mCity;
                 addressModel.lat = lat+"";
                 addressModel.lon = lon+"";
                 addressModel.tag = 2;
@@ -555,6 +1131,7 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
+                addressModel.city = mCity;
                 addressModel.lat = lat+"";
                 addressModel.lon = lon+"";
                 addressModel.tag = 3;
@@ -592,13 +1169,134 @@ int jia = 0;
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lat+"";
-                addressModel.lon = lon+"";
-                addressModel.tag = 0;
-                addressModel.is_result =0;
-                addressModel.city = tvCity.getText().toString()+"";
-                intent.putExtra("address_data", addressModel);
-                startActivity(intent);
+                if (mId.equals("1")||mId.equals("2")){
+                    addressModel.lat = lat+"";
+                    addressModel.lon = lon+"";
+                    addressModel.tag = 0;
+                    addressModel.is_result =0;
+                    addressModel.city = tvCity.getText().toString()+"";
+                    intent.putExtra("address_data", addressModel);
+                    startActivity(intent);
+                }
+
+                if (mId.equals("3")||mId.equals("4")||mId.equals("5")||mId.equals("6")) {
+                    if (tip == 31) {
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 3;
+                        addressModel.is_result = 0;
+                        intent.putExtra("address_data", addressModel);
+                        intent.putExtra("tip",tip);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 32) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 3;
+                        addressModel.is_result = 0;
+                        intent.putExtra("address_data", addressModel);
+                        intent.putExtra("tip",tip);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo, addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 41) {
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 4;
+                        addressModel.is_result = 0;
+                        intent.putExtra("address_data", addressModel);
+                        intent.putExtra("tip",tip);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 42) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 4;
+                        addressModel.is_result = 0;
+                        intent.putExtra("address_data", addressModel);
+                        intent.putExtra("tip",tip);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo, addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 51) {
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 5;
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 52) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 5;
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo, addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 61) {
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 6;
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 62) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = 6;
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo, addressModel));
+                        startActivity(intent);
+                    }
+                    if (tip == 311) {
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type = Integer.parseInt(mId);
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModel, addressModelShou));
+                        startActivity(intent);
+                    }
+                    if (tip == 321) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                        addressModel.lat = lat+"";
+                        addressModel.lon = lon+"";
+                        addressModel.city = tvCity.getText().toString()+"";
+                        addressModel.type =  Integer.parseInt(mId);
+                        addressModel.is_result = 0;
+                        intent.putExtra("tip",tip);
+                        intent.putExtra("address_data", addressModel);
+                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFaHuo, addressModel));
+                        startActivity(intent);
+                    }
+                }
+
                 finish();
                 break;
         }

@@ -13,7 +13,51 @@ import com.liaocheng.suteng.myapplication.presenter.contract.DingDanBuyInfoConte
 
 
 public class DingDanBuyInfoPresenter extends RxPresenter<DingDanBuyInfoContent.View> implements DingDanBuyInfoContent.Presenter{
+    @Override
+    public void queryReceiveOrderDetail(String code) {
+        addSubscribe(Api.createTBService().queryReceiveOrderDetail(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(DingDanBuyInfoModel commonRes) {
 
+                        if (commonRes != null) {
+                            mView.setDingDa(commonRes);
+                        } else {
+                            mView.showError(1, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void order_info_detail(String code) {
+        addSubscribe(Api.createTBService().order_info_detail(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(DingDanBuyInfoModel commonRes) {
+
+                        if (commonRes != null) {
+                            mView.setDingDa(commonRes);
+                        } else {
+                            mView.showError(1, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
     @Override
     public void getDingDa(String code) {
         addSubscribe(Api.createTBService().querySendOrderDetail(SPCommon.getString("token",""),code)
@@ -26,6 +70,28 @@ public class DingDanBuyInfoPresenter extends RxPresenter<DingDanBuyInfoContent.V
                         if (commonRes != null) {
                             mView.setDingDa(commonRes);
                         } else {
+                            mView.showError(1, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
+    @Override
+    public void checkSecondPassword(String secondPwd) {
+        addSubscribe(Api.createTBService().checkSecondPassword(SPCommon.getString("token",""),secondPwd)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.checkSecondPassword();
+                        } else {
                             mView.showError(0, "");
                         }
                     }
@@ -36,7 +102,6 @@ public class DingDanBuyInfoPresenter extends RxPresenter<DingDanBuyInfoContent.V
                 })
         );
     }
-
     @Override
     public void order_cancell(String code) {
         addSubscribe(Api.createTBService().order_cancell(SPCommon.getString("token",""),code)
@@ -107,8 +172,8 @@ public class DingDanBuyInfoPresenter extends RxPresenter<DingDanBuyInfoContent.V
     }
 
     @Override
-    public void addOrderTip(String code, String type) {
-        addSubscribe(Api.createTBService().addOrderTip(SPCommon.getString("token",""),code,type)
+    public void addOrderTip(String code, String type,String addTips) {
+        addSubscribe(Api.createTBService().addOrderTip(SPCommon.getString("token",""),code,type,addTips)
                 .compose(RxUtil.<BaseResponse<PayModel>>rxSchedulerHelper())
                 .compose(RxUtil.<PayModel>handleResult())
                 .subscribeWith(new CommonSubscriber<PayModel>(mContext, true) {

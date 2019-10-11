@@ -231,13 +231,13 @@ public class NewLocationActivity extends BaseActivity implements LocationSource,
         //金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
         // S3：城市，可以空字符串，空字符串代表全国
         // 三个个都可以为空）
-        query = new PoiSearch.Query(deepType, "", "");
-        query.setPageSize(20);// 设置每页最多返回多少条poiitem
+        query = new PoiSearch.Query(deepType, "", city);
+        query.setPageSize(100);// 设置每页最多返回多少条poiitem
         query.setPageNum(currentPage);// 设置查第一页
         poiSearch = new PoiSearch(this, query);
         poiSearch.setOnPoiSearchListener(this);
         lp = new LatLonPoint(latlng.latitude, latlng.longitude);//检索的经纬度
-        poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
+//        poiSearch.setBound(new PoiSearch.SearchBound(lp, 50000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
         poiSearch.searchPOIAsyn();// 异步搜索
 
     }

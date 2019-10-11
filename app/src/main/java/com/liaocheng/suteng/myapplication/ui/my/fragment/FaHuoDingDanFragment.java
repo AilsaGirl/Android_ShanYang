@@ -58,6 +58,14 @@ public class FaHuoDingDanFragment extends BaseFragment<FaDanPresenter> implement
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        page=1;
+        mPresenter.getMySendOrder(duration, page + "");
+        mPresenter.getTotel(duration);
+    }
+
+    @Override
     public void showError(int reqCode, String msg) {
         recyclerView.refreshComplete();
         recyclerView.loadMoreComplete();

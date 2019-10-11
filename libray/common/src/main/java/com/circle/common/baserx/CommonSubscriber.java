@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.circle.common.R;
 import com.circle.common.app.BaseApplication;
+import com.circle.common.response.BaseRespons;
 import com.circle.common.response.BaseResponse;
 import com.circle.common.response.CommonRes;
 import com.circle.common.util.NetWorkUtils;
@@ -66,6 +67,9 @@ public abstract class CommonSubscriber<T> extends ResourceSubscriber<T> {
                 if (((BaseResponse) t).isTokenExpire()) {
                     BaseApplication.getInstance().tokenExpire();
                 }
+            }
+            if (t instanceof BaseRespons) {
+
             }
             _onNext(t);
         } catch (Exception e) {

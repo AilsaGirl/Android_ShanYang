@@ -12,8 +12,11 @@ import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.liaocheng.suteng.myapplication.R;
+import com.liaocheng.suteng.myapplication.model.AuthBean;
 import com.liaocheng.suteng.myapplication.model.MainModel;
+import com.liaocheng.suteng.myapplication.model.MyBean;
 import com.liaocheng.suteng.myapplication.model.NoticeModel;
+import com.liaocheng.suteng.myapplication.model.VersionModel;
 import com.liaocheng.suteng.myapplication.presenter.MainPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.MainContact;
 import com.liaocheng.suteng.myapplication.ui.my.adapter.FaDanAdapter;
@@ -90,6 +93,24 @@ public class GongDaoListActivity extends BaseActivity<MainPresenter> implements 
     public void setBanner(MainModel mBean) {
 
     }
+
+    @Override
+    public void IdentityInfoSucss(MyBean authBean) {
+
+    }
+
+
+    @Override
+    public void updateLocation() {
+
+    }
+
+    @Override
+    public void appVersion_info(VersionModel model) {
+
+    }
+
+
 
     @Override
     public void showError(int reqCode, String msg) {

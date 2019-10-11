@@ -89,6 +89,10 @@ public class DingDanInfoPresenter extends RxPresenter<DingDanInfoContent.View> i
         this.endWeiDu= endWeiDu;
         this.endJingdu= endJingdu;
         this.isThree = isStart;
+        if (aMap!=null){
+            aMap.clear();
+            aMap =null;
+        }
         if (aMap == null) {
             aMap = mapView.getMap();
 //            aMap.setLocationSource(this);// 设置定位监听
@@ -184,6 +188,7 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
                         public void onArrivedWayPoint(int i) {
 
                         }
+
                     });
                 }
             });
@@ -266,12 +271,12 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
                         if (commonRes != null) {
                             mView.setDingDa(commonRes);
                         } else {
-                            mView.showError(0, "");
+                            mView.showError(1, "");
                         }
                     }
                     @Override
                     protected void _onError(String message) {
-                        mView.showError(0, message);
+                        mView.showError(1, message);
                     }
                 })
         );
@@ -326,6 +331,51 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
         );
     }
 
+    @Override
+    public void queryReceiveOrderDetail(String code) {
+        addSubscribe(Api.createTBService().queryReceiveOrderDetail(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(DingDanBuyInfoModel commonRes) {
+
+                        if (commonRes != null) {
+                            mView.setDingDa(commonRes);
+                        } else {
+                            mView.showError(1, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void order_info_detail(String code) {
+        addSubscribe(Api.createTBService().order_info_detail(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<DingDanBuyInfoModel>>rxSchedulerHelper())
+                .compose(RxUtil.<DingDanBuyInfoModel>handleResult())
+                .subscribeWith(new CommonSubscriber<DingDanBuyInfoModel>(mContext, true) {
+                    @Override
+                    protected void _onNext(DingDanBuyInfoModel commonRes) {
+
+                        if (commonRes != null) {
+                            mView.setDingDa(commonRes);
+                        } else {
+                            mView.showError(1, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(1, message);
+                    }
+                })
+        );
+    }
 
 
 }

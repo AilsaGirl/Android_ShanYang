@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.circle.common.view.MyToolBar
+        android:id="@+id/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.liaocheng.suteng.myapplication.view.CustomMenuView
+        android:id="@+id/cmvSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hl_white"
+        app:hlMenuLeftText="我的等级"
+        app:hlMenuRightIconVisible="invisible"
+        app:hlMenuRightText="小羊"
+        app:hlMenuRightTextVisible="visible"
+        app:hlMenuUnderLineVisible="visible"
+        app:hlMenuLeftIconVisible="gone"
+        />
+    <com.liaocheng.suteng.myapplication.view.CustomMenuView
+        android:id="@+id/cmvYaoQingMa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hl_white"
+        android:layout_marginTop="1dp"
+        app:hlMenuLeftText="团队人数"
+        app:hlMenuRightText="0人"
+        app:hlMenuRightTextVisible="visible"
+        app:hlMenuUnderLineVisible="visible"
+        app:hlMenuLeftIconVisible="gone"
+        />
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/rvTuanDui"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hl_white"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:layout_marginTop="1dp" />
+    <com.liaocheng.suteng.myapplication.view.CustomMenuView
+        android:id="@+id/cmvDingDan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hl_white"
+        app:hlMenuLeftText="团队收益"
+        app:hlMenuRightText="总计：0.00元"
+        app:hlMenuRightTextVisible="visible"
+        app:hlMenuUnderLineVisible="visible"
+        app:hlMenuLeftIconVisible="gone"
+        />
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/rvShouYi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="1dp" />
+</LinearLayout>

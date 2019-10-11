@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ExtensionDetailQueryBean {
     public List<ExtensionDetailQueryModel> data;
+    public String  sumMoney;//	String	认证状态
     public class ExtensionDetailQueryModel{
 
 //        名称	类型	描述

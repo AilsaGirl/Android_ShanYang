@@ -13,12 +13,16 @@ public interface FaDanDingDanInfoContent {
         void addOrderTip(PayModel model);
         void   user_order_refund();
         void  addBlacklist();
+        void checkSecondPassword();
+        void  order_pay(PayModel model);
     }
     interface Presenter extends BasePresenter<View> {//过程
         void  getDingDa(String code);
         void order_submit(String code);
-        void addOrderTip(String code, String type);
+        void addOrderTip(String code, String type,String num);
         void  user_order_refund(String code);
         void  addBlacklist(String id);
+        void checkSecondPassword(String pass);
+        void  order_pay(String code,String type);
     }
 }

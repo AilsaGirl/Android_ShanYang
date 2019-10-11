@@ -76,6 +76,10 @@ public class DingDanWeiZhiPresenter extends RxPresenter<DingDanWeiZhiContent.Vie
         this.endWeiDu= endWeiDu;
         this.endJingdu= endJingdu;
         this.isThree = isStart;
+        if (aMap!=null){
+            aMap.clear();
+            aMap =null;
+        }
         if (aMap == null) {
             aMap = mapView.getMap();
             //            aMap.setLocationSource(this);// 设置定位监听
@@ -170,6 +174,7 @@ fromResource(R.mipmap.btn_voice_map_navi));// 自定义定位蓝点图标*/
                         public void onArrivedWayPoint(int i) {
 
                         }
+
                     });
                 }
             });

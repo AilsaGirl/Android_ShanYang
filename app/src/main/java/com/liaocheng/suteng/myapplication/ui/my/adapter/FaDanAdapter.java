@@ -15,9 +15,13 @@ import android.widget.TextView;
 
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.MySendOrdersBean;
+import com.liaocheng.suteng.myapplication.model.event.RenWuEvent;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanBuyInfoActivity;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanInfoActivity;
 import com.liaocheng.suteng.myapplication.ui.home.jiedan.FaDanXiangQingActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.WoDeRenWuActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +94,7 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
                 holder.relFa.setVisibility(View.VISIBLE);
             }
             if (ordersModel.orderType.equals("5")) {
-                holder.tvDingDanType.setText("合作商家");
+                holder.tvDingDanType.setText("当日达");
                 holder.linMai.setVisibility(View.GONE);
                 holder.relFa.setVisibility(View.VISIBLE);
             }
@@ -128,6 +132,25 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
             if (ordersModel.status.equals("4")) {
                 holder.tvDingDanStutas.setText("已完成");
                 holder.tvZhiFu.setText("查看详情");
+//                if (type==0){
+//                    if (ordersModel.sendIsComment.equals("0")){
+//                        holder.tvDingDanStutas.setText("待评价");
+//                        holder.tvZhiFu.setText("去评价");
+//                    }else {
+//                        holder.tvDingDanStutas.setText("已评价");
+//                        holder.tvZhiFu.setText("查看详情");
+//                    }
+//                }
+//                if (type==1){
+//                    if (ordersModel.recIsComment.equals("0")){
+//                        holder.tvDingDanStutas.setText("待评价");
+//                        holder.tvZhiFu.setText("去评价");
+//                    }else {
+//                        holder.tvDingDanStutas.setText("已评价");
+//                        holder.tvZhiFu.setText("查看详情");
+//                    }
+//                }
+
             }
             if (ordersModel.status.equals("5")) {
                 holder.tvDingDanStutas.setText("送货中");
@@ -157,6 +180,7 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
                 holder.tvDingDanStutas.setText("转让订单中");
                 holder.tvZhiFu.setText("查看详情");
             }
+
             holder.tvDingDanTime.setText(ordersModel.createTime + "");
             holder.tvFaHuo.setText(ordersModel.sendAddress + "");
             holder.tvFaHUoXQ.setText(ordersModel.sendConcreteAdd + "");
@@ -174,37 +198,87 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     if (ordersModel.status.equals("1")) {
+                        if (ordersModel.orderType.equals("1") || ordersModel.orderType.equals("2")){
+                            Intent intent = new Intent();
+                            intent.putExtra("code", ordersModel.orderCode);
+//                            intent.putExtra("isJieDanYuan", false);
+                            if (type==1){
+                                intent.putExtra("isJieDanYuan", true);
+                            }else {
+                                intent.putExtra("isJieDanYuan", false);
+                            }
+                            intent.putExtra("type",2);
+                            intent.setClass(mContext, DingDanBuyInfoActivity.class);
+                            mContext.startActivity(intent);
+                        }else {
+                            if (type==0){
+                                Intent intent = new Intent();
+                                intent.putExtra("code", ordersModel.orderCode);
+                                intent.setClass(mContext, FaDanXiangQingActivity.class);
+                                mContext.startActivity(intent);
+                            }else {
+                                Intent intent = new Intent();
+                                intent.putExtra("type",1);
+                                intent.putExtra("code", ordersModel.orderCode);
+                                intent.setClass(mContext, DingDanInfoActivity.class);
+                                mContext.startActivity(intent);
+                            }
+                        }
 
                     } else {
 
                         if (ordersModel.orderType.equals("1") || ordersModel.orderType.equals("2")) {
-                            Intent intent = new Intent();
-                            intent.putExtra("code", ordersModel.orderCode);
-                            intent.putExtra("isJieDanYuan", false);
-//                          if (type==1){
-//                              intent.putExtra("isJieDanYuan", true);
-//                          }else {
-//                              intent.putExtra("isJieDanYuan", false);
-//                          }
+                            if (ordersModel.status.equals("5")){
+//                                EventBus.getDefault().postSticky(new RenWuEvent(1));
+                                Intent intent = new Intent();
+                                intent.putExtra("tab", 1);
+                                intent.setClass(mContext, WoDeRenWuActivity.class);
+                                mContext.startActivity(intent);
+                            }else {
+                                Intent intent = new Intent();
+                                intent.putExtra("code", ordersModel.orderCode);
+//                            intent.putExtra("isJieDanYuan", false);
+                                if (type==1){
+                                    intent.putExtra("isJieDanYuan", true);
+                                }else {
+                                    intent.putExtra("isJieDanYuan", false);
+                                }
+                                intent.putExtra("type",2);
+                                intent.setClass(mContext, DingDanBuyInfoActivity.class);
+                                mContext.startActivity(intent);
+                            }
 
-                            intent.setClass(mContext, DingDanBuyInfoActivity.class);
-                            mContext.startActivity(intent);
                         }else {
-                            Intent intent = new Intent();
-                            intent.putExtra("code", ordersModel.orderCode);
-                            intent.setClass(mContext, FaDanXiangQingActivity.class);
-                            mContext.startActivity(intent);
-//                            if (type==0){
-//                                Intent intent = new Intent();
-//                                intent.putExtra("code", ordersModel.orderCode);
-//                                intent.setClass(mContext, FaDanXiangQingActivity.class);
-//                                mContext.startActivity(intent);
-//                            }else {
-//                                Intent intent = new Intent();
-//                                intent.putExtra("code", ordersModel.orderCode);
-//                                intent.setClass(mContext, DingDanInfoActivity.class);
-//                                mContext.startActivity(intent);
-//                            }
+//                            Intent intent = new Intent();
+//                            intent.putExtra("code", ordersModel.orderCode);
+//                            intent.setClass(mContext, FaDanXiangQingActivity.class);
+//                            mContext.startActivity(intent);
+                            if (type==0){
+
+                                    Intent intent = new Intent();
+                                    intent.putExtra("code", ordersModel.orderCode);
+                                    intent.setClass(mContext, FaDanXiangQingActivity.class);
+                                    mContext.startActivity(intent);
+
+
+                            }else {
+                                if (ordersModel.status.equals("3")||ordersModel.status.equals("5")||ordersModel.status.equals("6")) {
+                                    Intent intent = new Intent();
+                                    if (ordersModel.status.equals("3")){
+//                                        EventBus.getDefault().postSticky(new RenWuEvent(0));
+                                        intent.putExtra("tab", 0);
+                                    }else {
+//                                        EventBus.getDefault().postSticky(new RenWuEvent(1));
+                                        intent.putExtra("tab", 1);
+                                    }
+
+//                                    intent.putExtra("code", ordersModel.orderCode);
+                                    intent.setClass(mContext, WoDeRenWuActivity.class);
+                                    mContext.startActivity(intent);
+
+                                }
+
+                            }
                         }
                     }
                 }
@@ -217,30 +291,32 @@ public class FaDanAdapter extends RecyclerView.Adapter<FaDanAdapter.ViewHolder> 
 //                    recyclerView.refresh();
                         Intent intent = new Intent();
                         intent.putExtra("code", ordersModel.orderCode);
-//                        if (type==1){
-//                            intent.putExtra("isJieDanYuan", true);
-//                        }else {
-//                            intent.putExtra("isJieDanYuan", false);
-//                        }
-                        intent.putExtra("isJieDanYuan", false);
+                        if (type==1){
+                            intent.putExtra("isJieDanYuan", true);
+                        }else {
+                            intent.putExtra("isJieDanYuan", false);
+                        }
+                        intent.putExtra("type",2);
+//                        intent.putExtra("isJieDanYuan", false);
                         intent.setClass(mContext, DingDanBuyInfoActivity.class);
                         mContext.startActivity(intent);
                     }else {
-                        Intent intent = new Intent();
-                        intent.putExtra("code", ordersModel.orderCode);
-                        intent.setClass(mContext, FaDanXiangQingActivity.class);
-                        mContext.startActivity(intent);
-//                        if (type==0){
-//                            Intent intent = new Intent();
-//                            intent.putExtra("code", ordersModel.orderCode);
-//                            intent.setClass(mContext, FaDanXiangQingActivity.class);
-//                            mContext.startActivity(intent);
-//                        }else {
-//                            Intent intent = new Intent();
-//                            intent.putExtra("code", ordersModel.orderCode);
-//                            intent.setClass(mContext, DingDanInfoActivity.class);
-//                            mContext.startActivity(intent);
-//                        }
+//                        Intent intent = new Intent();
+//                        intent.putExtra("code", ordersModel.orderCode);
+//                        intent.setClass(mContext, FaDanXiangQingActivity.class);
+//                        mContext.startActivity(intent);
+                        if (type==0){
+                            Intent intent = new Intent();
+                            intent.putExtra("code", ordersModel.orderCode);
+                            intent.setClass(mContext, FaDanXiangQingActivity.class);
+                            mContext.startActivity(intent);
+                        }else {
+                            Intent intent = new Intent();
+                            intent.putExtra("type",1);
+                            intent.putExtra("code", ordersModel.orderCode);
+                            intent.setClass(mContext, DingDanInfoActivity.class);
+                            mContext.startActivity(intent);
+                        }
                     }
                 }
             });

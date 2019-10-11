@@ -87,4 +87,27 @@ public class SongHuoPresenter extends RxPresenter<SongHuoContent.View> implement
                 })
         );
     }
+
+    @Override
+    public void queryOrder(String code) {
+        addSubscribe(Api.createTBService().courier_order_submit(SPCommon.getString("token",""),code)
+                .compose(RxUtil.<BaseResponse<NullBean>>rxSchedulerHelper())
+                .compose(RxUtil.<NullBean>handleResult())
+                .subscribeWith(new CommonSubscriber<NullBean>(mContext, true) {
+                    @Override
+                    protected void _onNext(NullBean commonRes) {
+
+                        if (commonRes != null) {
+                            mView.queryOrder();
+                        } else {
+                            mView.showError(0, "");
+                        }
+                    }
+                    @Override
+                    protected void _onError(String message) {
+                        mView.showError(0, message);
+                    }
+                })
+        );
+    }
 }

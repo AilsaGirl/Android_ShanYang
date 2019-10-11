@@ -75,7 +75,7 @@ public class WanChengAdapter extends RecyclerView.Adapter<WanChengAdapter.ViewHo
             }else  if (model.orderType.equals("4")){
                 holder.tvType.setText("同校快送");
             }else  if (model.orderType.equals("5")){
-                holder.tvType.setText("合作商家");
+                holder.tvType.setText("当日达");
             }else  if (model.orderType.equals("6")){
                 holder.tvType.setText("县域快送");
             }
@@ -83,13 +83,23 @@ public class WanChengAdapter extends RecyclerView.Adapter<WanChengAdapter.ViewHo
             holder.tvNum.setText("￥"+model.remuneration+"");
             holder.tvFaJL.setText(model.distance+"");
 //            holder.tvFa.setText("");
-            holder.tvFaHuo.setText("******************");
-            holder.tvFaHUoXQ.setText("******************");
+            holder.tvFaHuo.setText(model.sendAddress + "");
+            holder.tvFaHUoXQ.setText(model.sendConcreteAdd + "");
+            holder.tvShouHuo.setText(model.receiveAddress + "");
+            holder.tvShouHUoXQ.setText(model.receiveConcreteAdd + "");
+//            holder.tvFaHuo.setText("******************");
+//            holder.tvFaHUoXQ.setText("******************");
             holder.tvShouJL.setText(model.distance+"");
 //            holder.tvShou.setText("");
-            holder.tvShouHuo.setText("******************");
-            holder.tvShouHUoXQ.setText("******************");
+//            holder.tvShouHuo.setText("******************");
+//            holder.tvShouHUoXQ.setText("******************");
             holder.tvJuLi.setText("全程："+model.distance);
+//            if (model.recIsComment.equals("0")){
+//                holder.tvZhiFu.setText("去评价");
+//            }else {
+//                holder.tvZhiFu.setText("查看详情");
+//            }
+            holder.tvZhiFu.setText("查看详情");
             holder.tvZhiFu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -119,6 +129,7 @@ public class WanChengAdapter extends RecyclerView.Adapter<WanChengAdapter.ViewHo
                         Intent intent = new Intent();
                         intent.putExtra("code", model.orderCode);
                         intent.putExtra("isJieDanYuan", true);
+                        intent.putExtra("type",1);
                         intent.setClass(mContext, DingDanBuyInfoActivity.class);
                         mContext.startActivity(intent);
                     } else {

@@ -24,7 +24,13 @@ import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.LocationBean;
+import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoActivity;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +65,8 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
     String mCity;
     int isnew = 0;
     String id = "";
+    int tip = 0;
+    int odertype ;
     FaHuoAddressModel addressModel = new FaHuoAddressModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +74,13 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_new_location_seek);
         Intent intent = getIntent();
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
+        tip = getIntent().getIntExtra("tip",0);
         latf = Double.valueOf(addressModel.lat);
         lonf = Double.valueOf(addressModel.lon);
         mType = addressModel.tag;
         isnew = addressModel.is_new;
         mCity = addressModel.city;
+        odertype = addressModel.type;
         if (isnew==0){
             id = addressModel.id;
         }
@@ -88,6 +98,7 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
             AutoCompleteTextView.setHint("请输入家庭地址");
         }
         tvCity.setText(mCity+"");
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -100,6 +111,30 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
+    }
+
+    FaHuoAddressModel addressModelFa = new FaHuoAddressModel();
+    FaHuoAddressModel addressModelShou = new FaHuoAddressModel();
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void onMessageEvent(RecruitEvent event) {
+        if (event == null)
+            return;
+        if (event.getAddressModel() != null&&event.getAddressModelShou() != null){
+            if (event.getAddressModel() != null) {
+                addressModelFa = event.getAddressModel();
+//            mPresenter.orderNum("","3",lat+"",lon+"","","","","","","","");
+            }
+            if (event.getAddressModelShou() != null) {
+                addressModelShou = event.getAddressModelShou();
+            }
+        }
+    }
     /**
      * 绑定ID
      */
@@ -151,14 +186,14 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
         //金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
         // S3：城市，可以空字符串，空字符串代表全国
         // 三个个都可以为空）
-        query = new PoiSearch.Query(keyWord, "", "");
-        query.setPageSize(20);// 设置每页最多返回多少条poiitem
+        query = new PoiSearch.Query(keyWord, "", mCity);
+        query.setPageSize(50);// 设置每页最多返回多少条poiitem
         query.setPageNum(currentPage);// 设置查第一页
         poiSearch = new PoiSearch(this, query);
         poiSearch.setOnPoiSearchListener(this);
         poiSearch.searchPOIAsyn();// 异步搜索
         lp = new LatLonPoint(latf, lonf);//检索的经纬度
-        poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
+//        poiSearch.setBound(new PoiSearch.SearchBound(lp, 50000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
         poiSearch.searchPOIAsyn();// 异步搜索
 
     }
@@ -243,7 +278,7 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
                     poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
                     //清空数据
                     data.clear();
-                    for (com.amap.api.services.core.PoiItem item : poiItems) {
+                    for (PoiItem item : poiItems) {
                         //获取经纬度对象
                         LatLonPoint llp = item.getLatLonPoint();
                         double lon = llp.getLongitude();//经度
@@ -279,8 +314,8 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
                                 }
                                 addressModel.address = String.valueOf(data.get(i).getTitle());
                                 addressModel.ConcreteAdd =  data.get(i).getTexta();
-                                addressModel.lat =String.valueOf(data.get(i).getLon());
-                                addressModel.lon = String.valueOf(data.get(i).getLat());
+                                addressModel.lon =String.valueOf(data.get(i).getLon());
+                                addressModel.lat = String.valueOf(data.get(i).getLat());
                                 addressModel.city = mCity;
                                 addressModel.is_new = isnew;
                                 addressModel.is_result =0;
@@ -306,10 +341,97 @@ public class NewLocationSeekActivity extends BaseActivity implements View.OnClic
                                     addressModel.tag = 3;
 
                                 }
-                                intent.putExtra("address_data", addressModel);
                                 intent.setClass(NewLocationSeekActivity.this,AddAddress.class);
-                                startActivity(intent);
-                                NewLocationSeekActivity.this.finish();
+                                if (tip==0){
+                                    intent.putExtra("address_data", addressModel);
+                                    startActivity(intent);
+//                                    NewLocationSeekActivity.this.finish();
+                                }else {
+                                    if (tip == 31) {
+                                        addressModel.type = 3;
+                                        intent.putExtra("address_data", addressModel);
+                                        intent.putExtra("tip",tip);
+//                                         EventBus.getDefault().post(new RecruitEvent(addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 32) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                        addressModel.type = 3;
+                                        intent.putExtra("address_data", addressModel);
+                                        intent.putExtra("tip",tip);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 41) {
+                                        addressModel.type = 4;
+                                        intent.putExtra("address_data", addressModel);
+                                        intent.putExtra("tip",tip);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 42) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                                        addressModel.type = 4;
+                                        intent.putExtra("address_data", addressModel);
+                                        intent.putExtra("tip",tip);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 51) {
+
+                                        addressModel.type = 5;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 52) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                                        addressModel.type = 5;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 61) {
+
+                                        addressModel.type = 6;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 62) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                                        addressModel.type = 6;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 311) {
+
+                                        addressModel.type = odertype;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModel, addressModelShou));
+//                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                                        startActivity(intent);
+                                    }
+                                    if (tip == 321) {
+//                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                                        addressModel.type = odertype;
+                                        intent.putExtra("tip",tip);
+                                        intent.putExtra("address_data", addressModel);
+                                        EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                                        startActivity(intent);
+                                    }
+                                }
+                                finish();
+
                             }
                         });
                     }

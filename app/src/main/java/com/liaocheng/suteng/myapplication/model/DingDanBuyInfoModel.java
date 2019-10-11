@@ -41,4 +41,9 @@ public class DingDanBuyInfoModel {
     public String   total;//	String	订单付款总金额
     public String   status;//	String	订单状态
     public String   distance;//	String	配送距离
+  public String   sendDistance;//	String	接单员距离发货地距离
+  public String   receiveDistance;//	String	接单员距离收货地距离
+  public String recIsComment;//	String	接单员是否评价0-未评价1-已评价
+  public String sendIsComment;//	String	发单员是否评价0-未评价1-已评价
+
 }

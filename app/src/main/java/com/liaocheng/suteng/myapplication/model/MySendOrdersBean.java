@@ -20,6 +20,9 @@ public class MySendOrdersBean {
         public String  status;//	String	订单状态
 
         public String remuneration;
+
+        public String recIsComment;//	String	接单员是否评价0-未评价1-已评价
+        public String sendIsComment;//	String	发单员是否评价0-未评价1-已评价
     }
 
 }

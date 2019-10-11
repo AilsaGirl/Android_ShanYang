@@ -1,6 +1,7 @@
 package com.liaocheng.suteng.myapplication.ui.home.jiedan.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -16,12 +17,18 @@ import android.widget.TextView;
 import com.circle.common.base.BaseFragment;
 import com.circle.common.util.CommonUtil;
 import com.circle.common.util.ToastUtil;
-import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.DingDanBuyInfoModel;
 import com.liaocheng.suteng.myapplication.model.PayModel;
 import com.liaocheng.suteng.myapplication.presenter.FaDanDingDanInfoPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.FaDanDingDanInfoContent;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.PingJiaActivity;
+import com.liaocheng.suteng.myapplication.ui.home.jiedan.DingDanBuyInfoActivity;
+import com.liaocheng.suteng.myapplication.ui.my.UpdatePhoneZhiFuMiMaActivity;
+import com.liaocheng.suteng.myapplication.util.Util;
+import com.liaocheng.suteng.myapplication.view.ApliyDialog;
+import com.liaocheng.suteng.myapplication.view.JiaJiaDialog;
+import com.liaocheng.suteng.myapplication.view.PassWordDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,6 +125,11 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
     TextView tvTel;
     @BindView(R.id.linJieDan)
     LinearLayout linJieDan;
+    @BindView(R.id.linQiang)
+    LinearLayout linQiang;
+    @BindView(R.id.tvZhiFu)
+    TextView tvZhiFu;
+
 
     @Override
     public int getLayoutId() {
@@ -163,11 +175,11 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
     String starJingdu;
     String endWeiDu;
     String endJingdu;
-
+    String receiveUserId = "";
     @Override
     public void setDingDa(DingDanBuyInfoModel DingDanBean) {
         status = DingDanBean.status;
-
+        receiveUserId = DingDanBean.receiveUserId;
         starWeiDu = DingDanBean.sendLat;
         starJingdu = DingDanBean.sendLong;
         endWeiDu = DingDanBean.latitude;
@@ -177,12 +189,12 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
         tvFaJL.setText(DingDanBean.distance + "");
         tvShouJL.setText(DingDanBean.distance + "");
         tvFaHuo.setText(DingDanBean.sendAddress + "");
-        tvFaHUoXQ.setText(DingDanBean.sendConcreteAdd + "");
+        tvFaHUoXQ.setText(DingDanBean.sendConcreteAdd + ""+DingDanBean.sendDetailAdd);
         tvShouHuo.setText(DingDanBean.receiveAddress + "");
-        tvShouHUoXQ.setText(DingDanBean.receiveConcreteAdd + "");
+        tvShouHUoXQ.setText(DingDanBean.receiveConcreteAdd + ""+DingDanBean.receiveDetailAdd);
         tvTime.setText("约定时间：" + DingDanBean.appointTime);
-        mShouHuoTel = DingDanBean.sendPhone;
-        mFaHUoTel = DingDanBean.contactPhone;
+        mShouHuoTel = DingDanBean.contactPhone;
+        mFaHUoTel = DingDanBean.sendPhone;
 //        货品类型:1-鲜花2-食品3-文体4-蛋糕5-电子产品6-生活用品
         switch (DingDanBean.goods) {
             case "1":
@@ -233,10 +245,10 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
         tvDingDanJiaJia.setText("￥" + DingDanBean.addTips);
         tvXiaoFei.setText("￥" + DingDanBean.tip);
         tvBaoJia.setText("￥" + DingDanBean.parcel_insurance_fee);
-        tvYouHuiQuan.setText("￥" + DingDanBean.coupon);
+        tvYouHuiQuan.setText("￥ - " + DingDanBean.coupon);
         tvZhongliang.setText("￥" + DingDanBean.weightPrice);
         tvQuanCheng.setText("全程约：" + DingDanBean.distance);
-        tvNum.setText("接单总计：￥" + DingDanBean.total);
+        tvNum.setText("发单总计：￥" + DingDanBean.total);
         tvBianHao.setText("订单编号：" + DingDanBean.orderCode);
         tvShiJian.setText("创建时间：" + DingDanBean.payTime);
         tvFaName.setText("发货人：" + DingDanBean.sendName);
@@ -246,35 +258,65 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
         tvName.setText("接单人：" + DingDanBean.transporterName);
         tvTel.setText("" + DingDanBean.transporterPhone);
         tvCode.setText("订单编号：" + DingDanBean.orderCode);
-
+        tvBianHao.setText("订单编号：" + DingDanBean.orderCode + "");
+        if (DingDanBean.status.equals("1")){
+            tvShiJian.setText("创建时间：" + DingDanBean.createTime + "");
+        }else{
+            tvShiJian.setText("下单时间：" + DingDanBean.payTime + "");
+        }
+        mNum = DingDanBean.total+"";
         switch (DingDanBean.status) {
             case "1"://未付款
+                tvZhiFu.setVisibility(View.VISIBLE);
+                linQiang.setVisibility(View.GONE);
                 linJieDan.setVisibility(View.GONE);
+
                 break;
             case "2"://未被抢
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.VISIBLE);
                 linJieDan.setVisibility(View.GONE);
+                tvQueRen.setVisibility(View.GONE);
                 break;
             case "3"://取货中
 
                 break;
             case "4"://已完成
+//                if (DingDanBean.sendIsComment.equals("0")){
+//                    tvZhiFu.setVisibility(View.VISIBLE);
+//                    tvZhiFu.setText("去评价");
+//                }else {
+//                    tvZhiFu.setVisibility(View.GONE);
+//                }
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.GONE);
 
                 break;
             case "5"://送货中
 
                 break;
             case "6"://待提交
-
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.GONE);
                 break;
             case "7"://已退款
-
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.GONE);
+                linJieDan.setVisibility(View.GONE);
                 break;
             case "8"://指定接单中
-
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.VISIBLE);
+                linJieDan.setVisibility(View.GONE);
+                tvQueRen.setVisibility(View.GONE);
                 break;
             case "9"://转让订单中
-
+                tvZhiFu.setVisibility(View.GONE);
+                linQiang.setVisibility(View.VISIBLE);
+                linJieDan.setVisibility(View.GONE);
+                tvQueRen.setVisibility(View.GONE);
                 break;
+
         }
 
     }
@@ -287,14 +329,30 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
 
     @Override
     public void addOrderTip(PayModel model) {
-        ToastUtil.show("支付成功");
+        if (mPayType.equals("1")||mPayType.equals("2")){
+            Util.Pay(mPayType,model,mContext);
+        }else {
+            ToastUtil.show("支付成功");
+
+        }
         mPresenter.getDingDa(mCode);
     }
+    //支付成功
+    @Override
+    public void order_pay(PayModel model) {
+        if (mPayType.equals("1")||mPayType.equals("2")){
+            Util.Pay(mPayType,model,mContext);
+        }else {
+            ToastUtil.show("支付成功");
 
+        }
+
+        mPresenter.getDingDa(mCode);
+    }
     @Override
     public void user_order_refund() {
         ToastUtil.show("撤销成功");
-      getActivity().finish();
+        getActivity().finish();
     }
 
     @Override
@@ -303,16 +361,77 @@ public class FaDanDingDanInfoFragment extends BaseFragment<FaDanDingDanInfoPrese
         mPresenter.getDingDa(mCode);
     }
 
+    @Override
+    public void checkSecondPassword() {
+        if (isFuKuan){
+            mPresenter.order_pay(mCode, mPayType);//付款
+        }else {
+            mPresenter.addOrderTip(mCode, mPayType,mTip);//加价
+        }
+    }
+
     String mShouHuoTel;
     String mFaHUoTel;
 
-String receiveUserId;
+    String mPayType;
+    String mTip;
     boolean isJieDan = true;
     boolean isZhuanDan = true;
-
-    @OnClick({R.id.tvQueRen, R.id.tvMore, R.id.tvJiaJia, R.id.ivShouTel, R.id.tvLaHei})
+    boolean isFuKuan = true;
+    PassWordDialog passWordDialog;
+    String mNum = "";
+    @OnClick({R.id.tvQueRen, R.id.tvMore, R.id.tvJiaJia, R.id.tvCheXiao, R.id.tvLaHei,R.id.tvZhiFu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tvZhiFu:
+                if (status.equals("4")){
+
+//                    Intent   intent = new Intent(mContext, PingJiaActivity.class);
+//                    intent.putExtra("orderCode",mCode+"");
+//                    intent.putExtra("eva_userId",receiveUserId+"");
+//                    mContext.startActivity(intent);
+                }else {
+                    ApliyDialog dialog = new ApliyDialog(getActivity(), R.style
+                            .transparentFrameWindowStyle,mNum+"",
+                            new ApliyDialog.SelectDialogCancelListener() {
+                                @Override
+                                public void onCancelClick(String id) {
+
+                                    mPayType = id;
+                                    if (mPayType .equals("1")||mPayType .equals("2")){
+                                        mPresenter.order_pay(mCode, mPayType);//付款
+                                    }else {
+
+                                        passWordDialog = new PassWordDialog(getContext());
+                                        passWordDialog.show();
+                                        passWordDialog.setHintText(mNum + "");
+                                        passWordDialog.setMoneyNum(mNum+"");
+                                        passWordDialog.setError_tishi("请输入支付密码");
+                                        passWordDialog.setClick(new PassWordDialog.OnPayClickListener() {
+                                            @Override
+                                            public void onSetPass(String text) {
+                                                isFuKuan = true;
+                                                mPresenter.checkSecondPassword(text+"");
+                                                passWordDialog.dismiss();
+                                            }
+
+                                            @Override
+                                            public void onSetPwd() {
+                                                passWordDialog.cancel();
+                                                Intent intent = new Intent(mContext, UpdatePhoneZhiFuMiMaActivity.class);
+                                                startActivity(intent);
+                                                passWordDialog.dismiss();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                    if (!getActivity().isFinishing()) {
+                        dialog.show();
+                    }
+                }
+
+                break;
             case R.id.tvQueRen:
                 mPresenter.order_submit(mCode);
                 break;
@@ -329,7 +448,63 @@ String receiveUserId;
 
                 break;
             case R.id.tvJiaJia:
-                mPresenter.addOrderTip(mCode,"");
+                final JiaJiaDialog dialogs = new JiaJiaDialog(mContext);
+                dialogs.setCanceledOnTouchOutside(true);
+                dialogs.setVisibilityBtn(true);
+                dialogs.setText("加价金额：");
+                dialogs.setYesOnclickListener("确定", new JiaJiaDialog.onYesOnclickListener() {
+                    @Override
+                    public void onYesClick(final String tel) {
+                        mTip = tel;
+                        ApliyDialog dialog = new ApliyDialog(getActivity(), R.style
+                                .transparentFrameWindowStyle, tel + "",
+                                new ApliyDialog.SelectDialogCancelListener() {
+                                    @Override
+                                    public void onCancelClick(String id) {
+
+                                        mPayType = id;
+                                        if (mPayType.equals("1") || mPayType.equals("2")) {
+                                            mPresenter.addOrderTip(mCode, mPayType, tel + "");//加价
+                                        } else {
+                                            isFuKuan = false;
+                                            final PassWordDialog passWordDialog = new PassWordDialog(mContext);
+                                            passWordDialog.show();
+                                            passWordDialog.setHintText(tel + "");
+                                            passWordDialog.setMoneyNum(tel + "");
+                                            passWordDialog.setError_tishi("请输入支付密码");
+                                            passWordDialog.setClick(new PassWordDialog.OnPayClickListener() {
+                                                @Override
+                                                public void onSetPass(String text) {
+                                                    mPresenter.checkSecondPassword(text + "");
+                                                    passWordDialog.dismiss();
+                                                }
+
+                                                @Override
+                                                public void onSetPwd() {
+                                                    passWordDialog.cancel();
+                                                    Intent intent = new Intent(mContext, UpdatePhoneZhiFuMiMaActivity.class);
+                                                    startActivity(intent);
+                                                    passWordDialog.dismiss();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                        if (!getActivity().isFinishing()) {
+                            dialog.show();
+                        }
+                        dialogs.dismiss();
+
+                    }
+                });
+                dialogs.setOnOnclickListener("取消", new JiaJiaDialog.onOnOnclickListener() {
+                    @Override
+                    public void onOnClick() {
+                        dialogs.dismiss();
+                    }
+                });
+                dialogs.show();
+//                mPresenter.addOrderTip(mCode,"");
                 break;
             case R.id.tvCheXiao:
                 mPresenter.user_order_refund(mCode);
@@ -361,4 +536,17 @@ String receiveUserId;
         });
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+    }
 }

@@ -4,6 +4,7 @@ import com.circle.common.base.BasePresenter;
 import com.circle.common.base.BaseView;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
+import com.liaocheng.suteng.myapplication.model.PayModel;
 
 /**
  * Created by LHB on 2018/7/23 0023.
@@ -14,6 +15,8 @@ public interface FaHuoContact {
 //        void loginSuccess(LoginBean loginBean);
         void setData(FaDanXiaDanModel xiaDanModel);
         void setNum(OrderCalculateBean orderCalculateBean);
+        void order_pay(PayModel payModel);
+        void checkSecondPassword();
 
     }
 //    orderType	String	是	订单类型: 1-帮我买 2-帮我办 3-帮我送 4-校园快送 5-合作商家 6-县域快送
@@ -67,5 +70,7 @@ public interface FaHuoContact {
         void orderNum(String token, String orderType, String sendLat,
                       String sendLong, String longitude, String latitude, String tip, String coupon,
                       String weight, String trafficTool, String parcel_insurance_id);
-    }
+     void order_pay(String code, String type);
+    void checkSecondPassword(String secondPwd);
+}
 }

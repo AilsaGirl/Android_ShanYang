@@ -21,10 +21,16 @@ import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.ModificationPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.ModificationContact;
+
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoBanActivity;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoXiaDanSongActivity;
 import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,12 +125,13 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
     int is_result = 0;
     int tag = 0;
     FaHuoAddressModel addressModel = new FaHuoAddressModel();
+    int tip = 0;
     @Override
     public void initEventAndData() {
         Intent intent = getIntent();
         addressModel = (FaHuoAddressModel) getIntent().getSerializableExtra("address_data");
-        lon = addressModel.lat;
-        lat = addressModel.lon;
+        lon = addressModel.lon;
+        lat = addressModel.lat;
         mType = addressModel.type;
         isnew = addressModel.is_new;
         mCity = addressModel.city;
@@ -132,9 +139,11 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         mAddress = addressModel.ConcreteAdd;
         is_result = addressModel.is_result;
         tag = addressModel.tag;
+        tip = getIntent().getIntExtra("tip",0);
         if (isnew==0){
             id = addressModel.id;
         }
+
         toolBar.setTitleText("补充地址").setLeftClick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,6 +170,7 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         });
         tvDiZhi.setText(mTitle + "");
         tvDiZhiXiangQing.setText(mAddress + "");
+        EventBus.getDefault().register(this);
 //        tvBuChong.setText("");
 
     }
@@ -171,8 +181,8 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         if (resultCode == 100) {
             if (requestCode == 100) {
                 addressModel = (FaHuoAddressModel) data.getSerializableExtra("address_data");
-                lon = addressModel.lat;
-                lat = addressModel.lon;
+                lon = addressModel.lon;
+                lat = addressModel.lat;
                 mType = addressModel.type;
                 tag = addressModel.tag;
                 isnew = addressModel.is_new;
@@ -194,7 +204,7 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
             dialog.setBackgroundResource(true);
             dialog.setVisibilityBtn(true);
             dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
@@ -214,6 +224,30 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
         }
         return false;
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().removeAllStickyEvents();
+        EventBus.getDefault().unregister(this);
+    }
+
+    FaHuoAddressModel addressModelFa = new FaHuoAddressModel();
+    FaHuoAddressModel addressModelShou = new FaHuoAddressModel();
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void onMessageEvent(RecruitEvent event) {
+        if (event == null)
+            return;
+        if (event.getAddressModel() != null&&event.getAddressModelShou() != null){
+            if (event.getAddressModel() != null) {
+                addressModelFa = event.getAddressModel();
+//            mPresenter.orderNum("","3",lat+"",lon+"","","","","","","","");
+            }
+            if (event.getAddressModelShou() != null) {
+                addressModelShou = event.getAddressModelShou();
+            }
+        }
+    }
     Intent intent;
 
     @OnClick({R.id.relDiZhi, R.id.btnOk})
@@ -227,8 +261,8 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                 if (addressModel==null){
                     addressModel = new FaHuoAddressModel();
                 }
-                addressModel.lat = lon+"";
-                addressModel.lon = lat+"";
+                addressModel.lat = lat+"";
+                addressModel.lon = lon+"";
                 addressModel.type = mType;
                 addressModel.is_new = isnew;
                 addressModel.tag = tag;
@@ -243,9 +277,6 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                 break;
             case R.id.btnOk:
                 if (tag == 0) {
-                    if (mType==1){
-                        intent = new Intent(this, BangWoMaiActivity.class);
-                    }
                     String address = tvDiZhi.getText().toString();
                     String city = tvDiZhiXiangQing.getText().toString();
                     String xiangqing = etXiangQing.getText().toString();
@@ -267,16 +298,114 @@ public class AddAddress extends BaseActivity<ModificationPresenter> implements M
                     addressModel.contactName = name;
                     addressModel.contactPhone = tel;
                     addressModel.ConcreteAdd = city;
+                    addressModel.city = mCity;
                     addressModel.lat = lat;
                     addressModel.lon =lon;
                     addressModel.is_result = 0;
-                    intent.putExtra("address_data", addressModel);
-                    if (is_result==1){
-                        EventBus.getDefault().post(new RecruitEvent(addressModel));
-                        finish();
-                    }else {
-                        startActivity(intent);
+
+                    if (mType==1||mType==2){
+                        if (mType==1){
+                            intent = new Intent(this, BangWoMaiActivity.class);
+                        }
+                        if (mType==2){
+                            intent = new Intent(this, BangWoBanActivity.class);
+                        }
+                        intent.putExtra("address_data", addressModel);
+                        if (is_result==1){
+                            EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            finish();
+                        }else {
+                            startActivity(intent);
+                        }
                     }
+
+                    if (mType==3||mType==4||mType==5||mType==6){
+                        if (tip == 31) {
+                            intent = new Intent(this, FaHuoActivity.class);
+                            addressModel.type = 3;
+//                            intent.putExtra("address_data", addressModel);
+//                            intent.putExtra("tip",tip);
+                              EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 32) {
+                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                            addressModel.type = 3;
+//                            intent.putExtra("address_data", addressModel);
+//                            intent.putExtra("tip",tip);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 41) {
+                            intent = new Intent(this, FaHuoActivity.class);
+                            addressModel.type = 4;
+//                            intent.putExtra("address_data", addressModel);
+//                            intent.putExtra("tip",tip);
+                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 42) {
+                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+                            addressModel.type = 4;
+//                            intent.putExtra("address_data", addressModel);
+//                            intent.putExtra("tip",tip);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 51) {
+                            intent = new Intent(this, FaHuoActivity.class);
+                            addressModel.type = 5;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                        EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 52) {
+                        intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                            addressModel.type = 5;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 61) {
+                            intent = new Intent(this, FaHuoActivity.class);
+                            addressModel.type = 6;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                            EventBus.getDefault().post(new RecruitEvent(addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 62) {
+                            intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                            addressModel.type = 6;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+                            startActivity(intent);
+                        }
+                        if (tip == 311) {
+//                            intent = new Intent(this, FaHuoActivity.class);
+                            addressModel.type = mType;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModel, addressModelShou));
+//                            startActivity(intent);
+                        }
+                        if (tip == 321) {
+//                            intent = new Intent(this, FaHuoXiaDanSongActivity.class);
+
+                            addressModel.type = mType;
+//                            intent.putExtra("tip",tip);
+//                            intent.putExtra("address_data", addressModel);
+                            EventBus.getDefault().postSticky(new RecruitEvent(addressModelFa, addressModel));
+//                            startActivity(intent);
+                        }
+                    }
+
+
 
                     finish();
                 } else {

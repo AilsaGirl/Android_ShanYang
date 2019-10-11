@@ -3,6 +3,7 @@ package com.liaocheng.suteng.myapplication.ui.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.liaocheng.suteng.myapplication.model.YouHuiQuanListBean;
 import com.liaocheng.suteng.myapplication.presenter.YouHuiQuanPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.YouHuiQuanContent;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.BangWoMaiActivity;
+import com.liaocheng.suteng.myapplication.ui.home.fahuo.FaHuoXiaDanSongActivity;
 import com.liaocheng.suteng.myapplication.ui.my.adapter.YouHuiQuanAdapter;
 import com.liaocheng.suteng.myapplication.view.YouHuiQuanDialog;
 
@@ -50,6 +52,7 @@ public class YouHuiQuanActivity extends BaseActivity<YouHuiQuanPresenter> implem
 
     int page = 1;
     YouHuiQuanAdapter adapter;
+    int mType = 0;
 
     @Override
     public void initEventAndData() {
@@ -63,6 +66,7 @@ public class YouHuiQuanActivity extends BaseActivity<YouHuiQuanPresenter> implem
                 startActivity(intent);
             }
         });
+        mType = getIntent().getIntExtra("type",0) ;
         mPresenter.getYouHuiQuanNum();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -89,6 +93,10 @@ public class YouHuiQuanActivity extends BaseActivity<YouHuiQuanPresenter> implem
         tvZhuanChu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (tvTotal.getText().toString().equals("0")){
+                    ToastUtil.show("优惠券数量为0");
+                    return;
+                }
 
                 final YouHuiQuanDialog dialog = new YouHuiQuanDialog(YouHuiQuanActivity.this);
                 dialog.setCanceledOnTouchOutside(true);
@@ -148,6 +156,7 @@ public class YouHuiQuanActivity extends BaseActivity<YouHuiQuanPresenter> implem
 
     @Override
     public void setYouHuiQuanNum(YouHuiQuanBean quanBean) {
+        if (!TextUtils.isEmpty(quanBean.denomination))
         tvNum.setText(quanBean.denomination + "");
         tvTotal.setText(quanBean.count + "");
     }
@@ -171,20 +180,36 @@ public class YouHuiQuanActivity extends BaseActivity<YouHuiQuanPresenter> implem
         if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
             return;
         mLasttime = System.currentTimeMillis();
+        if (tvTotal.getText().toString().equals("0")){
+            ToastUtil.show("优惠券数量为0");
+            return;
+        }
+        if (mType==0){
+            ToastUtil.show("只有发货才能使用优惠券");
+            return;
+        }else {
+            if (mType==3){
+                intent = new Intent(mContext, FaHuoXiaDanSongActivity.class);
+                intent.putExtra("num","2.00");
+                setResult(120, intent);
+                finish();
+            }
 
-        intent = new Intent(mContext, BangWoMaiActivity.class);
-        addressModel = new FaHuoAddressModel();
-        addressModel.address = "";
-        addressModel.ConcreteAdd = "";
-        addressModel.contactName = "";
-        addressModel.contactPhone = "";
-        addressModel.lon ="";
-        addressModel.lat = "";
-        addressModel.type = 1;
-        addressModel.is_result = 0;
-        addressModel.is_new_address =0;
-        intent.putExtra("address_data", addressModel);
-        mContext.startActivity(intent);
+
+        }
+//        intent = new Intent(mContext, BangWoMaiActivity.class);
+//        addressModel = new FaHuoAddressModel();
+//        addressModel.address = "";
+//        addressModel.ConcreteAdd = "";
+//        addressModel.contactName = "";
+//        addressModel.contactPhone = "";
+//        addressModel.lon ="";
+//        addressModel.lat = "";
+//        addressModel.type = 1;
+//        addressModel.is_result = 0;
+//        addressModel.is_new_address =0;
+//        intent.putExtra("address_data", addressModel);
+//        mContext.startActivity(intent);
 
 
     }

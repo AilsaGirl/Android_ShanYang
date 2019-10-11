@@ -74,7 +74,7 @@ public class SongHuoZhongFragment extends BaseFragment<SongHuoPresenter> impleme
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_daiquhuo;
+        return R.layout.fragment_songhuozhong;
     }
 
     @Override
@@ -90,8 +90,15 @@ public class SongHuoZhongFragment extends BaseFragment<SongHuoPresenter> impleme
         initRecyclerView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.refresh();
+    }
+
     int page = 1;
     String duration = "7";
+
     private void initRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -102,12 +109,15 @@ public class SongHuoZhongFragment extends BaseFragment<SongHuoPresenter> impleme
             public void onRefresh() {
                 page = 1;
                 mPresenter.queryOnTheWayOrder(page+"");
+                recyclerView.refreshComplete();
             }
 
             @Override
             public void onLoadMore() {
                 page++;
                 mPresenter.queryOnTheWayOrder(page+"");
+
+                recyclerView.loadMoreComplete();
             }
         });
 
@@ -118,6 +128,7 @@ public class SongHuoZhongFragment extends BaseFragment<SongHuoPresenter> impleme
                 public void onBtnClick(String type, String id) {
                     //type = 0  取货  1  返回大厅   2返回发货人
                     mPresenter.checkReceiveCode(id,type);
+                    mCode = id;
                 }
 
                 @Override
@@ -316,16 +327,13 @@ public class SongHuoZhongFragment extends BaseFragment<SongHuoPresenter> impleme
 List<ReceiveOrderModel.ReceiveOrderBean> mList = new ArrayList<>();
     @Override
     public void queryOnTheWayOrder(ReceiveOrderModel ReceiveOrderBean) {
-        recyclerView.refreshComplete();
-        recyclerView.loadMoreComplete();
+
+        ivNull.setVisibility(View.GONE);
         if (ReceiveOrderBean.data != null&&ReceiveOrderBean.data.size()>0) {
             if (page==1){
                 mList.clear();
             }
             mList.addAll(ReceiveOrderBean.data);
-
-            recyclerView.setVisibility(View.VISIBLE);
-            ivNull.setVisibility(View.GONE);
             mAdapter.setData(mList);
         } else {
             if (page != 1) {
@@ -335,19 +343,27 @@ List<ReceiveOrderModel.ReceiveOrderBean> mList = new ArrayList<>();
                 if (page==1){
                     mList.clear();
                 }
-                mList.addAll(ReceiveOrderBean.data);
+//                mList.addAll(ReceiveOrderBean.data);
+                mAdapter.setData(mList);
             }
         }
     }
     @Override
     public void checkReceiveCode() {
-        ToastUtil.show("确认成功");
-        recyclerView.refresh();
+        ToastUtil.show("验证码正确");
+        mPresenter.queryOrder(mCode);
+
     }
 
     @Override
     public void order_upPhotoByIndex() {
         ToastUtil.show("图片提交成功");
+        recyclerView.refresh();
+    }
+
+    @Override
+    public void queryOrder() {
+        ToastUtil.show("确认成功");
         recyclerView.refresh();
     }
 

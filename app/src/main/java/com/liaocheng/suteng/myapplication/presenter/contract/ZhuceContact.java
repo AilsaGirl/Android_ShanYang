@@ -10,6 +10,6 @@ public interface ZhuceContact {
 
     }
     interface Presenter extends BasePresenter<View> {//过程
-        void  getzhucexy(String code, String type);
+        void  getzhucexy(String code);
     }
 }

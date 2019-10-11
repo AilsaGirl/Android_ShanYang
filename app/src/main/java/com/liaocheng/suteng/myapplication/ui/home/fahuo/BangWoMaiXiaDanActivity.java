@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -21,18 +23,27 @@ import android.widget.Toast;
 
 import com.circle.common.base.BaseActivity;
 import com.circle.common.util.CommonUtil;
+import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.FaDanXiaDanModel;
 import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
 import com.liaocheng.suteng.myapplication.model.OrderCalculateBean;
+import com.liaocheng.suteng.myapplication.model.PayModel;
 import com.liaocheng.suteng.myapplication.model.event.RecruitEvent;
 import com.liaocheng.suteng.myapplication.presenter.FaHuoXiaDanPersenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.FaHuoContact;
 import com.liaocheng.suteng.myapplication.ui.home.address.AddressList;
 import com.liaocheng.suteng.myapplication.ui.home.fahuo.adapter.MyTimeAdapter;
+import com.liaocheng.suteng.myapplication.ui.my.JiJiaBiaoZhun;
+import com.liaocheng.suteng.myapplication.ui.my.UpDataMyInFoActivity;
+import com.liaocheng.suteng.myapplication.ui.my.UpdatePhoneZhiFuMiMaActivity;
+import com.liaocheng.suteng.myapplication.ui.my.XieYiActivity;
+import com.liaocheng.suteng.myapplication.util.Util;
+import com.liaocheng.suteng.myapplication.view.ApliyDialog;
 import com.liaocheng.suteng.myapplication.view.ApplyAndAlterDialog;
+import com.liaocheng.suteng.myapplication.view.PassWordDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,6 +58,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -138,7 +151,7 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
         lat = addressModel.lat;
         mAddress = addressModel.address;
         mCity = addressModel.detailAddress;
-        mXiangQing = addressModel.ConcreteAdd;
+        mXiangQing = addressModel.ConcreteAdd;//
         mTel = addressModel.contactPhone;
         mName = addressModel.contactName;
         mShangPin = addressModel.content;
@@ -146,10 +159,33 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
         tvDiZhiXiangQing.setText(mCity + "");
         tvTel.setText(mTel + "");
         etXuQiu.setText(mShangPin + "");
-        etHuoKuan.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//        etHuoKuan.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean f) {
+//                if (!f){
+//                    if (TextUtils.isEmpty(etHuoKuan.getText())){
+//                        tvNum.setText(mLuFei +"");
+//                    }else {
+//                        String num = etHuoKuan.getText().toString();
+//                        double a = Double.valueOf(mLuFei);
+//                        double b = Double.valueOf(num);
+//                        double c = a+b;
+//                        BigDecimal bd   =   new   BigDecimal(c);
+//                        tip   =   bd.setScale(3,   BigDecimal.ROUND_HALF_UP).doubleValue();
+//                        tvNum.setText(tip +"");
+//                    }
+//                }
+//            }
+//        });
+        etHuoKuan.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void onFocusChange(View view, boolean f) {
-                if (!f){
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                //s:变化后的所有字符
+//                Toast.makeText(getContext(), "变化:"+s+";"+start+";"+before+";"+count, Toast.LENGTH_SHORT).show();
+//                Log.i("Seachal:","变化:"+s+";"+start+";"+before+";"+count);
+
                     if (TextUtils.isEmpty(etHuoKuan.getText())){
                         tvNum.setText(mLuFei +"");
                     }else {
@@ -160,7 +196,34 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
                         BigDecimal bd   =   new   BigDecimal(c);
                         tip   =   bd.setScale(3,   BigDecimal.ROUND_HALF_UP).doubleValue();
                         tvNum.setText(tip +"");
-                    }
+
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                //s:变化前的所有字符； start:字符开始的位置； count:变化前的总字节数；after:变化后的字节数
+//                Toast.makeText(getContext(), "变化前:"+s+";"+start+";"+count+";"+after, Toast.LENGTH_SHORT).show();
+//                Log.i("Seachal:","变化前:"+s+";"+start+";"+count+";"+after);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //S：变化后的所有字符；start：字符起始的位置；before: 变化之前的总字节数；count:变化后的字节数
+//                Toast.makeText(getContext(), "变化后:"+s+";", Toast.LENGTH_SHORT).show();
+//                Log.i("Seachal:","变化后:"+s+";");
+                if (TextUtils.isEmpty(etHuoKuan.getText())){
+                    tvNum.setText(mLuFei +"");
+                }else {
+                    String num = etHuoKuan.getText().toString();
+                    double a = Double.valueOf(mLuFei);
+                    double b = Double.valueOf(num);
+                    double c = a+b;
+                    BigDecimal bd   =   new   BigDecimal(c);
+                    tip   =   bd.setScale(3,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                    tvNum.setText(tip +"");
+
                 }
             }
         });
@@ -170,6 +233,15 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
         Date afterDate = new Date(now .getTime() + 600000);
 
         mPresenter.orderNum("","1",lat,lon,"","","","","","","");
+        tvXieYi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(mContext,XieYiActivity.class);
+                intent.putExtra("code",2001+"");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -213,7 +285,7 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             final ApplyAndAlterDialog dialog = new ApplyAndAlterDialog(this);
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setMessage("退出后设置的时间会丢失,是否退出", "");
+            dialog.setMessage("退出后设置的信息会丢失,是否退出", "");
             dialog.setBackgroundResource(true);
             dialog.setVisibilityBtn(true);
             dialog.setYesOnclickListener("确定", new ApplyAndAlterDialog.onYesOnclickListener() {
@@ -309,11 +381,44 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
                 startActivityForResult(intent, 110);
                 break;
             case R.id.tvBianZun:
+                if (System.currentTimeMillis() - mLasttime < 700)//防止快速点击操作
+                    return;
+                mLasttime = System.currentTimeMillis();
+                intent = new Intent(mContext, JiJiaBiaoZhun.class);
+                intent.putExtra("lat",lat);
+                intent.putExtra("lon",lon);
+                intent.putExtra("type",1);
+                startActivity(intent);
                 break;
             case R.id.tvXiaDan:
+                if (!ckTY.isChecked())
+                {
+                    ToastUtil.show("请阅读并同意协议");
+                    return;
+                }
+                if (TextUtils.isEmpty(etHuoKuan.getText())){
+                    tvNum.setText(mLuFei +"");
+                }else {
+                    String num = etHuoKuan.getText().toString();
+                    double a = Double.valueOf(mLuFei);
+                    double b = Double.valueOf(num);
+                    double c = a+b;
+                    BigDecimal bd   =   new   BigDecimal(c);
+                    tip   =   bd.setScale(3,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                    tvNum.setText(tip +"");
+                }
+                if (TextUtils.isEmpty(etXuQiu.getText().toString())){
+                    ToastUtil.show("需求不能为空");
+                    return;
+                }
+//                if (  !isMobile(etTel.getText().toString()) == true){
+//                    ToastUtil.show("指定手机号不正确");
+//                    return;
+//                }
                 if (addressModel==null){
                     ToastUtil.show("订单错误");
                 }else {
+                    addressModel.content = etXuQiu.getText().toString();
                     mPresenter.detail("","1",addressModel.contactName,addressModel.contactPhone,addressModel.address,addressModel.ConcreteAdd,addressModel.detailAddress,lat,lon,"","","","","","","",etHuoKuan.getText().toString()+"","","6","",tvShiJian.getText().toString()+"",addressModel.content+"","","",etTel.getText().toString(),"");
                 }
                 break;
@@ -327,7 +432,16 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
     private void initData() {
         timeDialog = new TimeDialog(this, R.layout.dialog_time_layout,new int[]{R.id.dialog_ok_tv});
     }
-
+    //判断是不是手机号
+    public static boolean isMobile(String str) {
+        Pattern p = null;
+        Matcher m = null;
+        boolean b = false;
+        p = Pattern.compile("^[1][3,5,6,7,8,9][0-9]{9}$"); // 验证手机号
+        m = p.matcher(str);
+        b = m.matches();
+        return b;
+    }
     private TextView mTime;
     private ListView mTimeList;
     private TextView today;
@@ -471,12 +585,55 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
             }
         }
     };
-
+    PassWordDialog passWordDialog;
+    String mPayType = "";
     @Override
-    public void setData(FaDanXiaDanModel xiaDanModel) {
-        ToastUtil.show("待支付");
+    public void setData(final FaDanXiaDanModel xiaDanModel) {
+//        ToastUtil.show("待支付");
+        mCode = xiaDanModel.orderCode;
+        ApliyDialog dialog = new ApliyDialog(BangWoMaiXiaDanActivity.this, R.style
+                .transparentFrameWindowStyle,tvNum.getText().toString() +"",
+                new ApliyDialog.SelectDialogCancelListener() {
+                    @Override
+                    public void onCancelClick(String id) {
+                        if (id.equals("4")){
+                            if (!TextUtils.isEmpty(etHuoKuan.getText().toString())){
+                                ToastUtil.show("货款不能用提现余额");
+                                return;
+                            }
+                        }
+                        mPayType = id;
+                        if (mPayType .equals("1")||mPayType .equals("2")){
+                            mPresenter.order_pay(mCode, mPayType);//付款
+                        }else {
+                            passWordDialog = new PassWordDialog(BangWoMaiXiaDanActivity.this);
+                            passWordDialog.show();
+                            passWordDialog.setHintText(tvNum.getText().toString() + "");
+                            passWordDialog.setMoneyNum(tvNum.getText().toString()+"");
+                            passWordDialog.setError_tishi("请输入支付密码");
+                            passWordDialog.setClick(new PassWordDialog.OnPayClickListener() {
+                                @Override
+                                public void onSetPass(String text) {
+                                    mPresenter.checkSecondPassword(text+"");
+
+                                }
+
+                                @Override
+                                public void onSetPwd() {
+                                    passWordDialog.cancel();
+                                    Intent intent = new Intent(mContext, UpdatePhoneZhiFuMiMaActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+
+                    }
+                });
+        if (!this.isFinishing()) {
+            dialog.show();
+        }
     }
-    double   tip;
+    double tip;
     String mLuFei;
     @Override
     public void setNum(OrderCalculateBean orderCalculateBean) {
@@ -494,6 +651,21 @@ public class BangWoMaiXiaDanActivity extends BaseActivity<FaHuoXiaDanPersenter> 
         }
 
 
+    }
+
+    @Override
+    public void order_pay(PayModel payModel) {
+        if (mPayType.equals("1")||mPayType.equals("2")){
+            Util.Pay(mPayType,payModel,mContext);
+        }else {
+            ToastUtil.show("支付成功");
+            finish();
+        }
+    }
+    String mCode = "";
+    @Override
+    public void checkSecondPassword() {
+        mPresenter.order_pay(mCode, mPayType);//付款
     }
 
 

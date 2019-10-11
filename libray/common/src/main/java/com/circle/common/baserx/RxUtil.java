@@ -3,6 +3,7 @@ package com.circle.common.baserx;
 import android.text.TextUtils;
 
 import com.circle.common.app.BaseApplication;
+import com.circle.common.response.BaseRespons;
 import com.circle.common.response.BaseResponse;
 import com.circle.common.response.CommonRes;
 import com.circle.common.util.CommonUtil;
@@ -35,6 +36,31 @@ public class RxUtil {
             public Flowable<T> apply(Flowable<T> observable) {
                 return observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    /**
+     * 统一返回结果处理
+     *
+     * @param
+     * @return
+     */
+    public static <BaseRespons> FlowableTransformer<BaseRespons, BaseRespons> handleResults() {   //compose判断结果
+        return new FlowableTransformer<BaseRespons, BaseRespons>() {
+            @Override
+            public Flowable<BaseRespons> apply(Flowable<BaseRespons> httpResponseFlowable) {
+                return httpResponseFlowable.flatMap(new Function<BaseRespons, Flowable<BaseRespons>>() {
+                    @Override
+                    public Flowable<BaseRespons> apply(BaseRespons baseResponse) {
+                        if (baseResponse != null) {
+//                            baseResponse.result = (T) baseResponse;
+                            return createData(baseResponse);
+                        } else {
+                            return Flowable.error(new ApiException("服务器返回error"));
+                        }
+                    }
+                });
             }
         };
     }
@@ -78,8 +104,6 @@ public class RxUtil {
             }
         };
     }
-
-
     /**
      * 生成Flowable
      *
@@ -99,4 +123,5 @@ public class RxUtil {
             }
         }, BackpressureStrategy.BUFFER);
     }
+
 }

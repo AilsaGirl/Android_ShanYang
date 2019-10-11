@@ -19,6 +19,7 @@ import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.circle.common.base.BaseActivity;
+import com.circle.common.util.SPCommon;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.FaHuoAddressModel;
@@ -149,14 +150,14 @@ public class NewLocationSeekBuActivity extends BaseActivity implements View.OnCl
         //金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
         // S3：城市，可以空字符串，空字符串代表全国
         // 三个个都可以为空）
-        query = new PoiSearch.Query(keyWord, "", "");
-        query.setPageSize(20);// 设置每页最多返回多少条poiitem
+        query = new PoiSearch.Query(keyWord, "", mCity);
+        query.setPageSize(50);// 设置每页最多返回多少条poiitem
         query.setPageNum(currentPage);// 设置查第一页
         poiSearch = new PoiSearch(this, query);
         poiSearch.setOnPoiSearchListener(this);
         poiSearch.searchPOIAsyn();// 异步搜索
         lp = new LatLonPoint(Double.valueOf(latf), Double.valueOf(lonf));//检索的经纬度
-        poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
+//        poiSearch.setBound(new PoiSearch.SearchBound(lp, 50000, true)); // 设置搜索区域为以lp点为圆心，其周围2000米范围
         poiSearch.searchPOIAsyn();// 异步搜索
 
     }

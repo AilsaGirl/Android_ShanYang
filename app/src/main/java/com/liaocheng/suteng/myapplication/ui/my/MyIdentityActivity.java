@@ -10,20 +10,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.circle.common.base.BaseActivity;
-import com.circle.common.response.CommonRes;
 import com.circle.common.util.CommonUtil;
 import com.circle.common.util.SPCommon;
 import com.circle.common.util.ToastUtil;
@@ -31,12 +32,12 @@ import com.circle.common.view.LoadingDialog;
 import com.circle.common.view.MyToolBar;
 import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.AuthBean;
+import com.liaocheng.suteng.myapplication.model.BaoXianModel;
 import com.liaocheng.suteng.myapplication.presenter.IdentityPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.IdentityContract;
 import com.liaocheng.suteng.myapplication.util.Util;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.zmxy.ZMCertification;
+import com.zmxy.ZMCertificationListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +47,7 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.com.bluemoon.cardocr.lib.bean.IdCardInfo;
 import cn.com.bluemoon.cardocr.lib.common.CardType;
@@ -68,7 +70,6 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
     ImageView IVReverseHe;
 
 
-
     ImageView back, imagebig;
     //显示隐藏
     boolean isselect = false;
@@ -80,6 +81,30 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
     //姓名
     String name;
     String renxiang, guohui;
+
+    @BindView(R.id.renxiang_shanchu)
+    ImageView renxiangShanchu;
+
+    @BindView(R.id.renxiang_fangda)
+    ImageView renxiangFangda;
+    @BindView(R.id.guohui_shanchu)
+    ImageView guohuiShanchu;
+
+    @BindView(R.id.guohuo_fangda)
+    ImageView guohuoFangda;
+    @BindView(R.id.he_shanchu)
+    ImageView heShanchu;
+
+    @BindView(R.id.he_fangda)
+    ImageView heFangda;
+    @BindView(R.id.linRenZheng)
+    LinearLayout linRenZheng;
+    @BindView(R.id.xiugai)
+    Button xiugai;
+    @BindView(R.id.q_renzheng)
+    Button qRenzheng;
+    @BindView(R.id.zhima)
+    RelativeLayout zhima;
     //存放图片
     private ArrayList<String> mImgList = new ArrayList<>();
     //存放地址
@@ -115,34 +140,36 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
     @Override
     public void initEventAndData() {
         mybar.setTitleText("实名验证").setBackFinish();
-       mybar.setRight(0xff333333, "保存", new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               if (i==4){
-                   if (images.size() < 3) {
-                       images.add(renxiangpath);
-                       images.add(guohuipath);
-                       images.add( hepath);
-                   } else {
-                       images.set(0, renxiangpath);
-                       images.set(1, guohuipath);
-                       images.set(2, hepath);
-                   }
+        mybar.setRight(0xff333333, "保存", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (i == 4) {
+                    if (images.size() < 3) {
+                        images.add(renxiangpath);
+                        images.add(guohuipath);
+                        images.add(hepath);
+                    } else {
+                        images.set(0, renxiangpath);
+                        images.set(1, guohuipath);
+                        images.set(2, hepath);
+                    }
 
-                  String photo1 = Util.imageToBase64(renxiangpath);
-                   String photo2 = Util.imageToBase64(guohuipath);
-                   String photo3 = Util.imageToBase64(hepath);
-                   mPresenter.Identity(SPCommon.getString("token",""),xingming,SPCommon.getString("phone",""),idnumber,photo1,photo2,photo3);
+                    String photo1 = Util.imageToBase64(renxiangpath);
+                    String photo2 = Util.imageToBase64(guohuipath);
+                    String photo3 = Util.imageToBase64(hepath);
+                    mPresenter.Identity(SPCommon.getString("token", ""), xingming, SPCommon.getString("phone", ""), idnumber, photo1, photo2, photo3, sex, nation, address, authority, validDate);
                     if (loadingDialog == null)
-                       loadingDialog = new LoadingDialog(mContext);
-                   loadingDialog.setCancelable(true);
-                   loadingDialog.setMsg("加载中");
-                   loadingDialog.show();
-               }
+                        loadingDialog = new LoadingDialog(mContext);
+                    loadingDialog.setCancelable(true);
+                    loadingDialog.setMsg("加载中");
+                    loadingDialog.show();
+                }
+//                mPresenter.zhiMaAuth(xingming,idnumber);
 
-           }
-       });
+            }
+        });
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -169,7 +196,9 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
     public void IdentitySucss() {
         loadingDialog.cancelDialog();
         ToastUtil.show("提交成功，等待审核");
-        finish();
+        zhima.setVisibility(View.VISIBLE);
+//        linRenZheng.setVisibility(View.GONE);
+//        finish();
     }
 
     @Override
@@ -177,28 +206,55 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
 
     }
 
+    @Override
+    public void zhiMaAuth(BaoXianModel baoXianModel) {
+        ZMCertification.getInstance().startCertification(MyIdentityActivity.this, baoXianModel.biz_no,"2088022302379473",null);
+        ZMCertification.getInstance().setZMCertificationListener(new ZMCertificationListener() {
+            @Override
+            public void onFinish(boolean b, final boolean b1, int i) {
+//                                Log.d("-----","b = " + b + " - b1 = " + b1 + " - i = " + i);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //认证成功  b1为true
+                        if (b1){
+                           mPresenter.user_authOk(SPCommon.getString("token", ""));
+                        }else {
+                            Toast.makeText(mContext, "认证失败!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-    @OnClick({R.id.IV_face_photo, R.id.IV_reverse_side, R.id.IV_reverse_he})
+    @Override
+    public void user_authOk() {
+        loadingDialog.cancelDialog();
+        ToastUtil.show("提交成功");
+        Intent intent = new Intent(mContext, IdentityPayActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    @OnClick({R.id.IV_face_photo, R.id.IV_reverse_side, R.id.IV_reverse_he,R.id.q_renzheng,R.id.xiugai})
     public void onViewClicked(View view) {
         String dirPath = Environment.getExternalStorageDirectory() + "/images";
         switch (view.getId()) {
-            //人像删除
-//            case R.id.renxiang_shanchu:
-//                i--;
-//                renxiangShanchu.setVisibility(View.GONE);
-//                renxiangFangda.setVisibility(View.GONE);
-//                IVFacePhoto.setImageResource(R.mipmap.paisherenxiang);
-//                IVFacePhoto.setBackgroundColor(getResources().getColor(R.color.background));
+            case R.id.q_renzheng:
 //
-//                break;
+                mPresenter.zhiMaAuth(xingming,idnumber);
+                break;
             //人像拍照
             case R.id.IV_face_photo:
                 CoustomCaptureActivity.startAction(this, CardType.TYPE_ID_CARD_FRONT, dirPath, 0);//人像照
                 break;
-            //人像放大
-//            case R.id.renxiang_fangda:
-//                showpopuwindow(integer_renxiang);
-//                break;
+
+            case R.id.xiugai:
+                Intent  intent = new Intent(mContext, MyUpdateIdentityActivity.class);
+                startActivity(intent);
+                break;
             //手持
             case R.id.IV_reverse_he:
                 openCamera(this);
@@ -239,7 +295,7 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
         System.out.println("AuthenticationPS onActivityResult:333 ");
 
         if (resultCode == RESULT_OK) {
-            if (requestCode ==  PHOTO_REQUEST_CAREMA) {
+            if (requestCode == PHOTO_REQUEST_CAREMA) {
                 if (resultCode == RESULT_OK) {
                     Intent intent = new Intent("com.android.camera.action.CROP");
                     intent.setDataAndType(imageUri, "image/*");
@@ -249,24 +305,24 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
                 }
                 return;
             }
-                if (requestCode ==  CROP_PHOTO) {
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver()
-                                    .openInputStream(imageUri));
-                            IVReverseHe.setImageBitmap(bitmap);
-                            hepath = tempFile.getPath();
-                            if (i < 4) {
-                                i++;
-                            } else {
-                                i = 4;
-                            }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+            if (requestCode == CROP_PHOTO) {
+                if (resultCode == RESULT_OK) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver()
+                                .openInputStream(imageUri));
+                        IVReverseHe.setImageBitmap(bitmap);
+                        hepath = tempFile.getPath();
+                        if (i < 4) {
+                            i++;
+                        } else {
+                            i = 4;
                         }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
-                    return;
                 }
+                return;
+            }
             if (requestCode == 0) {
                 try {
                     /**
@@ -327,6 +383,7 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
                     String path = info.getImageUrl();
                     authority = info.getAuthority();//解析出来的签发机关；
                     validDate = info.getValidDate();//解析出来的有效期限；
+                   System.out.println("解析出来的有效期限"+validDate);
                     Display display = getWindowManager().getDefaultDisplay(); // 显示屏尺寸
                     float destWidth = display.getWidth();
                     float destHeight = display.getHeight();
@@ -366,7 +423,6 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
 
         }
     }
-
 
 
     /**
@@ -423,7 +479,7 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     //申请WRITE_EXTERNAL_STORAGE权限
-                    Toast.makeText(this,"请开启存储权限",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请开启存储权限", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 imageUri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
@@ -435,11 +491,17 @@ public class MyIdentityActivity extends BaseActivity<IdentityPresenter> implemen
     }
 
     /*
-* 判断sdcard是否被挂载
-*/
+     * 判断sdcard是否被挂载
+     */
     public static boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

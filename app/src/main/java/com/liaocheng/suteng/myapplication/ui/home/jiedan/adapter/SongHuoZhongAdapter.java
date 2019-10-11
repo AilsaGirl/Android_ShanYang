@@ -106,7 +106,7 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
                 holder.relFa.setVisibility(View.VISIBLE);
             }
             if (ordersModel.orderType.equals("5")) {
-                holder.tvDingDanType.setText("合作商家");
+                holder.tvDingDanType.setText("当日达");
                 holder.linMai.setVisibility(View.GONE);
                 holder.relFa.setVisibility(View.VISIBLE);
             }
@@ -136,6 +136,7 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
                 public void onClick(View view) {
                     if (!TextUtils.isEmpty(holder.etCode.getText().toString())){
                         mListener.onBtnClick(holder.etCode.getText().toString()+"", ordersModel.orderCode);
+                        holder.etCode.setText("");
                     }
 
                 }
@@ -162,10 +163,10 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
                 Glide.with(mContext).load(ordersModel.goodsImg1).placeholder(R.mipmap.add).error(R.mipmap.add).into(holder.ivPhoto1);
             }
             if (!TextUtils.isEmpty(ordersModel.goodsImg2)){
-                Glide.with(mContext).load(ordersModel.goodsImg1).placeholder(R.mipmap.add).error(R.mipmap.add).into(holder.ivPhoto2);
+                Glide.with(mContext).load(ordersModel.goodsImg2).placeholder(R.mipmap.add).error(R.mipmap.add).into(holder.ivPhoto2);
             }
             if (!TextUtils.isEmpty(ordersModel.goodsImg3)){
-                Glide.with(mContext).load(ordersModel.goodsImg1).placeholder(R.mipmap.add).error(R.mipmap.add).into(holder.ivPhoto3);
+                Glide.with(mContext).load(ordersModel.goodsImg3).placeholder(R.mipmap.add).error(R.mipmap.add).into(holder.ivPhoto3);
             }
             holder.ivDingWeiFa.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -205,12 +206,14 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
 //                    recyclerView.refresh();
                         Intent intent = new Intent();
                         intent.putExtra("code", ordersModel.orderCode);
-                        if (type == 1) {
-                            intent.putExtra("isJieDanYuan", true);
-                        } else {
-                            intent.putExtra("isJieDanYuan", false);
-                        }
+//                        if (type == 1) {
+//                            intent.putExtra("isJieDanYuan", true);
+//                        } else {
+//                            intent.putExtra("isJieDanYuan", false);
+//                        }
+                        intent.putExtra("isJieDanYuan", true);
                         intent.setClass(mContext, DingDanBuyInfoActivity.class);
+                        intent.putExtra("type",1);
                         mContext.startActivity(intent);
                     } else {
                         Intent intent = new Intent();
@@ -235,7 +238,7 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
             if (isQidian) {
                 setUpGaodeAppByLoca(LONGTITUDE_A, LATITUDE_A, QIDIAN_NAME);
             } else {
-                setUpGaodeAppByLoca(LONGTITUDE_A, LATITUDE_A, ZHONGDIAN_NAME);
+                setUpGaodeAppByLoca(LONGTITUDE_B, LATITUDE_B, ZHONGDIAN_NAME);
             }
         } else {
             //初始化定位
@@ -248,7 +251,7 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //获取最近3s内精度最高的一次定位结果：
             //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-            mLocationOption.setOnceLocationLatest(true);
+//            mLocationOption.setOnceLocationLatest(true);
             //给定位客户端对象设置定位参数
             mLocationClient.setLocationOption(mLocationOption);
             //启动定位
@@ -263,6 +266,7 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
     String mQu;
     String mCity;
     String mAddress;
+    int dingwei = 1;
     //声明定位回调监听器
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
         @Override
@@ -279,11 +283,14 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
                     SPCommon.setString("lat", aMapLocation.getLatitude() + "");
                     SPCommon.setString("qu", aMapLocation.getDistrict() + "");
                     SPCommon.setString("city", aMapLocation.getCity() + "");
-                    if (isQidian) {
-                        setUpGaodeAppByLoca(LONGTITUDE_A, LATITUDE_A, QIDIAN_NAME);
-                    } else {
-                        setUpGaodeAppByLoca(LONGTITUDE_A, LATITUDE_A, ZHONGDIAN_NAME);
+                    if (dingwei == 1){
+                        if (isQidian) {
+                            setUpGaodeAppByLoca(LONGTITUDE_A, LATITUDE_A, QIDIAN_NAME);
+                        } else {
+                            setUpGaodeAppByLoca(LONGTITUDE_B, LATITUDE_B, ZHONGDIAN_NAME);
+                        }
                     }
+                   dingwei++;
                 } else {
 
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -340,16 +347,23 @@ public class SongHuoZhongAdapter extends RecyclerView.Adapter<SongHuoZhongAdapte
      * 注意下面的起终点坐标都是百度坐标，如果使用高德坐标系有很大的误差
      */
     void setUpBaiduAPPByLoca(double lonb, double latb, String name) {
-        try {
-            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:" + lat + "," + lon + "|name:" + mAddress + "&destination=latlng:" + latb + "," + lonb + "|name:" + name + "&mode=riding&src=yourCompanyName|yourAppName#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
-            if (isInstallByread("com.baidu.BaiduMap")) {
-                mContext.startActivity(intent);
+        //            intent.setData(Uri.parse("baidumap://map/direction?destination=latlng:"
+//                    + lonb + ","
+//                    + latb + "|name:" + name + // 终点
+//                    "&mode=driving" + // 导航路线方式
+//                    "&src=" + mContext.getPackageName()));
+
+//            Intent intent = Intent.getIntent("intent://map/direction?origin=latlng:" + lat + "," + lon + "|name:" + mAddress + "&destination=latlng:" + latb + "," + lonb + "|name:" + name + "&mode=riding&src="+mContext.getPackageName()+"|"+mContext.getPackageName()+"#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+        if (isInstallByread("com.baidu.BaiduMap")) {
+//                mContext.startActivity(intent);
+            mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("baidumap://map/direction?destination=latlng:"
+                    + lonb + ","
+                    + latb + "|name:" + name + // 终点
+                    "&mode=driving" + // 导航路线方式
+                    "&src=" + mContext.getPackageName())));
 //                Log.e(TAG, "百度地图客户端已经安装") ;
-            } else {
-                ToastUtil.show("没有安装百度或高德地图客户端");
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } else {
+            ToastUtil.show("没有安装百度或高德地图客户端");
         }
     }
 

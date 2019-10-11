@@ -19,6 +19,7 @@ import com.liaocheng.suteng.myapplication.R;
 import com.liaocheng.suteng.myapplication.model.NullBean;
 import com.liaocheng.suteng.myapplication.presenter.RegistPresenter;
 import com.liaocheng.suteng.myapplication.presenter.contract.RegisContact;
+import com.liaocheng.suteng.myapplication.ui.my.XieYiActivity;
 
 
 import java.util.regex.Matcher;
@@ -128,12 +129,16 @@ public class RegisterActivity extends BaseActivity<RegistPresenter> implements R
 
                 break;
             case R.id.tvFindPW:
-//                Intent intent = new Intent();
-//                intent.setClass(this,LoginActivity.class);
-//                startActivity(intent);
+                Intent intent1 = new Intent();
+                intent1.setClass(this,LoginActivity.class);
+                startActivity(intent1);
                 finish();
                 break;
             case R.id.tv_registxy://协议
+                                Intent intent = new Intent();
+                intent.setClass(this,XieYiActivity.class);
+                intent.putExtra("code",3001+"");
+                startActivity(intent);
 
                 break;
             case R.id.tvPPW:
